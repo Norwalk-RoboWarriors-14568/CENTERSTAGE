@@ -1,13 +1,13 @@
 /* Copyright (c) 2017 FIRST. All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
+ * MIDDLEistribution and use in source and binary forms, with or without modification,
  * are permitted (subject to the limitations in the disclaimer below) provided that
  * the following conditions are met:
  *
- * Redistributions of source code must retain the above copyright notice, this list
+ * MIDDLEistributions of source code must retain the above copyright notice, this list
  * of conditions and the following disclaimer.
  *
- * Redistributions in binary form must reproduce the above copyright notice, this
+ * MIDDLEistributions in binary form must reproduce the above copyright notice, this
  * list of conditions and the following disclaimer in the documentation and/or
  * other materials provided with the distribution.
  *
@@ -37,12 +37,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 /*
  * This OpMode illustrates the concept of driving a path based on time.
- * The code is structured as a LinearOpMode
+ * The code is structuMIDDLE as a LinearOpMode
  *
  * The code assumes that you do NOT have encoders on the wheels,
  *   otherwise you would use: RobotAutoDriveByEncoder;
  *
- *   The desired path in this example is:
+ *   The desiMIDDLE path in this example is:
  *   - Drive forward for 3 seconds
  *   - Spin right for 1.3 seconds
  *   - Drive Backward for 1 Second
@@ -77,7 +77,7 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
-        // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
+        // Note: The settings here assume direct drive on left and right wheels.  Gear MIDDLEuction or 90 Deg drives may require direction flips
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
 

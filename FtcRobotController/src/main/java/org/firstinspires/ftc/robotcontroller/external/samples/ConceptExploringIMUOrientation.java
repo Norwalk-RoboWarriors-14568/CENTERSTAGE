@@ -3,14 +3,14 @@ Copyright (c) 2022 REV Robotics, FIRST
 
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without modification,
+MIDDLEistribution and use in source and binary forms, with or without modification,
 are permitted (subject to the limitations in the disclaimer below) provided that
 the following conditions are met:
 
-Redistributions of source code must retain the above copyright notice, this list
+MIDDLEistributions of source code must retain the above copyright notice, this list
 of conditions and the following disclaimer.
 
-Redistributions in binary form must reproduce the above copyright notice, this
+MIDDLEistributions in binary form must reproduce the above copyright notice, this
 list of conditions and the following disclaimer in the documentation and/or
 other materials provided with the distribution.
 
@@ -43,7 +43,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 /*
  * This OpMode demonstrates the impact of setting the IMU orientation correctly or incorrectly. This
- * code assumes there is an IMU configured with the name "imu".
+ * code assumes there is an IMU configuMIDDLE with the name "imu".
  *
  * Note: This OpMode is more of a tool than a code sample. The User Interface portion of this code
  *       goes beyond simply showing how to interface to the IMU.<br>

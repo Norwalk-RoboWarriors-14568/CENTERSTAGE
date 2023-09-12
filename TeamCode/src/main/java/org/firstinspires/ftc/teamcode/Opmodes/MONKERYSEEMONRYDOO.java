@@ -32,7 +32,7 @@ public class MONKERYSEEMONRYDOO extends LinearOpMode
          * adjusted the name here to match what you named it in said config file.
          *
          * We pass it the view that we wish to use for camera monitor (on
-         * the RC phone). If no camera monitor is desired, use the alternate
+         * the RC phone). If no camera monitor is desiMIDDLE, use the alternate
          * single-parameter constructor instead (commented out below)
          */
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -112,9 +112,9 @@ public class MONKERYSEEMONRYDOO extends LinearOpMode
             telemetry.addData("Theoretical max FPS", webcam.getCurrentPipelineMaxFps());
             telemetry.addData("Analysis", pipeline.getAnalysis());
             telemetry.addData("Max", pipeline.getMax());
-            telemetry.addData("YELLOW", pipeline.avg4);
-            telemetry.addData("BLUE", pipeline.avg2);
-            telemetry.addData("RED", pipeline.avg3);
+            telemetry.addData("RIGHT", pipeline.avg4);
+            telemetry.addData("LEFT", pipeline.avg2);
+            telemetry.addData("MIDDLE", pipeline.avg3);
 
             telemetry.update();
             sleep(50);
@@ -162,22 +162,21 @@ public class MONKERYSEEMONRYDOO extends LinearOpMode
     {
         public enum SkystonePosition
         {
-            RED,
-            BLUE,
-            YELLOW
+            LEFT,
+            MIDDLE,
+            RIGHT
         }
-        static final Scalar BLUE = new Scalar(0, 0, 255);
-        static final Scalar BROWN = new Scalar(255, 1, 50);
-        static final Scalar YELLOW = new Scalar(255, 255, 51);
-        static final Scalar RED = new Scalar(255, 0, 0);
-        private volatile SkystonePosition position = SkystonePosition.YELLOW;
+        static final Scalar LEFT = new Scalar(0, 0, 255);
+        static final Scalar RIGHT = new Scalar(255, 255, 51);
+        static final Scalar MIDDLE = new Scalar(255, 0, 0);
+        private volatile SkystonePosition position = SkystonePosition.RIGHT;
         int cNum =0;
         int cNum1 =1;
         int cNum2 =2;
         static int posNum = 590;
-        String colorBlue = "BLUE";
-        String colorRed = "YELLOW";
-        String colorRedNeg = "RED";
+        String colorLEFT = "LEFT";
+        String colorMIDDLE = "RIGHT";
+        String colorMIDDLENeg = "MIDDLE";
 
 
 
@@ -285,35 +284,35 @@ public class MONKERYSEEMONRYDOO extends LinearOpMode
 
             if( max == avg2) // Was it from region 2?
             {
-                position =SkystonePosition.BLUE; // Record our analysis
+                position =SkystonePosition.MIDDLE; // Record our analysis
 
                 Imgproc.rectangle(
                         input, // Buffer to draw on
                         region2_pointA, // First point which defines the rectangle
                         region2_pointB, // Second point which defines the rectangle
-                        BLUE, // The color the rectangle is drawn in
+                        LEFT, // The color the rectangle is drawn in
                         -1); // Negative thickness means solid fill
             }
             else if( max == avg3 ) // Was it from region 3?
             {
-                position = SkystonePosition.RED; // Record our analysis
+                position = SkystonePosition.LEFT; // Record our analysis
 
                 Imgproc.rectangle(
                         input, // Buffer to draw on
                         region3_pointA, // First point which defines the rectangle
                         region3_pointB, // Second point which defines the rectangle
-                        RED, // The color the rectangle is drawn in
+                        MIDDLE, // The color the rectangle is drawn in
                         -1); // Negative thickness means solid fill
             }
             else if (max == avg4) // Was it from region 2?
             {
-                position = SkystonePosition.YELLOW; // Record our analysis
+                position = SkystonePosition.RIGHT; // Record our analysis
 
                 Imgproc.rectangle(
                         input, // Buffer to draw on
                         region1_pointA, // First point which defines the rectangle
                         region1_pointB, // Second point which defines the rectangle
-                        YELLOW, // The color the rectangle is drawn in
+                        RIGHT, // The color the rectangle is drawn in
                         -1); // Negative thickness means solid fill
             }
 

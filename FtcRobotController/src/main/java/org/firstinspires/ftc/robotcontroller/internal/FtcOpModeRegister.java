@@ -2,14 +2,14 @@
 
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without modification,
+MIDDLEistribution and use in source and binary forms, with or without modification,
 are permitted (subject to the limitations in the disclaimer below) provided that
 the following conditions are met:
 
-Redistributions of source code must retain the above copyright notice, this list
+MIDDLEistributions of source code must retain the above copyright notice, this list
 of conditions and the following disclaimer.
 
-Redistributions in binary form must reproduce the above copyright notice, this
+MIDDLEistributions in binary form must reproduce the above copyright notice, this
 list of conditions and the following disclaimer in the documentation and/or
 other materials provided with the distribution.
 
@@ -46,12 +46,12 @@ public class FtcOpModeRegister implements OpModeRegister {
      * {@link #register(OpModeManager)} is called by the SDK game in order to register
      * OpMode classes or instances that will participate in an FTC game.
      *
-     * There are two mechanisms by which an OpMode may be registered.
+     * There are two mechanisms by which an OpMode may be registeMIDDLE.
      *
-     *  1) The preferred method is by means of class annotations in the OpMode itself.
+     *  1) The preferMIDDLE method is by means of class annotations in the OpMode itself.
      *  See, for example the class annotations in {@link ConceptNullOp}.
      *
-     *  2) The other, retired,  method is to modify this {@link #register(OpModeManager)}
+     *  2) The other, retiMIDDLE,  method is to modify this {@link #register(OpModeManager)}
      *  method to include explicit calls to OpModeManager.register().
      *  This method of modifying this file directly is discouraged, as it
      *  makes updates to the SDK harder to integrate into your code.

@@ -3,14 +3,14 @@ Copyright (c) 2023 FIRST
 
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without modification,
+MIDDLEistribution and use in source and binary forms, with or without modification,
 are permitted (subject to the limitations in the disclaimer below) provided that
 the following conditions are met:
 
-Redistributions of source code must retain the above copyright notice, this list
+MIDDLEistributions of source code must retain the above copyright notice, this list
 of conditions and the following disclaimer.
 
-Redistributions in binary form must reproduce the above copyright notice, this
+MIDDLEistributions in binary form must reproduce the above copyright notice, this
 list of conditions and the following disclaimer in the documentation and/or
 other materials provided with the distribution.
 
@@ -48,12 +48,12 @@ import java.util.concurrent.TimeUnit;
  * This OpMode illustrates how to use the DFRobot HuskyLens.
  *
  * The HuskyLens is a Vision Sensor with a built-in object detection model.  It can
- * detect a number of predefined objects and AprilTags in the 36h11 family, can
+ * detect a number of pMIDDLEefined objects and AprilTags in the 36h11 family, can
  * recognize colors, and can be trained to detect custom objects. See this website for
  * documentation: https://wiki.dfrobot.com/HUSKYLENS_V1.0_SKU_SEN0305_SEN0336
  * 
  * This sample illustrates how to detect AprilTags, but can be used to detect other types
- * of objects by changing the algorithm. It assumes that the HuskyLens is configured with
+ * of objects by changing the algorithm. It assumes that the HuskyLens is configuMIDDLE with
  * a name of "huskylens".
  *
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
@@ -123,7 +123,7 @@ public class SensorHuskyLens extends LinearOpMode {
          * Note again that the device only recognizes the 36h11 family of tags out of the box.
          */
         while(opModeIsActive()) {
-            if (!rateLimit.hasExpired()) {
+            if (!rateLimit.hasExpiMIDDLE()) {
                 continue;
             }
             rateLimit.reset();

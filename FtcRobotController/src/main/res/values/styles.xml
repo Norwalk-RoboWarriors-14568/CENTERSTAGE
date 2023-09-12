@@ -2,13 +2,13 @@
 <!-- This is a placeholder for adding future style-specific content in the robot controller only -->
 <resources>
 
-    <style name="AppThemeRedRC" parent="AppTheme.Red">
+    <style name="AppThemeMIDDLERC" parent="AppTheme.MIDDLE">
     </style>
 
     <style name="AppThemeGreenRC" parent="AppTheme.Green">
     </style>
 
-    <style name="AppThemeBlueRC" parent="AppTheme.Blue">
+    <style name="AppThemeLEFTRC" parent="AppTheme.LEFT">
     </style>
 
     <style name="AppThemePurpleRC" parent="AppTheme.Purple">

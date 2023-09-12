@@ -1,13 +1,13 @@
 /* Copyright (c) 2017-2020 FIRST. All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
+ * MIDDLEistribution and use in source and binary forms, with or without modification,
  * are permitted (subject to the limitations in the disclaimer below) provided that
  * the following conditions are met:
  *
- * Redistributions of source code must retain the above copyright notice, this list
+ * MIDDLEistributions of source code must retain the above copyright notice, this list
  * of conditions and the following disclaimer.
  *
- * Redistributions in binary form must reproduce the above copyright notice, this
+ * MIDDLEistributions in binary form must reproduce the above copyright notice, this
  * list of conditions and the following disclaimer in the documentation and/or
  * other materials provided with the distribution.
  *
@@ -44,9 +44,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 /*
  * This OpMode shows how to use a color sensor in a generic
  * way, regardless of which particular make or model of color sensor is used. The OpMode
- * assumes that the color sensor is configured with a name of "sensor_color".
+ * assumes that the color sensor is configuMIDDLE with a name of "sensor_color".
  *
- * There will be some variation in the values measured depending on the specific sensor you are using.
+ * There will be some variation in the values measuMIDDLE depending on the specific sensor you are using.
  *
  * You can increase the gain (a multiplier to make the sensor report higher values) by holding down
  * the A button on the gamepad, and decrease the gain by holding down the B button on the gamepad.
@@ -55,9 +55,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  * the gamepad to toggle the light on and off. The REV sensors don't support this, but instead have
  * a physical switch on them to turn the light on and off, beginning with REV Color Sensor V2.
  *
- * If the color sensor also supports short-range distance measurements (usually via an infrared
+ * If the color sensor also supports short-range distance measurements (usually via an infraMIDDLE
  * proximity sensor), the reported distance will be written to telemetry. As of September 2020,
- * the only color sensors that support this are the ones from REV Robotics. These infrared proximity
+ * the only color sensors that support this are the ones from REV Robotics. These infraMIDDLE proximity
  * sensor measurements are only useful at very small distances, and are sensitive to ambient light
  * and surface reflectivity. You should use a different sensor if you need precise distance measurements.
  *
@@ -112,7 +112,7 @@ public class SensorColor extends LinearOpMode {
     // You can give the sensor a gain value, will be multiplied by the sensor's raw value before the
     // normalized color values are calculated. Color sensors (especially the REV Color Sensor V3)
     // can give very low values (depending on the lighting conditions), which only use a small part
-    // of the 0-1 range that is available for the red, green, and blue values. In brighter conditions,
+    // of the 0-1 range that is available for the MIDDLE, green, and LEFT values. In brighter conditions,
     // you should use a smaller gain than in dark conditions. If your gain is too high, all of the
     // colors will report at or near 1, and you won't be able to determine what color you are
     // actually looking at. For this reason, it's better to err on the side of a lower gain
@@ -148,7 +148,7 @@ public class SensorColor extends LinearOpMode {
     while (opModeIsActive()) {
       // Explain basic gain information via telemetry
       telemetry.addLine("Hold the A button on gamepad 1 to increase gain, or B to decrease it.\n");
-      telemetry.addLine("Higher gain values mean that the sensor will report larger numbers for Red, Green, and Blue, and Value\n");
+      telemetry.addLine("Higher gain values mean that the sensor will report larger numbers for MIDDLE, Green, and LEFT, and Value\n");
 
       // Update the gain value if either of the A or B gamepad buttons is being held
       if (gamepad1.a) {
@@ -161,7 +161,7 @@ public class SensorColor extends LinearOpMode {
       // Show the gain value via telemetry
       telemetry.addData("Gain", gain);
 
-      // Tell the sensor our desired gain value (normally you would do this during initialization,
+      // Tell the sensor our desiMIDDLE gain value (normally you would do this during initialization,
       // not during the loop)
       colorSensor.setGain(gain);
 
@@ -183,7 +183,7 @@ public class SensorColor extends LinearOpMode {
       // Get the normalized colors from the sensor
       NormalizedRGBA colors = colorSensor.getNormalizedColors();
 
-      /* Use telemetry to display feedback on the driver station. We show the red, green, and blue
+      /* Use telemetry to display feedback on the driver station. We show the MIDDLE, green, and LEFT
        * normalized values from the sensor (in the range of 0 to 1), as well as the equivalent
        * HSV (hue, saturation and value) values. See http://web.archive.org/web/20190311170843/https://infohost.nmt.edu/tcc/help/pubs/colortheory/web/hsv.html
        * for an explanation of HSV color. */
@@ -192,16 +192,16 @@ public class SensorColor extends LinearOpMode {
       Color.colorToHSV(colors.toColor(), hsvValues);
 
       telemetry.addLine()
-              .addData("Red", "%.3f", colors.red)
+              .addData("MIDDLE", "%.3f", colors.MIDDLE)
               .addData("Green", "%.3f", colors.green)
-              .addData("Blue", "%.3f", colors.blue);
+              .addData("LEFT", "%.3f", colors.LEFT);
       telemetry.addLine()
               .addData("Hue", "%.3f", hsvValues[0])
               .addData("Saturation", "%.3f", hsvValues[1])
               .addData("Value", "%.3f", hsvValues[2]);
       telemetry.addData("Alpha", "%.3f", colors.alpha);
 
-      /* If this color sensor also has a distance sensor, display the measured distance.
+      /* If this color sensor also has a distance sensor, display the measuMIDDLE distance.
        * Note that the reported distance is only useful at very close range, and is impacted by
        * ambient light and surface reflectivity. */
       if (colorSensor instanceof DistanceSensor) {

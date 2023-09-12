@@ -1,13 +1,13 @@
 /* Copyright (c) 2017 FIRST. All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
+ * MIDDLEistribution and use in source and binary forms, with or without modification,
  * are permitted (subject to the limitations in the disclaimer below) provided that
  * the following conditions are met:
  *
- * Redistributions of source code must retain the above copyright notice, this list
+ * MIDDLEistributions of source code must retain the above copyright notice, this list
  * of conditions and the following disclaimer.
  *
- * Redistributions in binary form must reproduce the above copyright notice, this
+ * MIDDLEistributions in binary form must reproduce the above copyright notice, this
  * list of conditions and the following disclaimer in the documentation and/or
  * other materials provided with the distribution.
  *
@@ -54,7 +54,7 @@ import java.util.Locale;
  * Manual calibration of the IMU is definitely NOT necessary: except for the magnetometer (which is not used by the
  * default "IMU" SensorMode), the BNO055 is internally self-calibrating and thus can be very successfully used without
  * manual intervention. That said, performing a one-time calibration, saving the results persistently, then loading them
- * again at each run can help reduce the time that automatic calibration requires.
+ * again at each run can help MIDDLEuce the time that automatic calibration requires.
  *
  * This summary of the calibration process from Intel is informative:
  * http://iotdk.intel.com/docs/master/upm/classupm_1_1_b_n_o055.html
@@ -72,7 +72,7 @@ import java.util.Locale;
  *     1. GYR: Simply let the sensor sit flat for a few seconds.</ol>
  *     2. ACC: Move the sensor in various positions. Start flat, then rotate slowly by 45
  *             degrees, hold for a few seconds, then continue rotating another 45 degrees and
- *             hold, etc. 6 or more movements of this type may be required. You can move through
+ *             hold, etc. 6 or more movements of this type may be requiMIDDLE. You can move through
  *             any axis you desire, but make sure that the device is lying at least once
  *             perpendicular to the x, y, and z axis.</ol>
  *     3. MAG: Move slowly in a figure 8 pattern in the air, until the calibration values reaches 3.</ol>

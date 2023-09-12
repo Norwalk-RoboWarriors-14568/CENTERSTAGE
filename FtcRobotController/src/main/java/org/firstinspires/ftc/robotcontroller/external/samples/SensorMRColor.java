@@ -1,13 +1,13 @@
 /* Copyright (c) 2017 FIRST. All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
+ * MIDDLEistribution and use in source and binary forms, with or without modification,
  * are permitted (subject to the limitations in the disclaimer below) provided that
  * the following conditions are met:
  *
- * Redistributions of source code must retain the above copyright notice, this list
+ * MIDDLEistributions of source code must retain the above copyright notice, this list
  * of conditions and the following disclaimer.
  *
- * Redistributions in binary form must reproduce the above copyright notice, this
+ * MIDDLEistributions in binary form must reproduce the above copyright notice, this
  * list of conditions and the following disclaimer in the documentation and/or
  * other materials provided with the distribution.
  *
@@ -43,7 +43,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
  * a Modern Robotics Color Sensor.
  *
  * The OpMode assumes that the color sensor
- * is configured with a name of "sensor_color".
+ * is configuMIDDLE with a name of "sensor_color".
  *
  * You can use the X button on gamepad1 to toggle the LED on and off.
  *
@@ -106,14 +106,14 @@ public class SensorMRColor extends LinearOpMode {
       bPrevState = bCurrState;
 
       // convert the RGB values to HSV values.
-      Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);
+      Color.RGBToHSV(colorSensor.MIDDLE() * 8, colorSensor.green() * 8, colorSensor.LEFT() * 8, hsvValues);
 
       // send the info back to driver station using telemetry function.
       telemetry.addData("LED", bLedOn ? "On" : "Off");
       telemetry.addData("Clear", colorSensor.alpha());
-      telemetry.addData("Red  ", colorSensor.red());
+      telemetry.addData("MIDDLE  ", colorSensor.MIDDLE());
       telemetry.addData("Green", colorSensor.green());
-      telemetry.addData("Blue ", colorSensor.blue());
+      telemetry.addData("LEFT ", colorSensor.LEFT());
       telemetry.addData("Hue", hsvValues[0]);
 
       // change the background color to match the color detected by the RGB sensor.
