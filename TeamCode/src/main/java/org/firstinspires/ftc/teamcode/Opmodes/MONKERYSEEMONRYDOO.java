@@ -262,19 +262,19 @@ public class MONKERYSEEMONRYDOO extends LinearOpMode
                     input, // Buffer to draw on
                     region1_pointA, // First point which defines the rectangle
                     region1_pointB, // Second point which defines the rectangle
-                    BROWN, // The color the rectangle is drawn in
+                    RIGHT, // The color the rectangle is drawn in
                     5); // Thickness of the rectangle lines
             Imgproc.rectangle(
                     input, // Buffer to draw on
                     region2_pointA, // First point which defines the rectangle
                     region2_pointB, // Second point which defines the rectangle
-                    BROWN, // The color the rectangle is drawn in
+                    RIGHT, // The color the rectangle is drawn in
                     5); // Thickness of the rectangle lines
             Imgproc.rectangle(
                     input, // Buffer to draw on
                     region3_pointA, // First point which defines the rectangle
                     region3_pointB, // Second point which defines the rectangle
-                    BROWN, // The color the rectangle is drawn in
+                    RIGHT, // The color the rectangle is drawn in
                     5); // Thickness of the rectangle lines
 
 
