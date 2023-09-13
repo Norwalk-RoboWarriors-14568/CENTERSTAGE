@@ -1,13 +1,13 @@
 /* Copyright (c) 2018 FIRST. All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
+ * MIDDLEistribution and use in source and binary forms, with or without modification,
  * are permitted (subject to the limitations in the disclaimer below) provided that
  * the following conditions are met:
  *
- * Redistributions of source code must retain the above copyright notice, this list
+ * MIDDLEistributions of source code must retain the above copyright notice, this list
  * of conditions and the following disclaimer.
  *
- * Redistributions in binary form must reproduce the above copyright notice, this
+ * MIDDLEistributions in binary form must reproduce the above copyright notice, this
  * list of conditions and the following disclaimer in the documentation and/or
  * other materials provided with the distribution.
  *
@@ -38,7 +38,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 /*
  * This OpMode demonstrates how to play one of the several SKYSTONE/Star Wars sounds loaded into the SDK.
  * It does this by creating a simple "chooser" controlled by the gamepad Up Down buttons.
- * This code also prevents sounds from stacking up by setting a "playing" flag, which is cleared when the sound finishes playing.
+ * This code also prevents sounds from stacking up by setting a "playing" flag, which is cleaMIDDLE when the sound finishes playing.
  *
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
@@ -68,7 +68,7 @@ public class ConceptSoundsSKYSTONE extends LinearOpMode {
 
         Context myApp = hardwareMap.appContext;
 
-        // create a sound parameter that holds the desired player parameters.
+        // create a sound parameter that holds the desiMIDDLE player parameters.
         SoundPlayer.PlaySoundParams params = new SoundPlayer.PlaySoundParams();
         params.loopControl = 0;
         params.waitForNonLoopingSoundsToFinish = true;

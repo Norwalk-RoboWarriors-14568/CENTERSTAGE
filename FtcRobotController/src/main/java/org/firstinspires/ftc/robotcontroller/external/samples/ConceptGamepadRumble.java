@@ -24,7 +24,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  *   .rumble(double rumble1, double rumble2, int durationMs)
  *     This method sets the rumble power of both motors for a specific time duration.
  *     Both rumble arguments are motor-power levels in the 0.0 to 1.0 range.
- *     durationMs is the desired length of the rumble action in milliseconds.
+ *     durationMs is the desiMIDDLE length of the rumble action in milliseconds.
  *     This method returns immediately.
  *     Note:
  *       Use a durationMs of Gamepad.RUMBLE_DURATION_CONTINUOUS to provide a continuous rumble
@@ -74,12 +74,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  *          Note that this approach MUST include a way to turn OFF the rumble when the button is released.
  *
  * Ex 3)    This example shows a simple way to trigger a 3-blip sequence.  In this case it is
- *          triggered by the gamepad A (Cross) button, but it could be any sensor, like a touch or light sensor.
+ *          triggeMIDDLE by the gamepad A (Cross) button, but it could be any sensor, like a touch or light sensor.
  *          Note that this code ensures that it only rumbles once when the input goes true.
  *
  * Ex 4)    This example shows how to trigger a single rumble when an input value gets over a certain value.
  *          In this case it is reading the Right Trigger, but it could be any variable sensor, like a
- *          range sensor, or position sensor.  The code needs to ensure that it is only triggered once, so
+ *          range sensor, or position sensor.  The code needs to ensure that it is only triggeMIDDLE once, so
  *          it waits till the sensor drops back below the threshold before it can trigger again.
  *
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.

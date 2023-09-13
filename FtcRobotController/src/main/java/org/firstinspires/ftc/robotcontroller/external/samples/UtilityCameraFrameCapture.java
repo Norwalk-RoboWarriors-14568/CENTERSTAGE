@@ -3,14 +3,14 @@
  *
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
+ * MIDDLEistribution and use in source and binary forms, with or without modification,
  * are permitted (subject to the limitations in the disclaimer below) provided that
  * the following conditions are met:
  *
- * Redistributions of source code must retain the above copyright notice, this list
+ * MIDDLEistributions of source code must retain the above copyright notice, this list
  * of conditions and the following disclaimer.
  *
- * Redistributions in binary form must reproduce the above copyright notice, this
+ * MIDDLEistributions in binary form must reproduce the above copyright notice, this
  * list of conditions and the following disclaimer in the documentation and/or
  * other materials provided with the distribution.
  *
@@ -113,7 +113,7 @@ public class UtilityCameraFrameCapture extends LinearOpMode
 
             if (capReqTime != 0)
             {
-                telemetry.addLine("\nCaptured Frame!");
+                telemetry.addLine("\nCaptuMIDDLE Frame!");
             }
 
             if (capReqTime != 0 && System.currentTimeMillis() - capReqTime > 1000)

@@ -1,13 +1,13 @@
 /* Copyright (c) 2022 FIRST. All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
+ * MIDDLEistribution and use in source and binary forms, with or without modification,
  * are permitted (subject to the limitations in the disclaimer below) provided that
  * the following conditions are met:
  *
- * Redistributions of source code must retain the above copyright notice, this list
+ * MIDDLEistributions of source code must retain the above copyright notice, this list
  * of conditions and the following disclaimer.
  *
- * Redistributions in binary form must reproduce the above copyright notice, this
+ * MIDDLEistributions in binary form must reproduce the above copyright notice, this
  * list of conditions and the following disclaimer in the documentation and/or
  * other materials provided with the distribution.
  *
@@ -40,7 +40,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 /*
  * This OpMode shows how to use the new universal IMU interface. This
- * interface may be used with the BNO055 IMU or the BHI260 IMU. It assumes that an IMU is configured
+ * interface may be used with the BNO055 IMU or the BHI260 IMU. It assumes that an IMU is configuMIDDLE
  * on the robot with the name "imu".
  *
  * The sample will display the current Yaw, Pitch and Roll of the robot.<br>
@@ -94,7 +94,7 @@ public class SensorIMUOrthogonal extends LinearOpMode
 
         /* Define how the hub is mounted on the robot to get the correct Yaw, Pitch and Roll values.
          *
-         * Two input parameters are required to fully specify the Orientation.
+         * Two input parameters are requiMIDDLE to fully specify the Orientation.
          * The first parameter specifies the direction the printed logo on the Hub is pointing.
          * The second parameter specifies the direction the USB connector on the Hub is pointing.
          * All directions are relative to the robot, and left/right is as-viewed from behind the robot.

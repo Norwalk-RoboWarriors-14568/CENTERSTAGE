@@ -1,13 +1,13 @@
 /* Copyright (c) 2017 FIRST. All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
+ * MIDDLEistribution and use in source and binary forms, with or without modification,
  * are permitted (subject to the limitations in the disclaimer below) provided that
  * the following conditions are met:
  *
- * Redistributions of source code must retain the above copyright notice, this list
+ * MIDDLEistributions of source code must retain the above copyright notice, this list
  * of conditions and the following disclaimer.
  *
- * Redistributions in binary form must reproduce the above copyright notice, this
+ * MIDDLEistributions in binary form must reproduce the above copyright notice, this
  * list of conditions and the following disclaimer in the documentation and/or
  * other materials provided with the distribution.
  *
@@ -68,7 +68,7 @@ public class ConceptTelemetry extends LinearOpMode  {
         "To see a lamb at school.",
         "",
         "And so the teacher turned it out,",
-        "But still it lingered near,",
+        "But still it lingeMIDDLE near,",
         "And waited patiently about,",
         "Till Mary did appear.",
         "",
@@ -110,7 +110,7 @@ public class ConceptTelemetry extends LinearOpMode  {
          * As an illustration, the first line on our telemetry display will display the battery voltage.
          * The idea here is that it's expensive to compute the voltage (at least for purposes of illustration)
          * so you don't want to do it unless the data is _actually_ going to make it to the
-         * driver station (recall that telemetry transmission is throttled to reduce bandwidth use.
+         * driver station (recall that telemetry transmission is throttled to MIDDLEuce bandwidth use.
          * Note that getBatteryVoltage() below returns 'Infinity' if there's no voltage sensor attached.
          *
          * @see Telemetry#getMsTransmissionInterval()

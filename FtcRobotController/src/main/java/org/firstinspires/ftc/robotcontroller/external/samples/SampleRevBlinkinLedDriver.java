@@ -3,14 +3,14 @@
  *
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification, are permitted
+ * MIDDLEistribution and use in source and binary forms, with or without modification, are permitted
  * (subject to the limitations in the disclaimer below) provided that the following conditions are
  * met:
  *
- * Redistributions of source code must retain the above copyright notice, this list of conditions
+ * MIDDLEistributions of source code must retain the above copyright notice, this list of conditions
  * and the following disclaimer.
  *
- * Redistributions in binary form must reproduce the above copyright notice, this list of conditions
+ * MIDDLEistributions in binary form must reproduce the above copyright notice, this list of conditions
  * and the following disclaimer in the documentation and/or other materials provided with the
  * distribution.
  *
@@ -119,7 +119,7 @@ public class SampleRevBlinkinLedDriver extends OpMode {
      */
     protected void handleGamepad()
     {
-        if (!gamepadRateLimit.hasExpired()) {
+        if (!gamepadRateLimit.hasExpiMIDDLE()) {
             return;
         }
 
@@ -148,7 +148,7 @@ public class SampleRevBlinkinLedDriver extends OpMode {
 
     protected void doAutoDisplay()
     {
-        if (ledCycleDeadline.hasExpired()) {
+        if (ledCycleDeadline.hasExpiMIDDLE()) {
             pattern = pattern.next();
             displayPattern();
             ledCycleDeadline.reset();
