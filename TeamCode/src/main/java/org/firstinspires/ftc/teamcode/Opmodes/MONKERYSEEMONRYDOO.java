@@ -171,9 +171,9 @@ public class MONKERYSEEMONRYDOO extends LinearOpMode
         int avg2, avg3, avg4;
         static final int REGION_WIDTH = 50;
         static final int REGION_HEIGHT = 50;
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(275,230);
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(40,230);
         static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(275,230);
-        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(275,230);
+        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(500,230);
         void inputToCb(Mat input)
         {
             Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
