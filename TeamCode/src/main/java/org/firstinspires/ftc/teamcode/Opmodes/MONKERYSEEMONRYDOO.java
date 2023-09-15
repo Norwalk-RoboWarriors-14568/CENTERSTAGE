@@ -1,10 +1,6 @@
-package org.firstinspires.ftc.teamcode.drive.opmode;
-
-
-
+package org.firstinspires.ftc.teamcode.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -17,8 +13,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
-
-
+@TeleOp
 public class MONKERYSEEMONRYDOO extends LinearOpMode
 {
     OpenCvWebcam webcam;
@@ -33,15 +28,13 @@ public class MONKERYSEEMONRYDOO extends LinearOpMode
          * adjusted the name here to match what you named it in said config file.
          *
          * We pass it the view that we wish to use for camera monitor (on
-         * the RC phone). If no camera monitor is desired, use the alternate
+         * the RC phone). If no camera monitor is desiMIDDLE, use the alternate
          * single-parameter constructor instead (commented out below)
          */
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-
         // OR...  Do Not Activate the Camera Monitor View
         //webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"));
-
         /*
          * Specify the image processing pipeline we wish to invoke upon receipt
          * of a frame from the camera. Note that switching pipelines on-the-fly
@@ -82,7 +75,6 @@ public class MONKERYSEEMONRYDOO extends LinearOpMode
                  */
                 webcam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
             }
-
             @Override
             public void onError(int errorCode)
             {
@@ -91,15 +83,12 @@ public class MONKERYSEEMONRYDOO extends LinearOpMode
                  */
             }
         });
-
         telemetry.addLine("Waiting for start");
         telemetry.update();
-
         /*
          * Wait for the user to press start on the Driver Station
          */
         waitForStart();
-
         while (opModeIsActive())
         {
             /*
@@ -113,13 +102,11 @@ public class MONKERYSEEMONRYDOO extends LinearOpMode
             telemetry.addData("Theoretical max FPS", webcam.getCurrentPipelineMaxFps());
             telemetry.addData("Analysis", pipeline.getAnalysis());
             telemetry.addData("Max", pipeline.getMax());
-            telemetry.addData("YELLOW", pipeline.avg4);
-            telemetry.addData("BLUE", pipeline.avg2);
-            telemetry.addData("RED", pipeline.avg3);
-
+            telemetry.addData("RIGHT", pipeline.avg4);
+            telemetry.addData("LEFT", pipeline.avg2);
+            telemetry.addData("MIDDLE", pipeline.avg3);
             telemetry.update();
             sleep(50);
-
             /*
              * NOTE: stopping the stream from the camera early (before the end of the OpMode
              * when it will be automatically stopped for you) *IS* supported. The "if" statement
@@ -149,7 +136,6 @@ public class MONKERYSEEMONRYDOO extends LinearOpMode
                 webcam.stopStreaming();
                 //webcam.closeCameraDevice();
             }
-
             /*
              * For the purposes of this sample, throttle ourselves to 10Hz loop to avoid burning
              * excess CPU cycles for no reason. (By default, telemetry is only sent to the DS at 4Hz
@@ -158,45 +144,36 @@ public class MONKERYSEEMONRYDOO extends LinearOpMode
             sleep(100);
         }
     }
-
     public static class SamplePipeline extends OpenCvPipeline
     {
         public enum SkystonePosition
         {
-            RED,
-            BLUE,
-            YELLOW
+            LEFT,
+            MIDDLE,
+            RIGHT
         }
-        static final Scalar BLUE = new Scalar(0, 0, 255);
-        static final Scalar BROWN = new Scalar(255, 1, 50);
-        static final Scalar YELLOW = new Scalar(255, 255, 51);
-        static final Scalar RED = new Scalar(255, 0, 0);
-        private volatile SkystonePosition position = SkystonePosition.YELLOW;
+        static final Scalar LEFT = new Scalar(0, 0, 255);
+        static final Scalar RIGHT = new Scalar(255, 255, 51);
+        static final Scalar MIDDLE = new Scalar(255, 0, 0);
+        private volatile SkystonePosition position = SkystonePosition.RIGHT;
         int cNum =0;
         int cNum1 =1;
         int cNum2 =2;
         static int posNum = 590;
-        String colorBlue = "BLUE";
-        String colorRed = "YELLOW";
-        String colorRedNeg = "RED";
-
-
-
+        String colorLEFT = "LEFT";
+        String colorMIDDLE = "RIGHT";
+        String colorMIDDLENeg = "MIDDLE";
         Mat region2_Cb, region3_Cb,region4_Cb, region5_Cb;
         Mat YCrCb = new Mat();
         Mat Cr = new Mat();
         Mat Cb = new Mat();
         Mat outPut = new Mat();
-
         int avg2, avg3, avg4;
         static final int REGION_WIDTH = 50;
         static final int REGION_HEIGHT = 50;
-
         static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(275,230);
         static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(275,230);
         static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(275,230);
-
-
         void inputToCb(Mat input)
         {
             Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
@@ -207,15 +184,12 @@ public class MONKERYSEEMONRYDOO extends LinearOpMode
             Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
             Core.extractChannel(YCrCb, Cb, cNum2);
             Core.bitwise_not(Cb, outPut);
-
         }
-
         void inputToCr(Mat input)
         {
             Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
             Core.extractChannel(YCrCb, Cr, cNum1);
         }
-
         Point region1_pointA = new Point(
                 REGION1_TOPLEFT_ANCHOR_POINT.x,
                 REGION1_TOPLEFT_ANCHOR_POINT.y);
@@ -234,9 +208,6 @@ public class MONKERYSEEMONRYDOO extends LinearOpMode
         Point region3_pointB = new Point(
                 REGION3_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
                 REGION3_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
-
-
-
         @Override
         public void init(Mat firstFrame)
         {
@@ -246,94 +217,78 @@ public class MONKERYSEEMONRYDOO extends LinearOpMode
             region4_Cb = outPut.submat(new Rect(region1_pointA, region1_pointB));
             inputToCr(firstFrame);
             region3_Cb = Cr.submat(new Rect(region3_pointA, region3_pointB));
-
         }
         @Override
         public Mat processFrame(Mat input)
         {
-
             inputToCb(input);
             avg2 = (int) Core.mean(region2_Cb).val[0];
             inputToCbInvert(input);
             avg4 = (int) Core.mean(region4_Cb).val[0];
             inputToCr(input);
-
             avg3 = (int) Core.mean(region3_Cb).val[0];
-
             Imgproc.rectangle(
                     input, // Buffer to draw on
                     region1_pointA, // First point which defines the rectangle
                     region1_pointB, // Second point which defines the rectangle
-                    BROWN, // The color the rectangle is drawn in
+                    RIGHT, // The color the rectangle is drawn in
                     5); // Thickness of the rectangle lines
             Imgproc.rectangle(
                     input, // Buffer to draw on
                     region2_pointA, // First point which defines the rectangle
                     region2_pointB, // Second point which defines the rectangle
-                    BROWN, // The color the rectangle is drawn in
+                    RIGHT, // The color the rectangle is drawn in
                     5); // Thickness of the rectangle lines
             Imgproc.rectangle(
                     input, // Buffer to draw on
                     region3_pointA, // First point which defines the rectangle
                     region3_pointB, // Second point which defines the rectangle
-                    BROWN, // The color the rectangle is drawn in
+                    RIGHT, // The color the rectangle is drawn in
                     5); // Thickness of the rectangle lines
 
 
             int maxTwoThree = Math.max(avg3, avg2);
             int max = Math.max(maxTwoThree, avg4);
-
-
             if( max == avg2) // Was it from region 2?
             {
-                position =SkystonePosition.BLUE; // Record our analysis
-
+                position =SkystonePosition.MIDDLE; // Record our analysis
                 Imgproc.rectangle(
                         input, // Buffer to draw on
                         region2_pointA, // First point which defines the rectangle
                         region2_pointB, // Second point which defines the rectangle
-                        BLUE, // The color the rectangle is drawn in
+                        LEFT, // The color the rectangle is drawn in
                         -1); // Negative thickness means solid fill
             }
             else if( max == avg3 ) // Was it from region 3?
             {
-                position = SkystonePosition.RED; // Record our analysis
-
+                position = SkystonePosition.LEFT; // Record our analysis
                 Imgproc.rectangle(
                         input, // Buffer to draw on
                         region3_pointA, // First point which defines the rectangle
                         region3_pointB, // Second point which defines the rectangle
-                        RED, // The color the rectangle is drawn in
+                        MIDDLE, // The color the rectangle is drawn in
                         -1); // Negative thickness means solid fill
             }
             else if (max == avg4) // Was it from region 2?
             {
-                position = SkystonePosition.YELLOW; // Record our analysis
-
+                position = SkystonePosition.RIGHT; // Record our analysis
                 Imgproc.rectangle(
                         input, // Buffer to draw on
                         region1_pointA, // First point which defines the rectangle
                         region1_pointB, // Second point which defines the rectangle
-                        YELLOW, // The color the rectangle is drawn in
+                        RIGHT, // The color the rectangle is drawn in
                         -1); // Negative thickness means solid fill
             }
-
-
             return input;
         }
-
         public SkystonePosition getAnalysis()
         {
             return position;
         }
-
         public int getMax(){
             int maxTwoThree = Math.max(avg3, avg2);
             int max = Math.max(maxTwoThree, avg4);
-
             return max;
         }
-
     }
-
 }
