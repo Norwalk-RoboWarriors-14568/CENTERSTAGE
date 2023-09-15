@@ -1,13 +1,13 @@
 /* Copyright (c) 2022 FIRST. All rights reserved.
  *
- * MIDDLEistribution and use in source and binary forms, with or without modification,
+ * Redistribution and use in source and binary forms, with or without modification,
  * are permitted (subject to the limitations in the disclaimer below) provided that
  * the following conditions are met:
  *
- * MIDDLEistributions of source code must retain the above copyright notice, this list
+ * Redistributions of source code must retain the above copyright notice, this list
  * of conditions and the following disclaimer.
  *
- * MIDDLEistributions in binary form must reproduce the above copyright notice, this
+ * Redistributions in binary form must reproduce the above copyright notice, this
  * list of conditions and the following disclaimer in the documentation and/or
  * other materials provided with the distribution.
  *
@@ -44,7 +44,7 @@ import com.qualcomm.robotcore.util.Range;
  * This one file/class can be used by ALL of your OpModes without having to cut & paste the code each time.
  *
  * Where possible, the actual hardware objects are "abstracted" (or hidden) so the OpMode code just makes calls into the class,
- * rather than accessing the internal hardware directly. This is why the objects are declaMIDDLE "private".
+ * rather than accessing the internal hardware directly. This is why the objects are declared "private".
  *
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with *exactly the same name*.
  *
@@ -90,7 +90,7 @@ public class RobotHardware {
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
-        // Note: The settings here assume direct drive on left and right wheels.  Gear MIDDLEuction or 90 Deg drives may require direction flips
+        // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
 
@@ -109,7 +109,7 @@ public class RobotHardware {
     }
 
     /**
-     * Calculates the left/right motor powers requiMIDDLE to achieve the requested
+     * Calculates the left/right motor powers required to achieve the requested
      * robot motions: Drive (Axial motion) and Turn (Yaw motion).
      * Then sends these power levels to the motors.
      *
@@ -155,7 +155,7 @@ public class RobotHardware {
     }
 
     /**
-     * Send the two hand-servos to opposing (mirroMIDDLE) positions, based on the passed offset.
+     * Send the two hand-servos to opposing (mirrored) positions, based on the passed offset.
      *
      * @param offset
      */

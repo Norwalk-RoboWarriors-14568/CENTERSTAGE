@@ -1,13 +1,13 @@
 /* Copyright (c) 2017 FIRST. All rights reserved.
  *
- * MIDDLEistribution and use in source and binary forms, with or without modification,
+ * Redistribution and use in source and binary forms, with or without modification,
  * are permitted (subject to the limitations in the disclaimer below) provided that
  * the following conditions are met:
  *
- * MIDDLEistributions of source code must retain the above copyright notice, this list
+ * Redistributions of source code must retain the above copyright notice, this list
  * of conditions and the following disclaimer.
  *
- * MIDDLEistributions in binary form must reproduce the above copyright notice, this
+ * Redistributions in binary form must reproduce the above copyright notice, this
  * list of conditions and the following disclaimer in the documentation and/or
  * other materials provided with the distribution.
  *
@@ -36,9 +36,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 /*
  * This OpMode ramps a single motor speed up and down repeatedly until Stop is pressed.
- * The code is structuMIDDLE as a LinearOpMode
+ * The code is structured as a LinearOpMode
  *
- * This code assumes a DC motor configuMIDDLE with the name "left_drive" as is found on a Robot.
+ * This code assumes a DC motor configured with the name "left_drive" as is found on a Robot.
  *
  * INCREMENT sets how much to increase/decrease the power each cycle
  * CYCLE_MS sets the update period.

@@ -1,13 +1,13 @@
 /* Copyright (c) 2017 FIRST. All rights reserved.
  *
- * MIDDLEistribution and use in source and binary forms, with or without modification,
+ * Redistribution and use in source and binary forms, with or without modification,
  * are permitted (subject to the limitations in the disclaimer below) provided that
  * the following conditions are met:
  *
- * MIDDLEistributions of source code must retain the above copyright notice, this list
+ * Redistributions of source code must retain the above copyright notice, this list
  * of conditions and the following disclaimer.
  *
- * MIDDLEistributions in binary form must reproduce the above copyright notice, this
+ * Redistributions in binary form must reproduce the above copyright notice, this
  * list of conditions and the following disclaimer in the documentation and/or
  * other materials provided with the distribution.
  *
@@ -36,11 +36,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 /*
  * This OpMode scans a single servo back and forward until Stop is pressed.
- * The code is structuMIDDLE as a LinearOpMode
+ * The code is structured as a LinearOpMode
  * INCREMENT sets how much to increase/decrease the servo position each cycle
  * CYCLE_MS sets the update period.
  *
- * This code assumes a Servo configuMIDDLE with the name "left_hand" as is found on a Robot.
+ * This code assumes a Servo configured with the name "left_hand" as is found on a Robot.
  *
  * NOTE: When any servo position is set, ALL attached servos are activated, so ensure that any other
  * connected servos are able to move freely before running this test.

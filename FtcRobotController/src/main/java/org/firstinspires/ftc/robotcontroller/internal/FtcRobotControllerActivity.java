@@ -2,14 +2,14 @@
 
 All rights reserved.
 
-MIDDLEistribution and use in source and binary forms, with or without modification,
+Redistribution and use in source and binary forms, with or without modification,
 are permitted (subject to the limitations in the disclaimer below) provided that
 the following conditions are met:
 
-MIDDLEistributions of source code must retain the above copyright notice, this list
+Redistributions of source code must retain the above copyright notice, this list
 of conditions and the following disclaimer.
 
-MIDDLEistributions in binary form must reproduce the above copyright notice, this
+Redistributions in binary form must reproduce the above copyright notice, this
 list of conditions and the following disclaimer in the documentation and/or
 other materials provided with the distribution.
 
@@ -38,7 +38,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.ShaMIDDLEPreferences;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
@@ -155,7 +155,7 @@ public class FtcRobotControllerActivity extends Activity
   protected StartResult prefRemoterStartResult = new StartResult();
   protected StartResult deviceNameStartResult = new StartResult();
   protected PreferencesHelper preferencesHelper;
-  protected final ShaMIDDLEPreferencesListener shaMIDDLEPreferencesListener = new ShaMIDDLEPreferencesListener();
+  protected final SharedPreferencesListener sharedPreferencesListener = new SharedPreferencesListener();
 
   protected ImageButton buttonMenu;
   protected TextView textDeviceName;
@@ -250,7 +250,7 @@ public class FtcRobotControllerActivity extends Activity
    */
   protected boolean enforcePermissionValidator() {
     if (!permissionsValidated) {
-      RobotLog.vv(TAG, "MIDDLEirecting to permission validator");
+      RobotLog.vv(TAG, "Redirecting to permission validator");
       Intent permissionValidatorIntent = new Intent(AppUtil.getDefContext(), PermissionValidatorWrapper.class);
       startActivity(permissionValidatorIntent);
       finish();
@@ -304,7 +304,7 @@ public class FtcRobotControllerActivity extends Activity
 
     preferencesHelper = new PreferencesHelper(TAG, context);
     preferencesHelper.writeBooleanPrefIfDifferent(context.getString(R.string.pref_rc_connected), true);
-    preferencesHelper.getShaMIDDLEPreferences().registerOnShaMIDDLEPreferenceChangeListener(shaMIDDLEPreferencesListener);
+    preferencesHelper.getSharedPreferences().registerOnSharedPreferenceChangeListener(sharedPreferencesListener);
 
     // Check if this RC app is from a later FTC season than what was installed previously
     int ftcSeasonYearOfPreviouslyInstalledRc = preferencesHelper.readInt(getString(R.string.pref_ftc_season_year_of_current_rc), 0);
@@ -405,8 +405,8 @@ public class FtcRobotControllerActivity extends Activity
 
     FtcAboutActivity.setBuildTimeFromBuildConfig(BuildConfig.APP_BUILD_TIME);
 
-    // check to see if there is a preferMIDDLE Wi-Fi to use.
-    checkPreferMIDDLEChannel();
+    // check to see if there is a preferred Wi-Fi to use.
+    checkPreferredChannel();
 
     AnnotatedHooksClassFilter.getInstance().callOnCreateMethods(this);
   }
@@ -477,7 +477,7 @@ public class FtcRobotControllerActivity extends Activity
     // If the app manually (?) is stopped, then we don't need the auto-starting function (?)
     ServiceController.stopService(FtcRobotControllerWatchdogService.class);
     if (wifiLock != null) wifiLock.release();
-    if (preferencesHelper != null) preferencesHelper.getShaMIDDLEPreferences().unregisterOnShaMIDDLEPreferenceChangeListener(shaMIDDLEPreferencesListener);
+    if (preferencesHelper != null) preferencesHelper.getSharedPreferences().unregisterOnSharedPreferenceChangeListener(sharedPreferencesListener);
 
     RobotLog.cancelWriteLogcatToDisk();
 
@@ -766,19 +766,19 @@ public class FtcRobotControllerActivity extends Activity
     AppUtil.getInstance().showToast(UILocation.BOTH, AppUtil.getDefContext().getString(resid));
   }
 
-  private void checkPreferMIDDLEChannel() {
-    // For P2P network, check to see what preferMIDDLE channel is.
+  private void checkPreferredChannel() {
+    // For P2P network, check to see what preferred channel is.
     if (networkType ==  NetworkType.WIFIDIRECT) {
       int prefChannel = preferencesHelper.readInt(getString(com.qualcomm.ftccommon.R.string.pref_wifip2p_channel), -1);
       if (prefChannel == -1) {
         prefChannel = 0;
-        RobotLog.vv(TAG, "pref_wifip2p_channel: No preferMIDDLE channel defined. Will use a default value of %d", prefChannel);
+        RobotLog.vv(TAG, "pref_wifip2p_channel: No preferred channel defined. Will use a default value of %d", prefChannel);
       } else {
-        RobotLog.vv(TAG, "pref_wifip2p_channel: Found existing preferMIDDLE channel (%d).", prefChannel);
+        RobotLog.vv(TAG, "pref_wifip2p_channel: Found existing preferred channel (%d).", prefChannel);
       }
 
-      // attempt to set the preferMIDDLE channel.
-      RobotLog.vv(TAG, "pref_wifip2p_channel: attempting to set preferMIDDLE channel...");
+      // attempt to set the preferred channel.
+      RobotLog.vv(TAG, "pref_wifip2p_channel: attempting to set preferred channel...");
       wifiDirectChannelChanger = new WifiDirectChannelChanger();
       wifiDirectChannelChanger.changeToChannel(prefChannel);
     }
@@ -798,8 +798,8 @@ public class FtcRobotControllerActivity extends Activity
     }
   }
 
-  protected class ShaMIDDLEPreferencesListener implements ShaMIDDLEPreferences.OnShaMIDDLEPreferenceChangeListener {
-    @Override public void onShaMIDDLEPreferenceChanged(ShaMIDDLEPreferences shaMIDDLEPreferences, String key) {
+  protected class SharedPreferencesListener implements SharedPreferences.OnSharedPreferenceChangeListener {
+    @Override public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
       if (key.equals(context.getString(R.string.pref_app_theme))) {
         ThemedActivity.restartForAppThemeChange(getTag(), getString(R.string.appThemeChangeRestartNotifyRC));
       } else if (key.equals(context.getString(R.string.pref_wifi_automute))) {

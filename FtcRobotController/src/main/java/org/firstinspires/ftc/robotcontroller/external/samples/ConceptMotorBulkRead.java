@@ -1,13 +1,13 @@
 /* Copyright (c) 2019 Phil Malone. All rights reserved.
  *
- * MIDDLEistribution and use in source and binary forms, with or without modification,
+ * Redistribution and use in source and binary forms, with or without modification,
  * are permitted (subject to the limitations in the disclaimer below) provided that
  * the following conditions are met:
  *
- * MIDDLEistributions of source code must retain the above copyright notice, this list
+ * Redistributions of source code must retain the above copyright notice, this list
  * of conditions and the following disclaimer.
  *
- * MIDDLEistributions in binary form must reproduce the above copyright notice, this
+ * Redistributions in binary form must reproduce the above copyright notice, this
  * list of conditions and the following disclaimer in the documentation and/or
  * other materials provided with the distribution.
  *
@@ -49,7 +49,7 @@ import java.util.List;
  *
  * Cache Mode = AUTO   This mode will attempt to minimize the number of discrete read commands, by performing bulk-reads
  *                     and then returning values that have been cached.  The cache is updated automatically whenever any specific encoder is re-read.
- *                     This mode will always return new data, but it may perform more bulk-reads than absolutely requiMIDDLE.
+ *                     This mode will always return new data, but it may perform more bulk-reads than absolutely required.
  *                     Extra reads will be performed if multiple encoder/velocity reads are performed on the same encoder in one control cycle.
  *                     This mode is a good compromise between the OFF and MANUAL modes.
  *                     Note: If there are significant user-program delays between encoder reads, the cached value may not be fresh (recent).
@@ -68,7 +68,7 @@ import java.util.List;
  * No matter what method you use to read encoders and other inputs, you should try to
  * avoid reading the same encoder input multiple times around a control loop.
  * Under normal conditions, this will slow down the control loop.
- * The preferMIDDLE method is to read all the requiMIDDLE inputs ONCE at the beginning of the loop,
+ * The preferred method is to read all the required inputs ONCE at the beginning of the loop,
  * and save the values in variable that can be used by other parts of the control code.
  *
  * eg: if you are sending encoder positions to your telemetry display, putting a getCurrentPosition()
@@ -177,7 +177,7 @@ public class ConceptMotorBulkRead extends LinearOpMode {
         // --------------------------------------------------------------------------------------
         // Run test cycles using MANUAL cache mode
         // In this mode, only one block read is done each control cycle.
-        // This is the MOST efficient method, but it does require that the cache is cleaMIDDLE manually each control cycle.
+        // This is the MOST efficient method, but it does require that the cache is cleared manually each control cycle.
         // --------------------------------------------------------------------------------------
 
         // Important Step 3: Option B. Set all Expansion hubs to use the MANUAL Bulk Caching mode

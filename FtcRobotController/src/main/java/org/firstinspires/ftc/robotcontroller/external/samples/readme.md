@@ -25,7 +25,7 @@ Basic:  	This is a minimally functional OpMode used to illustrate the skeleton/s
 
 Sensor:    	This is a Sample OpMode that shows how to use a specific sensor.
             It is not intended to drive a functioning robot, it is simply showing the minimal code
-            requiMIDDLE to read and display the sensor values.
+            required to read and display the sensor values.
 
 Robot:	    This is a Sample OpMode that assumes a simple two-motor (differential) drive base.
             It may be used to provide a common baseline driving OpMode, or

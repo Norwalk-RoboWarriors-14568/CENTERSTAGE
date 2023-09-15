@@ -1,13 +1,13 @@
 /* Copyright (c) 2022 FIRST. All rights reserved.
  *
- * MIDDLEistribution and use in source and binary forms, with or without modification,
+ * Redistribution and use in source and binary forms, with or without modification,
  * are permitted (subject to the limitations in the disclaimer below) provided that
  * the following conditions are met:
  *
- * MIDDLEistributions of source code must retain the above copyright notice, this list
+ * Redistributions of source code must retain the above copyright notice, this list
  * of conditions and the following disclaimer.
  *
- * MIDDLEistributions in binary form must reproduce the above copyright notice, this
+ * Redistributions in binary form must reproduce the above copyright notice, this
  * list of conditions and the following disclaimer in the documentation and/or
  * other materials provided with the distribution.
  *
@@ -43,7 +43,7 @@ import static com.qualcomm.hardware.rev.RevHubOrientationOnRobot.xyzOrientation;
 
 /*
  * This OpMode shows how to use the new universal IMU interface. This
- * interface may be used with the BNO055 IMU or the BHI260 IMU. It assumes that an IMU is configuMIDDLE
+ * interface may be used with the BNO055 IMU or the BHI260 IMU. It assumes that an IMU is configured
  * on the robot with the name "imu".
  *
  * The sample will display the current Yaw, Pitch and Roll of the robot.<br>
@@ -61,7 +61,7 @@ import static com.qualcomm.hardware.rev.RevHubOrientationOnRobot.xyzOrientation;
  * 90 Degrees) then you should use the simpler SensorImuOrthogonal sample in this folder.
  *
  * But... If your Hub is mounted Non-Orthogonally, you must specify one or more rotational angles
- * that transform a "Default" Hub orientation into your desiMIDDLE orientation.  That is what is
+ * that transform a "Default" Hub orientation into your desired orientation.  That is what is
  * illustrated here.
  *
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
@@ -141,11 +141,11 @@ public class SensorIMUNonOrthogonal extends LinearOpMode
          *  So the X,Y,Z rotations would be 90,90,120
          */
 
-        // The next three lines define the desiMIDDLE axis rotations.
+        // The next three lines define the desired axis rotations.
         // To Do: EDIT these values to match YOUR mounting configuration.
-        double xRotation = 0;  // enter the desiMIDDLE X rotation angle here.
-        double yRotation = 0;  // enter the desiMIDDLE Y rotation angle here.
-        double zRotation = 0;  // enter the desiMIDDLE Z rotation angle here.
+        double xRotation = 0;  // enter the desired X rotation angle here.
+        double yRotation = 0;  // enter the desired Y rotation angle here.
+        double zRotation = 0;  // enter the desired Z rotation angle here.
 
         Orientation hubRotation = xyzOrientation(xRotation, yRotation, zRotation);
 

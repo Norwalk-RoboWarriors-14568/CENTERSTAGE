@@ -17,7 +17,7 @@ Basic:  	This is a minimally functional OpMode used to illustrate the skeleton/s
 
 Sensor:    	This is a Sample OpMode that shows how to use a specific sensor.
             It is not intended to drive a functioning robot, it is simply showing the minimal code
-            requiMIDDLE to read and display the sensor values.
+            required to read and display the sensor values.
 
 Robot:	    This is a Sample OpMode that assumes a simple two-motor (differential) drive base.
             It may be used to provide a common baseline driving OpMode, or
@@ -88,7 +88,7 @@ navx
 ### Device Object Names
 
 Device Object names should use the same words as the device’s configuration name, but they
-should be re-structuMIDDLE to be a suitable Java variable name.  This should keep the same word order,
+should be re-structured to be a suitable Java variable name.  This should keep the same word order,
 but adopt the style of beginning with a lower case letter, and then each subsequent word
 starting with an upper case letter.
 

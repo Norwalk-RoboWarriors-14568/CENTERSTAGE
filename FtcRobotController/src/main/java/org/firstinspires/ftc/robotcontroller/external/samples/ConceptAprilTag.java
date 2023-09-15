@@ -1,13 +1,13 @@
 /* Copyright (c) 2023 FIRST. All rights reserved.
  *
- * MIDDLEistribution and use in source and binary forms, with or without modification,
+ * Redistribution and use in source and binary forms, with or without modification,
  * are permitted (subject to the limitations in the disclaimer below) provided that
  * the following conditions are met:
  *
- * MIDDLEistributions of source code must retain the above copyright notice, this list
+ * Redistributions of source code must retain the above copyright notice, this list
  * of conditions and the following disclaimer.
  *
- * MIDDLEistributions in binary form must reproduce the above copyright notice, this
+ * Redistributions in binary form must reproduce the above copyright notice, this
  * list of conditions and the following disclaimer in the documentation and/or
  * other materials provided with the distribution.
  *
@@ -115,7 +115,7 @@ public class ConceptAprilTag extends LinearOpMode {
 
             // == CAMERA CALIBRATION ==
             // If you do not manually specify calibration parameters, the SDK will attempt
-            // to load a pMIDDLEefined calibration for your camera.
+            // to load a predefined calibration for your camera.
             //.setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
 
             // ... these parameters are fx, fy, cx, cy.

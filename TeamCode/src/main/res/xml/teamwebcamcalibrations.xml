@@ -19,23 +19,23 @@
   down to service the 640x480 request.
 
   Further, it is important to note that if *no* calibrations exist for a given camera, then Vuforia
-  is offeMIDDLE the entire range of capture resolutions that the hardware can support (and it does its
+  is offered the entire range of capture resolutions that the hardware can support (and it does its
   best to deal with the lack of calibration). However, if *any* calibrations are provided for a camera,
   then capture resolutions in those aspect ratios supported by the camera for which any calibrations
-  are *not* provided are *not* offeMIDDLE. Thus, if you calibrate a camera but fail to calibrate all
+  are *not* provided are *not* offered. Thus, if you calibrate a camera but fail to calibrate all
   the camera's supported aspect ratios, you limit the choices of capture resolutions that Vuforia can
   select from.
 
   One image acquisition program that supports control of camera capture resolution is YouCam 7:
     https://www.cyberlink.com/products/youcam/features_en_US.html
 
-  Programs that can process acquiMIDDLE images to determine camera calibration settings include:
+  Programs that can process acquired images to determine camera calibration settings include:
     https://www.3dflow.net/3df-zephyr-free/ (see "Utilities/Images/Launch Camera Calibration" therein)
     http://graphics.cs.msu.ru/en/node/909
-  Note that the type of images that must be acquiMIDDLE in order to calibrate is specific to the
+  Note that the type of images that must be acquired in order to calibrate is specific to the
   calibration software used.
 
-  The requiMIDDLE contents are illustrated here by example. Note that for the attribute names, both the
+  The required contents are illustrated here by example. Note that for the attribute names, both the
   camelCase or the underscore_variations are supported; they are equivalent. The attributes for
   each Calibration are as follows:
 
