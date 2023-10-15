@@ -92,6 +92,7 @@ public class TeleOpPOV extends OpMode {
             intakeRight.setPower(0);
             intakeLeft.setPower(0);
         }
+
     }
     @Override
     public void stop() {
@@ -105,6 +106,8 @@ public class TeleOpPOV extends OpMode {
             br.setPower(backRight);
 
         }
+
+
         public void setBehavior(DcMotor motor, DcMotor.ZeroPowerBehavior Behavior){
             motor.setZeroPowerBehavior(Behavior);
         }
