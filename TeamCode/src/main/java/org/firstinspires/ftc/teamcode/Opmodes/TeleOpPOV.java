@@ -15,7 +15,7 @@ public class TeleOpPOV extends OpMode {
     private DcMotor fl, bl, fr, br, armAngle, armHeight, slide;
 
     private CRServo intakeLeft, intakeRight;
-    private boolean mecanumDriveMode = true, slideOn = true;
+    private boolean mecanumDriveMode = true;
     private float mecanumStrafe = 0;
 
     @Override
@@ -92,7 +92,7 @@ public class TeleOpPOV extends OpMode {
             intakeRight.setPower(0);
             intakeLeft.setPower(0);
         }
-        
+
     }
     @Override
     public void stop() {
