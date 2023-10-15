@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@TeleOp(name = "POV Drive")
+@TeleOp
 
 public class TeleOpZTD extends OpMode {
     private DcMotor fl, bl, fr, br, armAngle, armHeight, slide;

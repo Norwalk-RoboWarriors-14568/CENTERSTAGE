@@ -24,7 +24,7 @@ public class MONKERYSEEMONRYDOO extends LinearOpMode
         /*
          * Instantiate an OpenCvCamera object for the camera we'll be using.
          * In this sample, we're using a webcam. Note that you will need to
-         * make sure you have added the webcam to your configuration file and
+         * make sure you have added the weubcam to your configuration file and
          * adjusted the name here to match what you named it in said config file.
          *
          * We pass it the view that we wish to use for camera monitor (on
@@ -213,19 +213,19 @@ public class MONKERYSEEMONRYDOO extends LinearOpMode
         {
             inputToCb(firstFrame);
             region2_Cb = Cb.submat(new Rect(region2_pointA, region2_pointB));
-            inputToCbInvert(firstFrame);
-            region4_Cb = outPut.submat(new Rect(region1_pointA, region1_pointB));
-            inputToCr(firstFrame);
-            region3_Cb = Cr.submat(new Rect(region3_pointA, region3_pointB));
+            //inputToCbInvert(firstFrame);
+            region4_Cb = Cb.submat(new Rect(region1_pointA, region1_pointB));
+            //inputToCr(firstFrame);
+            region3_Cb = Cb.submat(new Rect(region3_pointA, region3_pointB));
         }
         @Override
         public Mat processFrame(Mat input)
         {
             inputToCb(input);
             avg2 = (int) Core.mean(region2_Cb).val[0];
-            inputToCbInvert(input);
+            //inputToCbInvert(input);
             avg4 = (int) Core.mean(region4_Cb).val[0];
-            inputToCr(input);
+           // inputToCr(input);
             avg3 = (int) Core.mean(region3_Cb).val[0];
             Imgproc.rectangle(
                     input, // Buffer to draw on
@@ -247,8 +247,7 @@ public class MONKERYSEEMONRYDOO extends LinearOpMode
                     5); // Thickness of the rectangle lines
 
 
-            int maxTwoThree = Math.max(avg3, avg2);
-            int max = Math.max(maxTwoThree, avg4);
+            int maxTwoThree = Math.max(avg3, avg2);            int max = Math.max(maxTwoThree, avg4);
             if( max == avg2) // Was it from region 2?
             {
                 position =SkystonePosition.MIDDLE; // Record our analysis
