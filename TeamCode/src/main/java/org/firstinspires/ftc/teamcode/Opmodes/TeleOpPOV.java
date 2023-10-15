@@ -15,7 +15,7 @@ public class TeleOpPOV extends OpMode {
     private DcMotor fl, bl, fr, br, armAngle, armHeight, slide;
 
     private CRServo intakeLeft, intakeRight;
-    private boolean mecanumDriveMode = true;
+    private boolean mecanumDriveMode = true, slideOn = true;
     private float mecanumStrafe = 0;
 
     @Override
@@ -92,6 +92,9 @@ public class TeleOpPOV extends OpMode {
             intakeRight.setPower(0);
             intakeLeft.setPower(0);
         }
+        if (gamepad2.a){
+            toggleSlide();
+        }
     }
     @Override
     public void stop() {
@@ -105,6 +108,17 @@ public class TeleOpPOV extends OpMode {
             br.setPower(backRight);
 
         }
+        public void toggleSlide(){
+            if (!slideOn) {
+                slide.setPower(1);
+                slideOn = true;
+            } else {
+                slide.setPower(0);
+                slideOn = false;
+            }
+
+        }
+
         public void setBehavior(DcMotor motor, DcMotor.ZeroPowerBehavior Behavior){
             motor.setZeroPowerBehavior(Behavior);
         }
