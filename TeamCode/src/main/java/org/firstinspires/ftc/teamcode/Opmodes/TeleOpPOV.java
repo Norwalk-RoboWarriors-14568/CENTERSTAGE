@@ -92,9 +92,7 @@ public class TeleOpPOV extends OpMode {
             intakeRight.setPower(0);
             intakeLeft.setPower(0);
         }
-        if (gamepad2.a){
-            toggleSlide();
-        }
+        
     }
     @Override
     public void stop() {
@@ -108,16 +106,7 @@ public class TeleOpPOV extends OpMode {
             br.setPower(backRight);
 
         }
-        public void toggleSlide(){
-            if (!slideOn) {
-                slide.setPower(1);
-                slideOn = true;
-            } else {
-                slide.setPower(0);
-                slideOn = false;
-            }
 
-        }
 
         public void setBehavior(DcMotor motor, DcMotor.ZeroPowerBehavior Behavior){
             motor.setZeroPowerBehavior(Behavior);
