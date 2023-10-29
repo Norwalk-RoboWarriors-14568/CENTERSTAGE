@@ -5,6 +5,7 @@ import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.STOP_AND_RESET_ENCODER;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -48,6 +49,7 @@ public class MyPocketsISrealite extends LinearOpMode{
 
         @Override
         public void runOpMode() throws InterruptedException {
+
             drive = new MecanumDrive(hardwareMap);
 
             drive.setPoseEstimate(startPose);
@@ -91,22 +93,22 @@ public class MyPocketsISrealite extends LinearOpMode{
                 }
             }
 
-            Trajectory startingStrafe = drive.trajectory (startPose)
+            TrajectoryActionBuilder startingStrafe = drive.actionBuilder((startPose))
                     .lineToConstantHeading(new Vector2d(8,-24))
                     .build();
 
-            Action toFirstJunction = drive.trajectoryActionBuilder(startingStrafe.end())
+            TrajectoryActionBuilder toFirstJunction = drive.actionBuilder(startingStrafe.end())
                     .lineToLinearHeading(new Pose2d(48, -24, Math.toRadians(0)))
                     .lineToLinearHeading(new Pose2d(55.5, -10, Math.toRadians(0)))
                     .build();
 
-            TrajectorySequence toStack = drive.trajectorySequenceBuilder((toFirstJunction.end()))
+            TrajectoryActionBuilder toStack = drive.actionBuilder((toFirstJunction.end()))
                     .lineToLinearHeading(new Pose2d(52.5, -11, Math.toRadians(0)))
                     .lineToLinearHeading(new Pose2d(53, 0, Math.toRadians(90)))
                     .lineToLinearHeading(new Pose2d(53, 27.5, Math.toRadians(90)))
                     .build();
 
-            TrajectorySequence toBigPole = drive.trajectorySequenceBuilder((toStack.end()))
+            TrajectoryActionBuilder toBigPole = drive.actionBuilder((toStack.end()))
                     //.lineToLinearHeading(new Pose2d(52.5, 6, Math.toRadians(-90)))
                     //.lineToLinearHeading(new Pose2d(52, 10, Math.toRadians(0)))
                     //.lineToLinearHeading(new Pose2d(55.75, 10, Math.toRadians(0)))
@@ -114,24 +116,24 @@ public class MyPocketsISrealite extends LinearOpMode{
                     .lineToLinearHeading(new Pose2d(57.5, -9, Math.toRadians(0)))
                     .build();
 
-            TrajectorySequence toStackTwo = drive.trajectorySequenceBuilder((toBigPole.end()))
+            TrajectoryActionBuilder toStackTwo = drive.actionBuilder((toBigPole.end()))
                     .lineToLinearHeading(new Pose2d(52.5, -10.5, Math.toRadians(0)))
                     .lineToLinearHeading(new Pose2d(53, 0, Math.toRadians(90)))
                     .lineToLinearHeading(new Pose2d(53.75, 26.5, Math.toRadians(90)))
                     .build();
 
-            TrajectorySequence toBigPoleTwo = drive.trajectorySequenceBuilder((toStackTwo.end()))
+            TrajectoryActionBuilder toBigPoleTwo = drive.actionBuilder((toStackTwo.end()))
                     .lineToLinearHeading(new Pose2d(52.5, -6, Math.toRadians(90)))
                     .lineToLinearHeading(new Pose2d(52, -10, Math.toRadians(0)))
                     .lineToLinearHeading(new Pose2d(55.75, -10, Math.toRadians(0)))
                     .build();
-            TrajectorySequence toSmallPole = drive.trajectorySequenceBuilder(toStack.end())
+            TrajectoryActionBuilder toSmallPole = drive.actionBuilder(toStack.end())
                     //.lineToLinearHeading(new Pose2d(54, 14.5, Math.toRadians(180)))
                     .lineToLinearHeading(new Pose2d(55, 25, Math.toRadians(90)))
 
                     .lineToLinearHeading(new Pose2d(49.5, 12.5, Math.toRadians(180)))
                     .build();
-            TrajectorySequence Park = drive.trajectorySequenceBuilder(toSmallPole.end())
+            TrajectoryActionBuilder Park = drive.actionBuilder(toSmallPole.end())
                     // .lineToLinearHeading(new Pose2d(54, 6, Math.toRadians(90)))
 
                     //.lineToLinearHeading(new Pose2d(52.5, -11, Math.toRadians(0)))
@@ -141,7 +143,7 @@ public class MyPocketsISrealite extends LinearOpMode{
             waitForStart();
 
             if (isStopRequested()) return;
-            drive.followTrajectoryAsync(startingStrafe);
+            drive.FollowTrajectoryAction(startingStrafe);
 
             while (opModeIsActive() && !isStopRequested()) {
                 switch (currentState) {
@@ -149,7 +151,7 @@ public class MyPocketsISrealite extends LinearOpMode{
                         drive.ConeGrabber.setPosition(0);
                         if (!drive.isBusy()) {
                             currentState = State.FIRST_JUNCTION;
-                            drive.followTrajectorySequenceAsync(toFirstJunction);
+                            drive.ParallelAction(toFirstJunction);
                         }
                         break;
                     case FIRST_JUNCTION:
@@ -251,5 +253,7 @@ public class MyPocketsISrealite extends LinearOpMode{
             drive.motorLift.setPower(armSpeed);
             drive.motorLift.setMode(RUN_TO_POSITION);
         }
+
+
     }
 }
