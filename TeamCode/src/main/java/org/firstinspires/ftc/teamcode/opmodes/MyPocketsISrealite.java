@@ -158,7 +158,7 @@ public class MyPocketsISrealite extends LinearOpMode{
             //drive.FollowTrajectoryAction(startingStrafe);
 
             Drive drive = new Drive();
-            drive.moveToPoint(10, 20).runBlocking();
+           // drive.moveToPoint(10, 20).runBlocking();
 
             while (opModeIsActive() && !isStopRequested()) {
                 /*switch (currentState) {
