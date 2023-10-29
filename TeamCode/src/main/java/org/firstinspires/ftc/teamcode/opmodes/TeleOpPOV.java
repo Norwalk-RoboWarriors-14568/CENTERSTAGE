@@ -13,24 +13,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name = "POV Drive")
 
-<<<<<<< Updated upstream
 public class TeleOpPOV extends OpMode {
-    private DcMotor fl, bl, fr, br, armAngle, armHeight, lift, intakeLeft;
-
-    //private CRServo intakeLeft, intakeRight;
-    private boolean mecanumDriveMode = true;
-    private boolean drivePOV = true;
-    private float mecanumStrafe = 0, dominantXJoystick = 0;
-
-=======
-public class        TeleOpPOV extends OpMode {
     private DcMotor fl, bl, fr, br, armAngle, armHeight, lift, intakeLeft;
 
     private CRServo  intakeRight;
     private boolean mecanumDriveMode = true;
     private float mecanumStrafe = 0, dominantXJoystick = 0;
     boolean drivePOV = true;
->>>>>>> Stashed changes
+
     @Override
     public void init() {
         fl = hardwareMap.dcMotor.get("leftFront");
@@ -44,19 +34,10 @@ public class        TeleOpPOV extends OpMode {
         lift = hardwareMap.dcMotor.get("lift");
 
         intakeLeft = hardwareMap.dcMotor.get("intakeLeft");
-<<<<<<< Updated upstream
-        //intakeRight = hardwareMap.crservo.get("intakeRight");
-=======
->>>>>>> Stashed changes
 
 
         fr.setDirection(DcMotor.Direction.REVERSE);
         br.setDirection(DcMotor.Direction.REVERSE);
-<<<<<<< Updated upstream
-        //intakeRight.setDirection(DcMotorSimple.Direction.REVERSE);
-=======
-       // intakeRight.setDirection(DcMotorSimple.Direction.REVERSE);
->>>>>>> Stashed changes
 
         setBehavior(fl, FLOAT);
         setBehavior(bl, FLOAT);
@@ -66,10 +47,6 @@ public class        TeleOpPOV extends OpMode {
         setBehavior(armAngle, BRAKE);
         setBehavior(armHeight, BRAKE);
         setBehavior(lift, BRAKE);
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 
         telemetry.addLine("Init Opmode");
     }
@@ -142,20 +119,8 @@ public class        TeleOpPOV extends OpMode {
             }
         }
 
-<<<<<<< Updated upstream
-        if ((gamepad1.right_stick_x) > 0.2){
-            drive(gamepad1.right_stick_x *2,gamepad1.right_stick_x  *2, -gamepad1.right_stick_x * 2, -gamepad1.right_stick_x  *2);
-        }   if (gamepad1.right_stick_x < -0.2){
-            drive(-gamepad1.right_stick_x *2,-gamepad1.right_stick_x  *2, gamepad1.right_stick_x * 2, gamepad1.right_stick_x  *2);
-=======
-        if (gamepad2.dpad_up){
-            lift.setPower(0.75);
-        } else if (gamepad2.dpad_down){
-            lift.setPower(-0.75);
-        } else {
-            lift.setPower(0);
->>>>>>> Stashed changes
-        }
+
+
 
         if (gamepad2.right_stick_y > 0.1){
             armHeight.setPower(gamepad2.right_stick_y * 0.1);//arm slow
@@ -166,21 +131,14 @@ public class        TeleOpPOV extends OpMode {
         }
 
         if (gamepad2.left_stick_y > 0.1) {
-<<<<<<< Updated upstream
             armAngle.setPower(gamepad2.left_stick_y * 0.2);
-        } else if (gamepad2.left_stick_y < -1) {
-            armAngle.setPower(gamepad2.left_stick_y * 0.2);
-=======
-            armAngle.setPower(0.4);
         } else if (gamepad2.left_stick_y < -0.1) {
-            armAngle.setPower(-0.4);
->>>>>>> Stashed changes
+            armAngle.setPower(gamepad2.left_stick_y * 0.2);
         } else {
             armAngle.setPower(0);
         }
 
         if (gamepad2.right_bumper) {
-<<<<<<< Updated upstream
             //intakeRight.setPower(1);
             intakeLeft.setPower(1);
         } else if (gamepad2.left_bumper) {
@@ -188,15 +146,6 @@ public class        TeleOpPOV extends OpMode {
             intakeLeft.setPower(-1);
         } else {
             //intakeRight.setPower(0);
-=======
-           // intakeRight.setPower(1);
-            intakeLeft.setPower(1);
-        } else if (gamepad2.left_bumper) {
-         //   intakeRight.setPower(-1);
-            intakeLeft.setPower(-1);
-        } else {
-           // intakeRight.setPower(0);
->>>>>>> Stashed changes
             intakeLeft.setPower(0);
         }
 
@@ -214,21 +163,14 @@ public class        TeleOpPOV extends OpMode {
 
         }
         public void drive(double left, double right) {
-<<<<<<< Updated upstream
+
             fl.setPower(left);
             bl.setPower(left);
             fr.setPower(right);
             br.setPower(right);
 
         }
-=======
-        fl.setPower(left);
-        bl.setPower(left);
-        fr.setPower(right);
-        br.setPower(right);
->>>>>>> Stashed changes
 
-    }
 
         public void setBehavior(DcMotor motor, DcMotor.ZeroPowerBehavior Behavior){
             motor.setZeroPowerBehavior(Behavior);
