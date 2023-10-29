@@ -158,7 +158,7 @@ public class MyPocketsISrealite extends LinearOpMode{
             //drive.FollowTrajectoryAction(startingStrafe);
 
             Drive drive = new Drive();
-            drive.moveToPoint(10, 20).runBlocking();
+           // drive.moveToPoint(10, 20).runBlocking();
 
             while (opModeIsActive() && !isStopRequested()) {
                 /*switch (currentState) {
@@ -248,6 +248,7 @@ public class MyPocketsISrealite extends LinearOpMode{
                 }
 
                  */
+                /*
                 runBlocking(new SequentialAction(
                         drive.turn(Math.PI / 2),
                         new ParallelAction(
@@ -258,7 +259,7 @@ public class MyPocketsISrealite extends LinearOpMode{
                                         ),
                                 ),
                         ));
-
+*/
 
                // Pose2d poseEstimate = drive.getPoseEstimate();
 
