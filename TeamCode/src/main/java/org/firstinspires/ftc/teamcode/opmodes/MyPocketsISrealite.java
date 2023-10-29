@@ -1,16 +1,13 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_TO_POSITION;
-import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
-import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.STOP_AND_RESET_ENCODER;
+import static com.acmerobotics.roadrunner.ftc.Actions.runBlocking;
 
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.Vector2d;
+import com.acmerobotics.roadrunner.SequentialAction;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
@@ -21,12 +18,7 @@ public class MyPocketsISrealite extends LinearOpMode{
         MONKERYSEEMONRYDOO openCv;
         ElapsedTime waitTimer = new ElapsedTime();
         ElapsedTime matchTimer = new ElapsedTime();
-        final double ARMTPI = 84.5;
-        int highPoleTicks =(int) (ARMTPI* 35);;
-        int topOfStack = (int) (ARMTPI* 5.25 ) ;;
-        double waitTime = 0.2;
-        int stackConesGrabbed = 0;
-        enum State {
+/*        enum State {
             START,
             FIRST_JUNCTION,
             WAIT_1,
@@ -38,7 +30,7 @@ public class MyPocketsISrealite extends LinearOpMode{
             SMALL_POLE,
             PARK
         }
-        State currentState = State.START;
+        State currentState = State.START; */
         Pose2d startPose = new Pose2d(0, 0.5, 0);
 
         Pose2d Yellow = new Pose2d(50,-25, Math.toRadians(90));
@@ -51,13 +43,8 @@ public class MyPocketsISrealite extends LinearOpMode{
 
             drive = new MecanumDrive(hardwareMap, startPose);
 
-            drive.setPoseEstimate(startPose);
             openCv = new MONKERYSEEMONRYDOO();
             openCv.OpenCv(hardwareMap, telemetry);
-
-            drive.motorLift.setDirection(DcMotorSimple.Direction.REVERSE);
-            drive.motorLift.setMode(RUN_USING_ENCODER);
-            drive.motorLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
             while (!isStarted() && !isStopRequested())
             {
@@ -69,7 +56,6 @@ public class MyPocketsISrealite extends LinearOpMode{
 
             telemetry.addData("Snapshot post-START analysis : ", snapshotAnalysis);
             telemetry.update();
-            drive.motorLift.setMode(STOP_AND_RESET_ENCODER);
 
             if (isStopRequested()) return;
 
@@ -92,11 +78,36 @@ public class MyPocketsISrealite extends LinearOpMode{
                 }
             }
 
-             startingStrafe = drive.actionBuilder((startPose))
-                    .lineToConstantHeading(new Vector2d(8,-24))
+            Action startingStrafe = drive.actionBuilder((startPose))
+                    .lineToXConstantHeading(8).lineToYConstantHeading(8)
                     .build();
 
-            TrajectoryActionBuilder toFirstJunction = drive.actionBuilder(startingStrafe.end())
+            class Drive {
+                public Action followTrajectory() {
+                    return null;
+                }
+
+                public Action turn(double v) {
+                    return null;
+                }
+
+                public Action moveToPoint() {
+                    return null;
+                }
+            }
+            class Shooter {
+                public Action spinUp() {
+                    return null;
+                }
+                public Action fireBall() {
+                    return null;
+                }
+                public Action loadBall() {
+                    return null;
+                }
+            }
+/*
+            TrajectoryActionBuilder toFirstJunction = drive.actionBuilder(new Pose2d(startingStrafe.))
                     .lineToLinearHeading(new Pose2d(48, -24, Math.toRadians(0)))
                     .lineToLinearHeading(new Pose2d(55.5, -10, Math.toRadians(0)))
                     .build();
@@ -139,13 +150,18 @@ public class MyPocketsISrealite extends LinearOpMode{
                     .lineToLinearHeading(park)
                     .build();
 
+ */
+
             waitForStart();
 
             if (isStopRequested()) return;
-            drive.FollowTrajectoryAction(startingStrafe);
+            //drive.FollowTrajectoryAction(startingStrafe);
+
+            Drive drive = new Drive();
+            drive.moveToPoint(10, 20).runBlocking();
 
             while (opModeIsActive() && !isStopRequested()) {
-                switch (currentState) {
+                /*switch (currentState) {
                     case START:
                         drive.ConeGrabber.setPosition(0);
                         if (!drive.isBusy()) {
@@ -230,29 +246,28 @@ public class MyPocketsISrealite extends LinearOpMode{
                         }
                         break;
                 }
-                drive.update();
 
-                Pose2d poseEstimate = drive.getPoseEstimate();
+                 */
+                runBlocking(new SequentialAction(
+                        drive.turn(Math.PI / 2),
+                        new ParallelAction(
+                                drive.followTrajectory(shootingTraj),
+                                new SequentialAction(
+                                        shooter.spinUp(),
+                                        shooter.fireBall(),
+                                        ),
+                                ),
+                        ));
 
-                PoseStorage.currentPose = poseEstimate;
 
-                telemetry.addData("Lift POSE", drive.motorLift.getCurrentPosition());
-                telemetry.addData("Lift TARGET POSE", drive.motorLift.getTargetPosition());
-                telemetry.addData("topOfStack", topOfStack);
-                telemetry.addData("x", poseEstimate.getX());
-                telemetry.addData("y", poseEstimate.getY());
-                telemetry.addData("heading", poseEstimate.getHeading());
-                telemetry.addData("Realtime analysis  : ", openCv.pipeline.getAnalysis());
-                telemetry.update();
+               // Pose2d poseEstimate = drive.getPoseEstimate();
+
+              //  PoseStorage.currentPose = poseEstimate;
+
+
             }
         }
 
-        public void armHeight(double armSpeed, int newArmTarget) {
-            drive.motorLift.setTargetPosition(newArmTarget);
-            drive.motorLift.setPower(armSpeed);
-            drive.motorLift.setMode(RUN_TO_POSITION);
-        }
 
 
-    }
 }
