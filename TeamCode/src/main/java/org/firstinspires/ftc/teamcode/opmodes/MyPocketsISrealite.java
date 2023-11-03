@@ -33,9 +33,9 @@ public class MyPocketsISrealite extends LinearOpMode{
         State currentState = State.START; */
         Pose2d startPose = new Pose2d(0, 0.5, 0);
 
-        Pose2d Yellow = new Pose2d(50,-25, Math.toRadians(90));
-        Pose2d Blue = new Pose2d(52,-3,Math.toRadians(90));
-        Pose2d Red = new Pose2d(52,28,Math.toRadians(180));
+        Pose2d Middle = new Pose2d(50,-25, Math.toRadians(90));
+        Pose2d Left = new Pose2d(52,-3,Math.toRadians(90));
+        Pose2d Right = new Pose2d(52,28,Math.toRadians(180));
         Pose2d park;
 
         @Override
@@ -63,17 +63,17 @@ public class MyPocketsISrealite extends LinearOpMode{
             {
                 case 1://BLUE
                 {
-                    park = Blue;
+                    park = Right;
                     break;
                 }
                 case 2://YELLOW
                 {
-                    park = Yellow;
+                    park = Middle;
                     break;
                 }
                 default://RED
                 {
-                    park = Red;
+                    park = Left;
                     break;
                 }
             }
@@ -84,6 +84,7 @@ public class MyPocketsISrealite extends LinearOpMode{
 
             class Drive {
                 public Action followTrajectory() {
+                    t
                     return null;
                 }
 
@@ -106,6 +107,37 @@ public class MyPocketsISrealite extends LinearOpMode{
                     return null;
                 }
             }
+
+            //Blue depot
+            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.18, 60.93, Math.toRadians(-89.08)))
+                    .lineToConstantHeading(new Vector2d(-36.18, 36.18))
+                    .lineToConstantHeading(new Vector2d(38.37, 36.62))
+                    .lineToConstantHeading(new Vector2d(49.29, 35.16))
+                    .build();
+            drive.setPoseEstimate(untitled0.start());
+            //Blue Bored
+            TrajectorySequence untitled1 = drive.trajectorySequenceBuilder(new Pose2d(11.58, 61.52, Math.toRadians(269.01)))
+                    .splineTo(new Vector2d(11.72, 34.87), Math.toRadians(-89.69))
+                    .splineTo(new Vector2d(49.72, 35.16), Math.toRadians(1.06))
+                    .lineToConstantHeading(new Vector2d(48.12, 61.52))
+                    .build();
+            drive.setPoseEstimate(untitled1.start());
+            //Red depot
+            TrajectorySequence untitled2 = drive.trajectorySequenceBuilder(new Pose2d(-36.76, -60.35, Math.toRadians(90.00)))
+                    .splineTo(new Vector2d(-35.75, -35.16), Math.toRadians(87.68))
+                    .lineToConstantHeading(new Vector2d(38.07, -35.45))
+                    .lineToConstantHeading(new Vector2d(49.58, -35.16))
+                    .build();
+            drive.setPoseEstimate(untitled2.start());
+            //Red Bored
+            TrajectorySequence untitled3 = drive.trajectorySequenceBuilder(new Pose2d(10.85, -59.48, Math.toRadians(90.00)))
+                    .splineTo(new Vector2d(10.70, -35.60), Math.toRadians(90.35))
+                    .splineTo(new Vector2d(48.41, -35.60), Math.toRadians(0.00))
+                    .lineToConstantHeading(new Vector2d(48.85, -60.50))
+                    .build();
+            drive.setPoseEstimate(untitled3.start());
+
+
 /*
             TrajectoryActionBuilder toFirstJunction = drive.actionBuilder(new Pose2d(startingStrafe.))
                     .lineToLinearHeading(new Pose2d(48, -24, Math.toRadians(0)))
@@ -248,7 +280,7 @@ public class MyPocketsISrealite extends LinearOpMode{
                 }
 
                  */
-                /*
+
                 runBlocking(new SequentialAction(
                         drive.turn(Math.PI / 2),
                         new ParallelAction(
@@ -259,7 +291,7 @@ public class MyPocketsISrealite extends LinearOpMode{
                                         ),
                                 ),
                         ));
-*/
+
 
                // Pose2d poseEstimate = drive.getPoseEstimate();
 
