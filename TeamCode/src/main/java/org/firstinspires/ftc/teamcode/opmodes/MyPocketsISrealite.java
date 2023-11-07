@@ -84,7 +84,7 @@ public class MyPocketsISrealite extends LinearOpMode{
 
             class Drive {
                 public Action followTrajectory() {
-                    t
+                    
                     return null;
                 }
 
@@ -107,7 +107,7 @@ public class MyPocketsISrealite extends LinearOpMode{
                     return null;
                 }
             }
-
+/*
             //Blue depot
             TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.18, 60.93, Math.toRadians(-89.08)))
                     .lineToConstantHeading(new Vector2d(-36.18, 36.18))
@@ -136,6 +136,8 @@ public class MyPocketsISrealite extends LinearOpMode{
                     .lineToConstantHeading(new Vector2d(48.85, -60.50))
                     .build();
             drive.setPoseEstimate(untitled3.start());
+
+ */
 
 
 /*
@@ -280,7 +282,7 @@ public class MyPocketsISrealite extends LinearOpMode{
                 }
 
                  */
-
+                /*
                 runBlocking(new SequentialAction(
                         drive.turn(Math.PI / 2),
                         new ParallelAction(
@@ -291,6 +293,8 @@ public class MyPocketsISrealite extends LinearOpMode{
                                         ),
                                 ),
                         ));
+
+                 */
 
 
                // Pose2d poseEstimate = drive.getPoseEstimate();
