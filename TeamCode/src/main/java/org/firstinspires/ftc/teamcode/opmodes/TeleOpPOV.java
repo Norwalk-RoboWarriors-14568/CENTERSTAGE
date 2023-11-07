@@ -10,13 +10,13 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name = "POV Drive")
 
 public class TeleOpPOV extends OpMode {
     private DcMotor fl, bl, fr, br, armAngle, armHeight, lift, intakeLeft;
-
-    private CRServo  intakeRight;
+    private Servo swing, rotateBucket;
     private boolean mecanumDriveMode = true;
     private float mecanumStrafe = 0, dominantXJoystick = 0;
     boolean drivePOV = true;
@@ -32,9 +32,10 @@ public class TeleOpPOV extends OpMode {
         armHeight = hardwareMap.dcMotor.get("armHeight");
 
         lift = hardwareMap.dcMotor.get("lift");
-
         intakeLeft = hardwareMap.dcMotor.get("intakeLeft");
 
+        swing = hardwareMap.servo.get("swing");
+        rotateBucket = hardwareMap.servo.get("bucket");
 
         fr.setDirection(DcMotor.Direction.REVERSE);
         br.setDirection(DcMotor.Direction.REVERSE);
@@ -44,11 +45,17 @@ public class TeleOpPOV extends OpMode {
         setBehavior(fr, FLOAT);
         setBehavior(br, FLOAT);
 
-        setBehavior(armAngle, BRAKE);
+        setBehavior(armAngle, BRAKE  );
         setBehavior(armHeight, BRAKE);
         setBehavior(lift, BRAKE);
 
         telemetry.addLine("Init Opmode");
+        /*
+        armAngle.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armAngle.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        */
+         armAngle.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        float armTicksZero = armAngle.getCurrentPosition();//sets the floor position to 0
     }
 
     @Override
@@ -70,9 +77,10 @@ public class TeleOpPOV extends OpMode {
             }
 
             if ((gamepad1.right_stick_x) > 0.2){
-                drive(gamepad1.right_stick_x *2,gamepad1.right_stick_x  *2, -gamepad1.right_stick_x * 2, -gamepad1.right_stick_x  *2);
+                drive(gamepad1.right_stick_x *-1,gamepad1.right_stick_x  *-1, gamepad1.right_stick_x *   1, gamepad1.right_stick_x  *1);
             } else if (gamepad1.right_stick_x < -0.2){
-                drive(-gamepad1.right_stick_x *2,-gamepad1.right_stick_x  *2, gamepad1.right_stick_x * 2, gamepad1.right_stick_x  *2);
+                drive(gamepad1.right_stick_x *-1,gamepad1.right_stick_x  *-1, gamepad1.right_stick_x * 1, gamepad1.right_stick_x);
+                telemetry.addLine("DRIVE POV");
 
             }
         } else {
@@ -117,23 +125,46 @@ public class TeleOpPOV extends OpMode {
                     drive(gamepad1.left_stick_y * 0.5, gamepad1.right_stick_y * 0.5);
                 }
             }
+            telemetry.addLine("DRIVE TANK");
+
+        }
+
+        if (gamepad2.b){
+            rotateBucket.setPosition(0 );
+
+            swing.setPosition(0.53);//rest
+
+        } else if (gamepad2.y){
+            swing.setPosition(0);
+            rotateBucket.setPosition(1);
+
+        } else if (gamepad2.x) {
+            swing.setPosition(-1);
+            rotateBucket.setPosition(-1);
+
+        }
+
+        if (gamepad2.dpad_left){
+            rotateBucket.setPosition(1);
+        } else if (gamepad2.dpad_right){
+            rotateBucket.setPosition(0);
         }
 
 
-
-
         if (gamepad2.right_stick_y > 0.1){
-            armHeight.setPower(gamepad2.right_stick_y * 0.1);//arm slow
+            armHeight.setPower(gamepad2.right_stick_y * 0.7);//arm slow
         } else if (gamepad2.right_stick_y < -0.1) {
-            armHeight.setPower(gamepad2.right_stick_y * 0.1);
+            armHeight.setPower(gamepad2.right_stick_y * 0.7);
         } else {
             armHeight.setPower(0);
         }
 
         if (gamepad2.left_stick_y > 0.1) {
-            armAngle.setPower(gamepad2.left_stick_y * 0.2);
+            //raiseArm(0.1,233);
+            armAngle.setPower(gamepad2.left_stick_y * -0.5);
         } else if (gamepad2.left_stick_y < -0.1) {
-            armAngle.setPower(gamepad2.left_stick_y * 0.2);
+           // raiseArm(0.1,0);
+            armAngle.setPower(gamepad2.left_stick_y * -0.5);
         } else {
             armAngle.setPower(0);
         }
@@ -148,7 +179,14 @@ public class TeleOpPOV extends OpMode {
             //intakeRight.setPower(0);
             intakeLeft.setPower(0);
         }
-
+        if (gamepad2.dpad_up){
+            lift.setPower(-1);
+        } else if (gamepad2.dpad_down){
+            lift.setPower(1);
+        } else{
+            lift.setPower(0);
+        }
+        telemetry.update();
     }
     @Override
     public void stop() {
@@ -174,6 +212,11 @@ public class TeleOpPOV extends OpMode {
 
         public void setBehavior(DcMotor motor, DcMotor.ZeroPowerBehavior Behavior){
             motor.setZeroPowerBehavior(Behavior);
+        }
+        public void raiseArm(double armSpeed, int newTargetAngle){
+            armAngle.setTargetPosition(newTargetAngle);
+            armAngle.setPower(armSpeed);
+            armAngle.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
 
     }
