@@ -2,10 +2,29 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import static com.acmerobotics.roadrunner.ftc.Actions.runBlocking;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.Arclength;
+import com.acmerobotics.roadrunner.DisplacementTrajectory;
+import com.acmerobotics.roadrunner.HolonomicController;
+import com.acmerobotics.roadrunner.MappedPosePath;
+import com.acmerobotics.roadrunner.MecanumKinematics;
 import com.acmerobotics.roadrunner.ParallelAction;
+import com.acmerobotics.roadrunner.PathBuilder;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Pose2dDual;
+import com.acmerobotics.roadrunner.PosePath;
+import com.acmerobotics.roadrunner.SafeTrajectoryBuilder;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.Time;
+import com.acmerobotics.roadrunner.Trajectory;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.TrajectoryBuilder;
+import com.acmerobotics.roadrunner.Twist2d;
+import com.acmerobotics.roadrunner.Twist2dDual;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -18,6 +37,7 @@ public class MyPocketsISrealite extends LinearOpMode{
         MONKERYSEEMONRYDOO openCv;
         ElapsedTime waitTimer = new ElapsedTime();
         ElapsedTime matchTimer = new ElapsedTime();
+
 /*        enum State {
             START,
             FIRST_JUNCTION,
@@ -37,8 +57,9 @@ public class MyPocketsISrealite extends LinearOpMode{
         Pose2d Left = new Pose2d(52,-3,Math.toRadians(90));
         Pose2d Right = new Pose2d(52,28,Math.toRadians(180));
         Pose2d park;
+    private com.acmerobotics.roadrunner.MappedPosePath MappedPosePath;
 
-        @Override
+    @Override
         public void runOpMode() throws InterruptedException {
 
             drive = new MecanumDrive(hardwareMap, startPose);
@@ -78,43 +99,16 @@ public class MyPocketsISrealite extends LinearOpMode{
                 }
             }
 
-            Action startingStrafe = drive.actionBuilder((startPose))
-                    .lineToXConstantHeading(8).lineToYConstantHeading(8)
-                    .build();
 
-            class Drive {
-                public Action followTrajectory() {
-                    
-                    return null;
-                }
-
-                public Action turn(double v) {
-                    return null;
-                }
-
-                public Action moveToPoint() {
-                    return null;
-                }
-            }
-            class Shooter {
-                public Action spinUp() {
-                    return null;
-                }
-                public Action fireBall() {
-                    return null;
-                }
-                public Action loadBall() {
-                    return null;
-                }
-            }
-/*
             //Blue depot
-            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.18, 60.93, Math.toRadians(-89.08)))
-                    .lineToConstantHeading(new Vector2d(-36.18, 36.18))
-                    .lineToConstantHeading(new Vector2d(38.37, 36.62))
-                    .lineToConstantHeading(new Vector2d(49.29, 35.16))
+        Action trajectoryStart =drive.actionBuilder ((new Pose2d(-36.18, 60.93, Math.toRadians(-89.08))))
+                    .lineToXConstantHeading(-36.18).lineToYConstantHeading( 36.18)
+                    .lineToXConstantHeading(38.37).lineToYConstantHeading( 36.62)
+                    .lineToXConstantHeading(49.29).lineToYConstantHeading(35.16)
                     .build();
-            drive.setPoseEstimate(untitled0.start());
+
+
+            /*
             //Blue Bored
             TrajectorySequence untitled1 = drive.trajectorySequenceBuilder(new Pose2d(11.58, 61.52, Math.toRadians(269.01)))
                     .splineTo(new Vector2d(11.72, 34.87), Math.toRadians(-89.69))
@@ -187,14 +181,24 @@ public class MyPocketsISrealite extends LinearOpMode{
  */
 
             waitForStart();
-
             if (isStopRequested()) return;
-            //drive.FollowTrajectoryAction(startingStrafe);
+            //
 
-            Drive drive = new Drive();
-           // drive.moveToPoint(10, 20).runBlocking();
+            runBlocking(new SequentialAction(
+                    trajectoryStart,
+                        new ParallelAction(
+                            trajectoryStart,trajectoryStart
+                        ),
+                    new SequentialAction(
+                            trajectoryStart
+                        )
+                    )
+            );
 
-            while (opModeIsActive() && !isStopRequested()) {
+
+            //while (opModeIsActive() && !isStopRequested()) {
+
+
                 /*switch (currentState) {
                     case START:
                         drive.ConeGrabber.setPosition(0);
@@ -302,7 +306,7 @@ public class MyPocketsISrealite extends LinearOpMode{
               //  PoseStorage.currentPose = poseEstimate;
 
 
-            }
+            //}
         }
 
 
