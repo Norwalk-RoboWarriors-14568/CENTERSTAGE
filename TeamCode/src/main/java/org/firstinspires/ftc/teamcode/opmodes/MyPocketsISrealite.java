@@ -99,13 +99,15 @@ public class MyPocketsISrealite extends LinearOpMode{
                 }
             }
 
-
             //Blue depot
         Action trajectoryStart =drive.actionBuilder ((new Pose2d(-36.18, 60.93, Math.toRadians(-89.08))))
                     .lineToXConstantHeading(-36.18).lineToYConstantHeading( 36.18)
                     .lineToXConstantHeading(38.37).lineToYConstantHeading( 36.62)
                     .lineToXConstantHeading(49.29).lineToYConstantHeading(35.16)
                     .build();
+        Action motor =drive.actionBuilder (new Pose2d(49.29, 35.16, Math.toRadians(-89.08)))
+                .afterTime(0.5, arm())
+                        .build();
 
 
             /*
@@ -187,7 +189,7 @@ public class MyPocketsISrealite extends LinearOpMode{
             runBlocking(new SequentialAction(
                     trajectoryStart,
                         new ParallelAction(
-                            trajectoryStart,trajectoryStart
+                            trajectoryStart,motor
                         ),
                     new SequentialAction(
                             trajectoryStart
@@ -309,6 +311,25 @@ public class MyPocketsISrealite extends LinearOpMode{
             //}
         }
 
+    private Action arm() {
 
+        return null;
+    }
+   /* public Action armUp() {
+        return new Action() {
+            @Override
+            public void init() {
+                drive.leftBack.setPower(0.8);
+            }
 
+            @Override
+            public boolean loop(TelemetryPacket packet) {
+                double vel = drive.leftBack.getVelocity();
+
+                packet.put("shooterVelocity", vel);
+
+                return vel < 10_000.0;
+            }
+        };
+    } */
 }
