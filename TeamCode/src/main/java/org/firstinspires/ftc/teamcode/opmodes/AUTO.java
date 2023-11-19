@@ -1,30 +1,10 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import java.lang.annotation.Target;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.configuration.WebcamConfiguration;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import java.util.List;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvPipeline;
-import org.openftc.easyopencv.OpenCvWebcam;
+
 @Autonomous(name = "Blue Car Warehouse")
 public class AUTO extends LinearOpMode {
     // Declare OpMode members.
@@ -36,21 +16,11 @@ public class AUTO extends LinearOpMode {
     private DcMotor motorLeftFRONT = null;
     private DcMotor motorRightFRONT = null;
     private DcMotor intakeLeft = null;
-    int hubLevel = 1;
-    //OpenCvRed cvRed;
-    //OpenCVBLUE CVBlue;
-    //private CRServo servoLeft, servoRight;
-    private double CPI_ATV_DT;
-    final private double CPI_MECC_DT = 537.7/ ( 5 * Math.PI);
-    // private Servo servomain;
-    //private boolean buttonG2APressest = false;
-    //private boolean buttonG2XPressedLast = false;
+    final private double CPCM_MECC = 537.6/ ( 10 * Math.PI);
     private ElapsedTime timer;
 
     private final int CPR_ODOMETRY = 8192;//counts per revolution for encoder, from website
-    private final int hexCoreCPR = 288;
     private final int ODOMETRY_WHEEL_DIAMETER = 4;
-    private double CPI_DRIVE_TRAIN, CPI_CORE_HEX, CPI_GOBILDA26TO1;
     private double cpiOdometry;
     private double leftPos = 0;
     private double rightPos = 0;
@@ -65,8 +35,6 @@ public class AUTO extends LinearOpMode {
         cpiOdometry  = CPR_ODOMETRY / (ODOMETRY_WHEEL_DIAMETER * Math.PI);
         //CPI =     ticksPerRev / (circumerence);
         //CPI_CORE_HEX = hexCoreCPR/4.4;
-        CPI_ATV_DT = 537.7/ ( 5 * Math.PI);
-        CPI_GOBILDA26TO1 = 180.81*2.6/2.5;//gear ratio adjustment
         motorLeftBACK = hardwareMap.dcMotor.get("leftRear");
         motorRightBACK = hardwareMap.dcMotor.get("rightRear");
         motorLeftFRONT = hardwareMap.dcMotor.get( "leftFront");
@@ -93,24 +61,28 @@ public class AUTO extends LinearOpMode {
         //run autonomous
         if (opModeIsActive()) {
             intakeLeft.setPower(-1);
-            encoderDrive(.1, .1 , 45, 45);
-
-
-
-
-
+            encoferDrive(.1, .1 , 45, 45);
 
         }
+        //telemetry.addData("T-FrontLeft: ", frontLeftTarget);
+        telemetry.addData("A-FrontLeft: ", motorLeftFRONT.getCurrentPosition());
+        //telemetry.addData("T-FrontRight: ", frontRightTarget);
+        telemetry.addData("A-FrontRight: ", motorRightFRONT.getCurrentPosition());
+        //telemetry.addData("T-BackLeft: ", backLeftTarget);
+        telemetry.addData("A-BackLeft: ", motorLeftBACK.getCurrentPosition());
+        //telemetry.addData("T-BackRight: ", backRightTarget);
+        telemetry.addData("A-BackRight: ", motorRightBACK.getCurrentPosition());
+        telemetry.update();
     }
 
-    public void encoferDrive(double leftSpeed, double rightSpeed, double leftInches, double rightInches){
+    public void encoferDrive(double leftSpeed, double rightSpeed, double leftCM, double rightCM){
         motorSetModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorSetModes(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        int frontRightTarget = motorRightFRONT.getCurrentPosition() + (int) (CPI_MECC_DT * rightInches);
-        int backRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPI_MECC_DT * rightInches);
-        int frontLeftTarget = motorLeftFRONT.getCurrentPosition() +  (int) (CPI_MECC_DT * leftInches);
-        int backLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPI_MECC_DT * leftInches);
+        int frontRightTarget = motorRightFRONT.getCurrentPosition() + (int) (CPCM_MECC * rightCM);
+        int backRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPCM_MECC * rightCM);
+        int frontLeftTarget = motorLeftFRONT.getCurrentPosition() +  (int) (CPCM_MECC * leftCM);
+        int backLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPCM_MECC * leftCM);
         motorRightFRONT.setTargetPosition(frontRightTarget);
         motorRightBACK.setTargetPosition(backRightTarget);
         motorLeftFRONT.setTargetPosition(frontLeftTarget);
@@ -132,7 +104,7 @@ public class AUTO extends LinearOpMode {
         drive(0, 0);
     }
 
-
+/*
     public void encoderDrive(double leftDTSpeed, double rightDTSpeed, double mtrLeftInches, double mtrRightInches) {
         motorSetModes(DcMotor.RunMode.RUN_USING_ENCODER);
         int newLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPI_ATV_DT * mtrLeftInches);
@@ -152,7 +124,7 @@ public class AUTO extends LinearOpMode {
         // Stop all motion;
         drive(0, 0);
     }
-
+*/
 
     public void motorSetModes(DcMotor.RunMode modeName) {
         motorLeftBACK.setMode(modeName);
