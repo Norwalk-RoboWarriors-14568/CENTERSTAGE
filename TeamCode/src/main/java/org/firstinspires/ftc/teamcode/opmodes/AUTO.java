@@ -35,11 +35,13 @@ public class AUTO extends LinearOpMode {
     private DcMotor motorRightBACK = null;
     private DcMotor motorLeftFRONT = null;
     private DcMotor motorRightFRONT = null;
+    private DcMotor intakeLeft = null;
     int hubLevel = 1;
     //OpenCvRed cvRed;
     //OpenCVBLUE CVBlue;
     //private CRServo servoLeft, servoRight;
     private double CPI_ATV_DT;
+    final private double CPI_MECC_DT = 537.7/ ( 5 * Math.PI);
     // private Servo servomain;
     //private boolean buttonG2APressest = false;
     //private boolean buttonG2XPressedLast = false;
@@ -63,12 +65,13 @@ public class AUTO extends LinearOpMode {
         cpiOdometry  = CPR_ODOMETRY / (ODOMETRY_WHEEL_DIAMETER * Math.PI);
         //CPI =     ticksPerRev / (circumerence);
         //CPI_CORE_HEX = hexCoreCPR/4.4;
-        CPI_ATV_DT = 537.7/ ( 3.5 * Math.PI);
+        CPI_ATV_DT = 537.7/ ( 5 * Math.PI);
         CPI_GOBILDA26TO1 = 180.81*2.6/2.5;//gear ratio adjustment
         motorLeftBACK = hardwareMap.dcMotor.get("leftRear");
         motorRightBACK = hardwareMap.dcMotor.get("rightRear");
         motorLeftFRONT = hardwareMap.dcMotor.get( "leftFront");
         motorRightFRONT = hardwareMap.dcMotor.get("rightFront");
+        intakeLeft = hardwareMap.dcMotor.get("intakeLeft");
         //servoRight = hardwareMap.crservo.get("servo_0");
         //servoLeft = hardwareMap.crservo.get("servo_1");
         // vs  = this.hardwareMap.voltageSensor.iterator().next();
@@ -89,18 +92,49 @@ public class AUTO extends LinearOpMode {
 
         //run autonomous
         if (opModeIsActive()) {
-            motorSetModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);  //stop and reset encoders
-            motorSetModes(DcMotor.RunMode.RUN_USING_ENCODER);       //start encoders
+            intakeLeft.setPower(-1);
+            encoderDrive(.1, .1 , 45, 45);
 
-            encoderDrive(.3, .2 , 24, 24);//back to carosel
+
+
+
+
 
         }
     }
 
+    public void encoferDrive(double leftSpeed, double rightSpeed, double leftInches, double rightInches){
+        motorSetModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorSetModes(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        int frontRightTarget = motorRightFRONT.getCurrentPosition() + (int) (CPI_MECC_DT * rightInches);
+        int backRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPI_MECC_DT * rightInches);
+        int frontLeftTarget = motorLeftFRONT.getCurrentPosition() +  (int) (CPI_MECC_DT * leftInches);
+        int backLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPI_MECC_DT * leftInches);
+        motorRightFRONT.setTargetPosition(frontRightTarget);
+        motorRightBACK.setTargetPosition(backRightTarget);
+        motorLeftFRONT.setTargetPosition(frontLeftTarget);
+        motorLeftBACK.setTargetPosition(backLeftTarget);
+        drive(leftSpeed,rightSpeed);
+        if (opModeIsActive() && !IsInRange(motorLeftBACK.getCurrentPosition(), backLeftTarget) && !IsInRange(motorRightBACK.getCurrentPosition(), backRightTarget)
+        && !IsInRange(motorLeftFRONT.getCurrentPosition(), frontLeftTarget) && !IsInRange(motorRightFRONT.getCurrentPosition(), frontRightTarget)){
+            telemetry.addData("T-FrontLeft: ", frontLeftTarget);
+            telemetry.addData("A-FrontLeft: ", motorLeftFRONT.getCurrentPosition());
+            telemetry.addData("T-FrontRight: ", frontRightTarget);
+            telemetry.addData("A-FrontRight: ", motorRightFRONT.getCurrentPosition());
+            telemetry.addData("T-BackLeft: ", backLeftTarget);
+            telemetry.addData("A-BackLeft: ", motorLeftBACK.getCurrentPosition());
+            telemetry.addData("T-BackRight: ", backRightTarget);
+            telemetry.addData("A-BackRight: ", motorRightBACK.getCurrentPosition());
+            telemetry.update();
+
+        }
+        drive(0, 0);
+    }
 
 
     public void encoderDrive(double leftDTSpeed, double rightDTSpeed, double mtrLeftInches, double mtrRightInches) {
+        motorSetModes(DcMotor.RunMode.RUN_USING_ENCODER);
         int newLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPI_ATV_DT * mtrLeftInches);
         int newRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPI_ATV_DT * mtrRightInches);
         drive(mtrLeftInches < 0 ? -leftDTSpeed : leftDTSpeed, mtrRightInches < 0 ? -rightDTSpeed : rightDTSpeed);

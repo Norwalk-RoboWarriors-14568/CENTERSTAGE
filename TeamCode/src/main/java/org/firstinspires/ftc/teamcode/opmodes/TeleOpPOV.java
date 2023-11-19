@@ -6,7 +6,6 @@ import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.FLOAT;
 import static java.lang.Math.abs;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -15,8 +14,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name = "POV Drive")
 
 public class TeleOpPOV extends OpMode {
-    private DcMotor fl, bl, fr, br, armAngle, armHeight, lift, intakeLeft;
-    private Servo swing, rotateBucket;
+    private DcMotor fl, bl, fr, br, arm1, arm2, lift, intakeLeft;
+    private CRServo gun;
+    private Servo rotateBucket;
     private boolean mecanumDriveMode = true;
     private float mecanumStrafe = 0, dominantXJoystick = 0;
     boolean drivePOV = true;
@@ -28,13 +28,13 @@ public class TeleOpPOV extends OpMode {
         fr = hardwareMap.dcMotor.get("rightFront");
         br = hardwareMap.dcMotor.get("rightRear");
 
-        armAngle = hardwareMap.dcMotor.get("armAngle");
-        armHeight = hardwareMap.dcMotor.get("armHeight");
+        arm1 = hardwareMap.dcMotor.get("armAngle");
+        arm2 = hardwareMap.dcMotor.get("armHeight");
 
         lift = hardwareMap.dcMotor.get("lift");
         intakeLeft = hardwareMap.dcMotor.get("intakeLeft");
 
-        swing = hardwareMap.servo.get("swing");
+        gun = hardwareMap.crservo.get("swing");
         rotateBucket = hardwareMap.servo.get("bucket");
 
         fr.setDirection(DcMotor.Direction.REVERSE);
@@ -45,8 +45,8 @@ public class TeleOpPOV extends OpMode {
         setBehavior(fr, FLOAT);
         setBehavior(br, FLOAT);
 
-        setBehavior(armAngle, BRAKE  );
-        setBehavior(armHeight, BRAKE);
+        setBehavior(arm1, BRAKE  );
+        setBehavior(arm2, BRAKE);
         setBehavior(lift, BRAKE);
 
         telemetry.addLine("Init Opmode");
@@ -54,8 +54,8 @@ public class TeleOpPOV extends OpMode {
         armAngle.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         armAngle.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         */
-         armAngle.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        float armTicksZero = armAngle.getCurrentPosition();//sets the floor position to 0
+         arm1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        float armTicksZero = arm1.getCurrentPosition();//sets the floor position to 0
     }
 
     @Override
@@ -80,9 +80,10 @@ public class TeleOpPOV extends OpMode {
                 drive(gamepad1.right_stick_x *-1,gamepad1.right_stick_x  *-1, gamepad1.right_stick_x *   1, gamepad1.right_stick_x  *1);
             } else if (gamepad1.right_stick_x < -0.2){
                 drive(gamepad1.right_stick_x *-1,gamepad1.right_stick_x  *-1, gamepad1.right_stick_x * 1, gamepad1.right_stick_x);
-                telemetry.addLine("DRIVE POV");
+
 
             }
+            telemetry.addLine("DRIVE POV");
         } else {
             if (abs(gamepad1.left_stick_x) > 0.15 || abs(gamepad1.right_stick_x) > 0.15) {
                 //removes negatives from joystick values, to set variable to +/- for determing stick farther from zero
@@ -129,66 +130,44 @@ public class TeleOpPOV extends OpMode {
 
         }
 
-        if (gamepad2.b){
-            rotateBucket.setPosition(0 );
-
-            swing.setPosition(0.53);//rest
-
-        } else if (gamepad2.y){
-            swing.setPosition(0);
-            rotateBucket.setPosition(1);
-
-        } else if (gamepad2.x) {
-            swing.setPosition(-1);
-            rotateBucket.setPosition(-1);
-
-        }
-
-        if (gamepad2.dpad_left){
-            rotateBucket.setPosition(1);
-        } else if (gamepad2.dpad_right){
-            rotateBucket.setPosition(0);
-        }
-
-
         if (gamepad2.right_stick_y > 0.1){
-            armHeight.setPower(gamepad2.right_stick_y * 0.7);//arm slow
+            arm2.setPower(gamepad2.right_stick_y);//arm slow
+            arm1.setPower(gamepad2.right_stick_y);
         } else if (gamepad2.right_stick_y < -0.1) {
-            armHeight.setPower(gamepad2.right_stick_y * 0.7);
-        } else {
-            armHeight.setPower(0);
-        }
+            arm2.setPower(gamepad2.right_stick_y);
+            arm1.setPower(gamepad2.right_stick_y);
 
-        if (gamepad2.left_stick_y > 0.1) {
-            //raiseArm(0.1,233);
-            armAngle.setPower(gamepad2.left_stick_y * -0.5);
-        } else if (gamepad2.left_stick_y < -0.1) {
-           // raiseArm(0.1,0);
-            armAngle.setPower(gamepad2.left_stick_y * -0.5);
         } else {
-            armAngle.setPower(0);
+            arm2.setPower(0);
+            arm1.setPower(0);
         }
-
-        if (gamepad2.right_bumper) {
-            //intakeRight.setPower(1);
+        if (gamepad1.right_trigger > 0.25){
             intakeLeft.setPower(1);
-        } else if (gamepad2.left_bumper) {
-           // intakeRight.setPower(-1);
+        } else if (gamepad1.left_trigger > 0.25){
             intakeLeft.setPower(-1);
-        } else {
-            //intakeRight.setPower(0);
+        } else{
             intakeLeft.setPower(0);
         }
-        if (gamepad2.dpad_up){
-            lift.setPower(-1);
-        } else if (gamepad2.dpad_down){
+
+        if(gamepad1.dpad_up){
             lift.setPower(1);
+        } else if (gamepad1.dpad_down){
+            lift.setPower(-1);
         } else{
             lift.setPower(0);
         }
+        if (gamepad1.dpad_left) {
+            gun.setPower(1);
+        } else if (gamepad1.dpad_right){
+            gun.setPower(0);
+        } else {
+            gun.setPower(-1);
+
+        }
+
         telemetry.update();
     }
-    @Override
+    @Override  
     public void stop() {
         telemetry.clearAll();
         telemetry.addLine("Stopped");
@@ -214,9 +193,9 @@ public class TeleOpPOV extends OpMode {
             motor.setZeroPowerBehavior(Behavior);
         }
         public void raiseArm(double armSpeed, int newTargetAngle){
-            armAngle.setTargetPosition(newTargetAngle);
-            armAngle.setPower(armSpeed);
-            armAngle.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            arm1.setTargetPosition(newTargetAngle);
+            arm1.setPower(armSpeed);
+            arm1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
 
     }
