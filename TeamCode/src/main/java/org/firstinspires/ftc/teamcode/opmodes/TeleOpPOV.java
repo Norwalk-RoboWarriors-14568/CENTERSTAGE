@@ -28,14 +28,14 @@ public class TeleOpPOV extends OpMode {
         fr = hardwareMap.dcMotor.get("rightFront");
         br = hardwareMap.dcMotor.get("rightRear");
 
-        arm1 = hardwareMap.dcMotor.get("armAngle");
-        arm2 = hardwareMap.dcMotor.get("armHeight");
+        arm1 = hardwareMap.dcMotor.get("armLeft");
+        arm2 = hardwareMap.dcMotor.get("armRight");
 
-        lift = hardwareMap.dcMotor.get("lift");
+        lift = hardwareMap.dcMotor.get("Lift");
         intakeLeft = hardwareMap.dcMotor.get("intakeLeft");
 
-        gun = hardwareMap.crservo.get("swing");
-        rotateBucket = hardwareMap.servo.get("bucket");
+        gun = hardwareMap.crservo.get("gun");
+       
 
         fr.setDirection(DcMotor.Direction.REVERSE);
         br.setDirection(DcMotor.Direction.REVERSE);

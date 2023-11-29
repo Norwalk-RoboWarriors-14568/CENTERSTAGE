@@ -100,7 +100,7 @@ public class MyPocketsISrealite extends LinearOpMode{
             }
 
             //Blue depot
-        Action trajectoryStart =drive.actionBuilder ((new Pose2d(-36.18, 60.93, Math.toRadians(-89.08))))
+        TrajectoryBuilder trajectoryStart =new Trajectory(drive.pose)//(new Pose2d(-36.18, 60.93, Math.toRadians(-89.08))))
                     .lineToXConstantHeading(-36.18).lineToYConstantHeading( 36.18)
                     .lineToXConstantHeading(38.37).lineToYConstantHeading( 36.62)
                     .lineToXConstantHeading(49.29).lineToYConstantHeading(35.16)

@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name = "Blue Car Warehouse")
-public class AUTO extends LinearOpMode {
+@Autonomous(name = "What color is your bugati")
+public class AUTO2ELECTRICBOOGALO extends LinearOpMode {
     // Declare OpMode members.
     //Tages
 
@@ -16,7 +16,7 @@ public class AUTO extends LinearOpMode {
     private DcMotor motorLeftFRONT = null;
     private DcMotor motorRightFRONT = null;
     private DcMotor intakeLeft = null;
-    final private double CPCM_MECC = 537.6/ ( 10 * Math.PI);
+    final private double CPI_MECC = (537.6/ ( 3.93 * Math.PI));
     private ElapsedTime timer;
 
     private final int CPR_ODOMETRY = 8192;//counts per revolution for encoder, from website
@@ -54,34 +54,45 @@ public class AUTO extends LinearOpMode {
         brakeMotors();
         reverseMotors();
         telemetry.update();
+        motorSetModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         waitForStart();
         runtime.reset();
 
 
         //run autonomous
         if (opModeIsActive()) {
-            intakeLeft.setPower(-1);
-            encoferDrive(.1, .1 , 45, 45);
-
+            encoferDrive(0.5,0.5,-18, 181, false);
+            while (opModeIsActive()) {
+                //  telemetry.addData("T-FrontLeft: ", frontLeftTarget);
+                telemetry.addData("A-FrontLeft: ", motorLeftFRONT.getCurrentPosition());
+                //   telemetry.addData("T-FrontRight: ", frontRightTarget);
+                telemetry.addData("A-FrontRight: ", motorRightFRONT.getCurrentPosition());
+                //   telemetry.addData("T-BackLeft: ", backLeftTarget);
+                telemetry.addData("A-BackLeft: ", motorLeftBACK.getCurrentPosition());
+                //  telemetry.addData("T-BackRight: ", backRightTarget);
+                telemetry.addData("A-BackRight: ", motorRightBACK.getCurrentPosition());
+                telemetry.update();
+            }
         }
 
     }
 
-    public void encoferDrive(double leftSpeed, double rightSpeed, double leftCM, double rightCM){
+    public void encoferDrive(double leftSpeed, double rightSpeed, double leftInches, double rightInches, boolean strafeywafey){
         motorSetModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorSetModes(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        int frontRightTarget = motorRightFRONT.getCurrentPosition() + (int) (CPCM_MECC * rightCM);
-        int backRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPCM_MECC * rightCM);
-        int frontLeftTarget = motorLeftFRONT.getCurrentPosition() +  (int) (CPCM_MECC * leftCM);
-        int backLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPCM_MECC * leftCM);
+        int frontRightTarget = motorRightFRONT.getCurrentPosition() + (int) (CPI_MECC * rightInches);
+        int backRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPI_MECC * rightInches);
+        int frontLeftTarget = motorLeftFRONT.getCurrentPosition() +  (int) (CPI_MECC * leftInches);
+        int backLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPI_MECC * leftInches);
         motorRightFRONT.setTargetPosition(frontRightTarget);
         motorRightBACK.setTargetPosition(backRightTarget);
         motorLeftFRONT.setTargetPosition(frontLeftTarget);
         motorLeftBACK.setTargetPosition(backLeftTarget);
-        drive(leftSpeed,rightSpeed);
-        if (opModeIsActive() && !IsInRange(motorLeftBACK.getCurrentPosition(), backLeftTarget) && !IsInRange(motorRightBACK.getCurrentPosition(), backRightTarget)
-        && !IsInRange(motorLeftFRONT.getCurrentPosition(), frontLeftTarget) && !IsInRange(motorRightFRONT.getCurrentPosition(), frontRightTarget)){
+        drive(leftSpeed,rightSpeed, strafeywafey);
+        while (opModeIsActive() && !IsInRange(motorLeftBACK.getCurrentPosition(), backLeftTarget) && !IsInRange(motorRightBACK.getCurrentPosition(), backRightTarget)
+                && !IsInRange(motorLeftFRONT.getCurrentPosition(), frontLeftTarget) && !IsInRange(motorRightFRONT.getCurrentPosition(), frontRightTarget)){
             telemetry.addData("T-FrontLeft: ", frontLeftTarget);
             telemetry.addData("A-FrontLeft: ", motorLeftFRONT.getCurrentPosition());
             telemetry.addData("T-FrontRight: ", frontRightTarget);
@@ -93,7 +104,7 @@ public class AUTO extends LinearOpMode {
             telemetry.update();
 
         }
-        drive(0, 0);
+        drive(0, 0, false);
     }
 
 /*
@@ -125,11 +136,19 @@ public class AUTO extends LinearOpMode {
         motorRightFRONT.setMode(modeName);
     }
 
-    public void drive(double left, double right  ) {
-        motorLeftBACK.setPower(left);
-        motorRightBACK.setPower(right);
-        motorRightFRONT.setPower(right);
-        motorLeftFRONT.setPower(left);
+    public void drive(double left, double right, boolean strafe) {
+
+        if(strafe){
+            motorLeftBACK.setPower(-left);
+            motorRightBACK.setPower(right);
+            motorRightFRONT.setPower(-right);
+            motorLeftFRONT.setPower(left);
+        } else {
+            motorLeftBACK.setPower(left);
+            motorRightBACK.setPower(right);
+            motorRightFRONT.setPower(right);
+            motorLeftFRONT.setPower(left);
+        }
     }
 
     public void motorSetTargetPos(int targetLeft, int targetRight) {
