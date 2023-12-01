@@ -16,7 +16,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class TeleOpPOV extends OpMode {
     private DcMotor fl, bl, fr, br, arm1, arm2, lift, intakeLeft;
     private CRServo gun;
-    private Servo rotateBucket;
+    private CRServo bucket;
     private boolean mecanumDriveMode = true;
     private float mecanumStrafe = 0, dominantXJoystick = 0;
     boolean drivePOV = true;
@@ -30,12 +30,13 @@ public class TeleOpPOV extends OpMode {
 
         arm1 = hardwareMap.dcMotor.get("armLeft");
         arm2 = hardwareMap.dcMotor.get("armRight");
+        bucket = hardwareMap.crservo.get("bucket");
 
         lift = hardwareMap.dcMotor.get("Lift");
         intakeLeft = hardwareMap.dcMotor.get("intakeLeft");
 
         gun = hardwareMap.crservo.get("gun");
-       
+
 
         fr.setDirection(DcMotor.Direction.REVERSE);
         br.setDirection(DcMotor.Direction.REVERSE);
@@ -56,6 +57,8 @@ public class TeleOpPOV extends OpMode {
         */
          arm1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         float armTicksZero = arm1.getCurrentPosition();//sets the floor position to 0
+
+
     }
 
     @Override
@@ -156,6 +159,14 @@ public class TeleOpPOV extends OpMode {
         } else{
             lift.setPower(0);
         }
+
+        if(gamepad2.dpad_up){
+            bucket.setPower(1.0);
+        } else if (gamepad2.dpad_down){
+            bucket.setPower(0);
+        }
+        //telemetry.addLine("Servo " + bucket.getPosition());
+
         if (gamepad1.dpad_left) {
             gun.setPower(1);
         } else if (gamepad1.dpad_right){

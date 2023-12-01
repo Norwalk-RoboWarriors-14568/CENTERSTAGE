@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class CenterStageTeleOpPOV extends OpMode {
     private DcMotor fl, bl, fr, br, armAngle, armHeight;
-    private Servo pixelFlipper, pin;
+    private Servo pixelFlipper, pin, bucket;
     private CRServo intakeLeft, intakeRight;
     private boolean mecanumDriveMode = true;
     private float mecanumStrafe = 0;
@@ -32,6 +32,7 @@ public class CenterStageTeleOpPOV extends OpMode {
 
         pixelFlipper = hardwareMap.servo.get("pixelFlipper");
         pin = hardwareMap.servo.get("pin");
+        bucket = hardwareMap.servo.get("bucket");
 
         intakeLeft = hardwareMap.crservo.get("intakeLeft");
         intakeRight = hardwareMap.crservo.get("intakeRight");
@@ -94,6 +95,7 @@ public class CenterStageTeleOpPOV extends OpMode {
             intakeRight.setPower(0);
             intakeLeft.setPower(0);
         }
+
     }
     @Override
     public void stop() {

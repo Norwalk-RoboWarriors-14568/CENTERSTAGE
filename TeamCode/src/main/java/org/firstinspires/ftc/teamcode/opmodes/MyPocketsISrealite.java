@@ -98,18 +98,22 @@ public class MyPocketsISrealite extends LinearOpMode{
                     break;
                 }
             }
-
+/*
+         toRedWing = new TrajectoryActionBuilder()//drive.pose, 1e-6, 0.0, drive.defaultVelConstraint, drive.defaultAccelConstraint, 0.25, 0.1)
+                .splineToConstantHeading(new Vector2d(0.00, 11.00), Math.toRadians(180.00))
+                .splineToConstantHeading(new Vector2d(-32.00, 11.00), Math.toRadians(180.00))
+                .splineToLinearHeading(new Pose2d(-53.00, 54.00, Math.toRadians(-45.00)), Math.toRadians(180.00))
+                .build();
+            /*
             //Blue depot
-        TrajectoryBuilder trajectoryStart =new Trajectory(drive.pose)//(new Pose2d(-36.18, 60.93, Math.toRadians(-89.08))))
+        Trajectory trajectoryStart =new TrajectoryActionBuilder(new Pose2d(11.58, 61.52, Math.toRadians(269.01)))
                     .lineToXConstantHeading(-36.18).lineToYConstantHeading( 36.18)
                     .lineToXConstantHeading(38.37).lineToYConstantHeading( 36.62)
                     .lineToXConstantHeading(49.29).lineToYConstantHeading(35.16)
                     .build();
-        Action motor =drive.actionBuilder (new Pose2d(49.29, 35.16, Math.toRadians(-89.08)))
-                .afterTime(0.5, arm())
-                        .build();
 
 
+             */
             /*
             //Blue Bored
             TrajectorySequence untitled1 = drive.trajectorySequenceBuilder(new Pose2d(11.58, 61.52, Math.toRadians(269.01)))
@@ -185,7 +189,7 @@ public class MyPocketsISrealite extends LinearOpMode{
             waitForStart();
             if (isStopRequested()) return;
             //
-
+/*
             runBlocking(new SequentialAction(
                     trajectoryStart,
                         new ParallelAction(
