@@ -98,11 +98,20 @@ public class MyPocketsISrealite extends LinearOpMode{
                     break;
                 }
             }
-/*
-         toRedWing = new TrajectoryActionBuilder()//drive.pose, 1e-6, 0.0, drive.defaultVelConstraint, drive.defaultAccelConstraint, 0.25, 0.1)
+
+         Action toRedWing = drive.actionBuilder(drive.pose)//drive.pose, 1e-6, 0.0, drive.defaultVelConstraint, drive.defaultAccelConstraint, 0.25, 0.1)
                 .splineToConstantHeading(new Vector2d(0.00, 11.00), Math.toRadians(180.00))
                 .splineToConstantHeading(new Vector2d(-32.00, 11.00), Math.toRadians(180.00))
                 .splineToLinearHeading(new Pose2d(-53.00, 54.00, Math.toRadians(-45.00)), Math.toRadians(180.00))
+                .build();
+        Action one = drive.actionBuilder(drive.pose)//drive.pose, 1e-6, 0.0, drive.defaultVelConstraint, drive.defaultAccelConstraint, 0.25, 0.1)
+                .turn(180)
+                .build();
+        Action two = drive.actionBuilder(drive.pose)//drive.pose, 1e-6, 0.0, drive.defaultVelConstraint, drive.defaultAccelConstraint, 0.25, 0.1)
+                .splineToConstantHeading(new Vector2d(-32.00, 11.00), Math.toRadians(180.00))
+                .build();
+        Action three = drive.actionBuilder(drive.pose)//drive.pose, 1e-6, 0.0, drive.defaultVelConstraint, drive.defaultAccelConstraint, 0.25, 0.1)
+                .lineToX(0).lineToY(11)// (new Vector2d(0.00, 11.00)
                 .build();
             /*
             //Blue depot
@@ -189,14 +198,14 @@ public class MyPocketsISrealite extends LinearOpMode{
             waitForStart();
             if (isStopRequested()) return;
             //
-/*
+
             runBlocking(new SequentialAction(
-                    trajectoryStart,
+                    toRedWing,
                         new ParallelAction(
-                            trajectoryStart,motor
+                                one,three
                         ),
                     new SequentialAction(
-                            trajectoryStart
+                            two
                         )
                     )
             );
