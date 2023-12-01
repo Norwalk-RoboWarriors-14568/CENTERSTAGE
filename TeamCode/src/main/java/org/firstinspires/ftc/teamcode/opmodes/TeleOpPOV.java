@@ -16,7 +16,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class TeleOpPOV extends OpMode {
     private DcMotor fl, bl, fr, br, arm1, arm2, lift, intakeLeft;
     private CRServo gun;
-    private CRServo bucket;
+    private Servo bucket;
     private boolean mecanumDriveMode = true;
     private float mecanumStrafe = 0, dominantXJoystick = 0;
     boolean drivePOV = true;
@@ -30,7 +30,7 @@ public class TeleOpPOV extends OpMode {
 
         arm1 = hardwareMap.dcMotor.get("armLeft");
         arm2 = hardwareMap.dcMotor.get("armRight");
-        bucket = hardwareMap.crservo.get("bucket");
+        bucket = hardwareMap.servo.get("bucket");
 
         lift = hardwareMap.dcMotor.get("Lift");
         intakeLeft = hardwareMap.dcMotor.get("intakeLeft");
@@ -57,7 +57,7 @@ public class TeleOpPOV extends OpMode {
         */
          arm1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         float armTicksZero = arm1.getCurrentPosition();//sets the floor position to 0
-
+        bucket.setPosition(0);
 
     }
 
@@ -144,29 +144,27 @@ public class TeleOpPOV extends OpMode {
             arm2.setPower(0);
             arm1.setPower(0);
         }
-        if (gamepad1.right_trigger > 0.25){
+        if (gamepad2.right_trigger > 0.25){
             intakeLeft.setPower(1);
-        } else if (gamepad1.left_trigger > 0.25){
+        } else if (gamepad2.left_trigger > 0.25){
             intakeLeft.setPower(-1);
         } else{
             intakeLeft.setPower(0);
         }
 
-        if(gamepad1.dpad_up){
+
+
+        if(gamepad2.right_bumper){
+           // bucket.setPosition(1.0);
             lift.setPower(1);
-        } else if (gamepad1.dpad_down){
+        } else if (gamepad2.left_bumper){
+           // bucket.setPower(0);
             lift.setPower(-1);
-        } else{
+        }else {
             lift.setPower(0);
         }
-
-        if(gamepad2.dpad_up){
-            bucket.setPower(1.0);
-        } else if (gamepad2.dpad_down){
-            bucket.setPower(0);
-        }
-        //telemetry.addLine("Servo " + bucket.getPosition());
-
+        telemetry.addLine("Servo " + bucket.getPosition());
+        telemetry.update();
         if (gamepad1.dpad_left) {
             gun.setPower(1);
         } else if (gamepad1.dpad_right){
