@@ -156,10 +156,10 @@ public class TeleOpPOV extends OpMode {
 
         if(gamepad2.right_bumper){
            // bucket.setPosition(1.0);
-            lift.setPower(1);
+            lift.setPower(0.30);
         } else if (gamepad2.left_bumper){
            // bucket.setPower(0);
-            lift.setPower(-1);
+            lift.setPower(-0.30);
         }else {
             lift.setPower(0);
         }
