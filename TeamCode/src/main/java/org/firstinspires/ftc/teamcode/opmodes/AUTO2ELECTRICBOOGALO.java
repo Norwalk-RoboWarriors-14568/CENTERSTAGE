@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name = "What color is your bugati")
+@Autonomous(name = "park")
 public class AUTO2ELECTRICBOOGALO extends LinearOpMode {
     // Declare OpMode members.
     //Tages
@@ -62,7 +62,7 @@ public class AUTO2ELECTRICBOOGALO extends LinearOpMode {
 
         //run autonomous
         if (opModeIsActive()) {
-            encoferDrive(0.5,0.5,-18, 181, false);
+            encoferDrive(0.5,0.5,-30, 30, false);
             while (opModeIsActive()) {
                 //  telemetry.addData("T-FrontLeft: ", frontLeftTarget);
                 telemetry.addData("A-FrontLeft: ", motorLeftFRONT.getCurrentPosition());

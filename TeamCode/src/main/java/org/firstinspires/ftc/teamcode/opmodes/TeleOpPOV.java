@@ -15,7 +15,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class TeleOpPOV extends OpMode {
     private DcMotor fl, bl, fr, br, arm1, arm2, lift, intakeLeft;
-    private CRServo gun;
+    private Servo gun;
+    boolean jacob = false;
+
     private Servo bucket;
     private boolean mecanumDriveMode = true;
     private float mecanumStrafe = 0, dominantXJoystick = 0;
@@ -35,7 +37,7 @@ public class TeleOpPOV extends OpMode {
         lift = hardwareMap.dcMotor.get("Lift");
         intakeLeft = hardwareMap.dcMotor.get("intakeLeft");
 
-        gun = hardwareMap.crservo.get("gun");
+        gun = hardwareMap.servo.get("gun");
 
 
         fr.setDirection(DcMotor.Direction.REVERSE);
@@ -49,7 +51,6 @@ public class TeleOpPOV extends OpMode {
         setBehavior(arm1, BRAKE  );
         setBehavior(arm2, BRAKE);
         setBehavior(lift, BRAKE);
-
         telemetry.addLine("Init Opmode");
         /*
         armAngle.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -57,8 +58,8 @@ public class TeleOpPOV extends OpMode {
         */
          arm1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         float armTicksZero = arm1.getCurrentPosition();//sets the floor position to 0
-        bucket.setPosition(0);
-
+       // bucket.setPosition(0);
+        //bucket.setBehavior();
     }
 
     @Override
@@ -144,10 +145,11 @@ public class TeleOpPOV extends OpMode {
             arm2.setPower(0);
             arm1.setPower(0);
         }
+
         if (gamepad2.right_trigger > 0.25){
             intakeLeft.setPower(1);
         } else if (gamepad2.left_trigger > 0.25){
-            intakeLeft.setPower(-1);
+            intakeLeft.setPower(-0.8);
         } else{
             intakeLeft.setPower(0);
         }
@@ -155,23 +157,21 @@ public class TeleOpPOV extends OpMode {
 
 
         if(gamepad2.right_bumper){
-           // bucket.setPosition(1.0);
+           // bucket.setPosition(0.15);//Can only use these values nothing beyond this point
             lift.setPower(0.30);
         } else if (gamepad2.left_bumper){
-           // bucket.setPower(0);
+            // bucket.setPosition(0.85);//Can only use these values nothing beyond this point
             lift.setPower(-0.30);
         }else {
             lift.setPower(0);
         }
         telemetry.addLine("Servo " + bucket.getPosition());
-        telemetry.update();
-        if (gamepad1.dpad_left) {
-            gun.setPower(1);
-        } else if (gamepad1.dpad_right){
-            gun.setPower(0);
-        } else {
-            gun.setPower(-1);
-
+        if (gamepad2.y && jacob) {
+            gun.setPosition(0.5);
+            jacob = false;
+        } else if (gamepad2.y && !jacob){
+            gun.setPosition(0.2);
+            jacob = true;
         }
 
         telemetry.update();
