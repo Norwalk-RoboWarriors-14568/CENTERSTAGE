@@ -12,16 +12,37 @@ import com.acmerobotics.roadrunner.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.ftc.Actions;
 
 public class PalestineActions {
+/*
+    public class Drive {
+        public Action followTrajectory(Trajectory t) {
+            return new TodoAction();
+        }
 
-    public static class Drive {
+        public Action turn(double angle) {
+            return new TodoAction();
+        }
 
+        public Action moveToPoint(double x, double y) {
+            return new TodoAction();
+        }
     }
-    public class Arm {
 
+    public class Shooter {
+        public Action spinUp() {
+            return new TodoAction();
+        }
+
+        public Action fireBall() {
+            return new TodoAction();
+        }
+
+        public Action loadBall() {
+            return new TodoAction();
+        }
     }
 
 
 
-
+*/
 
 }

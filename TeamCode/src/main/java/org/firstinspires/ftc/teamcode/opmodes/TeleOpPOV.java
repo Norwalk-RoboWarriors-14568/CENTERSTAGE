@@ -14,10 +14,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name = "POV Drive")
 
 public class TeleOpPOV extends OpMode {
-    private DcMotor fl, bl, fr, br, arm1, arm2, lift, intakeLeft;
+    DcMotor fl, bl, fr, br, arm1, arm2, lift, intakeLeft;
     private Servo gun;
     boolean jacob = false;
-
+    private CRServo intake2;
     private Servo bucket;
     private boolean mecanumDriveMode = true;
     private float mecanumStrafe = 0, dominantXJoystick = 0;
@@ -26,9 +26,9 @@ public class TeleOpPOV extends OpMode {
     @Override
     public void init() {
         fl = hardwareMap.dcMotor.get("leftFront");
-        bl = hardwareMap.dcMotor.get("leftRear");
+        bl = hardwareMap.dcMotor.get("leftBack");
         fr = hardwareMap.dcMotor.get("rightFront");
-        br = hardwareMap.dcMotor.get("rightRear");
+        br = hardwareMap.dcMotor.get("rightBack");
 
         arm1 = hardwareMap.dcMotor.get("armLeft");
         arm2 = hardwareMap.dcMotor.get("armRight");
@@ -36,7 +36,7 @@ public class TeleOpPOV extends OpMode {
 
         lift = hardwareMap.dcMotor.get("Lift");
         intakeLeft = hardwareMap.dcMotor.get("intakeLeft");
-
+        intake2 = hardwareMap.crservo.get("intake2");
         gun = hardwareMap.servo.get("gun");
 
 
@@ -122,9 +122,9 @@ public class TeleOpPOV extends OpMode {
                     br.setPower((gamepad1.right_stick_y + -mecanumStrafe) / 2.25 );
                 }
             } else if (!mecanumDriveMode ) {
-                if (gamepad1.left_bumper) {
+                if (gamepad1.right_bumper) {
                     drive(gamepad1.left_stick_y * 0.8, gamepad1.right_stick_y * 0.8);
-                } else if (gamepad1.right_bumper) {
+                } else if (gamepad1.left_bumper) {
                     drive(gamepad1.left_stick_y * 0.25, gamepad1.right_stick_y * 0.25);
                 } else {
                     drive(gamepad1.left_stick_y * 0.5, gamepad1.right_stick_y * 0.5);
@@ -148,10 +148,14 @@ public class TeleOpPOV extends OpMode {
 
         if (gamepad2.right_trigger > 0.25){
             intakeLeft.setPower(1);
+            intake2.setPower(-1);
         } else if (gamepad2.left_trigger > 0.25){
-            intakeLeft.setPower(-0.8);
+            intakeLeft.setPower(-0.5);
+            intake2.setPower(0.5);
         } else{
             intakeLeft.setPower(0);
+            intake2.setPower(0);
+
         }
 
 
@@ -166,12 +170,11 @@ public class TeleOpPOV extends OpMode {
             lift.setPower(0);
         }
         telemetry.addLine("Servo " + bucket.getPosition());
-        if (gamepad2.y && jacob) {
+        if (gamepad2.y) {
             gun.setPosition(0.5);
-            jacob = false;
-        } else if (gamepad2.y && !jacob){
+        }
+        if (gamepad2.x ){
             gun.setPosition(0.2);
-            jacob = true;
         }
 
         telemetry.update();

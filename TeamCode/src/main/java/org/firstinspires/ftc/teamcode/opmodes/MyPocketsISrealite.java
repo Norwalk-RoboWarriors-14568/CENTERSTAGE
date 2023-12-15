@@ -57,7 +57,6 @@ public class MyPocketsISrealite extends LinearOpMode{
         Pose2d Left = new Pose2d(52,-3,Math.toRadians(90));
         Pose2d Right = new Pose2d(52,28,Math.toRadians(180));
         Pose2d park;
-    private com.acmerobotics.roadrunner.MappedPosePath MappedPosePath;
 
     @Override
         public void runOpMode() throws InterruptedException {
@@ -112,6 +111,9 @@ public class MyPocketsISrealite extends LinearOpMode{
                 .build();
         Action three = drive.actionBuilder(drive.pose)//drive.pose, 1e-6, 0.0, drive.defaultVelConstraint, drive.defaultAccelConstraint, 0.25, 0.1)
                 .lineToX(0).lineToY(11)// (new Vector2d(0.00, 11.00)
+                .build();
+        Action four = drive.actionBuilder(drive.pose)//drive.pose, 1e-6, 0.0, drive.defaultVelConstraint, drive.defaultAccelConstraint, 0.25, 0.1)
+                .lineToX(2).lineToY(2)// (new Vector2d(0.00, 11.00)
                 .build();
             /*
             //Blue depot
@@ -196,24 +198,18 @@ public class MyPocketsISrealite extends LinearOpMode{
  */
 
             waitForStart();
-            if (isStopRequested()) return;
+            if (isStopRequested())
+                return;
             //
-
-            runBlocking(new SequentialAction(
-                    toRedWing,
-                        new ParallelAction(
-                                one,three
-                        ),
-                    new SequentialAction(
-                            two
+            while (opModeIsActive() && !isStopRequested()) {
+                runBlocking(new SequentialAction(
+                        four,
+                                new ParallelAction(
+                                        one,three
+                                )
                         )
-                    )
-            );
-
-
-            //while (opModeIsActive() && !isStopRequested()) {
-
-
+                );
+            }
                 /*switch (currentState) {
                     case START:
                         drive.ConeGrabber.setPosition(0);
@@ -324,10 +320,6 @@ public class MyPocketsISrealite extends LinearOpMode{
             //}
         }
 
-    private Action arm() {
-
-        return null;
-    }
    /* public Action armUp() {
         return new Action() {
             @Override

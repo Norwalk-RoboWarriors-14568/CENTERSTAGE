@@ -35,8 +35,8 @@ public class AUTO extends LinearOpMode {
         cpiOdometry  = CPR_ODOMETRY / (ODOMETRY_WHEEL_DIAMETER * Math.PI);
         //CPI =     ticksPerRev / (circumerence);
         //CPI_CORE_HEX = hexCoreCPR/4.4;
-        motorLeftBACK = hardwareMap.dcMotor.get("leftRear");
-        motorRightBACK = hardwareMap.dcMotor.get("rightRear");
+        motorLeftBACK = hardwareMap.dcMotor.get("leftBack");
+        motorRightBACK = hardwareMap.dcMotor.get("rightBack");
         motorLeftFRONT = hardwareMap.dcMotor.get( "leftFront");
         motorRightFRONT = hardwareMap.dcMotor.get("rightFront");
         intakeLeft = hardwareMap.dcMotor.get("intakeLeft");
