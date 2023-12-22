@@ -5,11 +5,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name = "park")
+//@Autonomous(name = "autofar")
 public class AUTO2ELECTRICBOOGALO extends LinearOpMode {
     // Declare OpMode members.
     //Tages
-
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor motorLeftBACK = null;
     private DcMotor motorRightBACK = null;
@@ -18,7 +17,6 @@ public class AUTO2ELECTRICBOOGALO extends LinearOpMode {
     private DcMotor intakeLeft = null;
     final private double CPI_MECC = (537.6/ ( 3.93 * Math.PI));
     private ElapsedTime timer;
-
     private final int CPR_ODOMETRY = 8192;//counts per revolution for encoder, from website
     private final int ODOMETRY_WHEEL_DIAMETER = 4;
     private double cpiOdometry;
@@ -27,7 +25,6 @@ public class AUTO2ELECTRICBOOGALO extends LinearOpMode {
     private int timeOutCount = 0;
     // private VoltageSensor vs;
     private double gameTimeSnapShot = 0;
-
     @Override
     public void runOpMode() {
         //telemetry.addData("T-FrontLeft: ", frontLeftTarget);
@@ -44,26 +41,29 @@ public class AUTO2ELECTRICBOOGALO extends LinearOpMode {
         //servoLeft = hardwareMap.crservo.get("servo_1");
         // vs  = this.hardwareMap.voltageSensor.iterator().next();
         timer = new ElapsedTime();//create a timer from the elapsed time class
-
-
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-
-
-
         brakeMotors();
         reverseMotors();
         telemetry.update();
         motorSetModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         waitForStart();
         runtime.reset();
-
-
         //run autonomous
         if (opModeIsActive()) {
+            while (getRuntime() < 1) {
+                drive(0.5, 0.5, true);
+            }
+            while (getRuntime() < 3) {
+                drive(0.8,0.8);
+            }
+            intakeLeft.setPower(-1);
+            drive(0,0);
+        }
+        /*
             encoferDrive(0.5,0.5,-30, 30, false);
             while (opModeIsActive()) {
+
                 //  telemetry.addData("T-FrontLeft: ", frontLeftTarget);
                 telemetry.addData("A-FrontLeft: ", motorLeftFRONT.getCurrentPosition());
                 //   telemetry.addData("T-FrontRight: ", frontRightTarget);
@@ -74,9 +74,10 @@ public class AUTO2ELECTRICBOOGALO extends LinearOpMode {
                 telemetry.addData("A-BackRight: ", motorRightBACK.getCurrentPosition());
                 telemetry.update();
             }
+            */
         }
 
-    }
+
 
     public void encoferDrive(double leftSpeed, double rightSpeed, double leftInches, double rightInches, boolean strafeywafey){
         motorSetModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -121,7 +122,6 @@ public class AUTO2ELECTRICBOOGALO extends LinearOpMode {
             telemetry.addData("Current Pos Right:", motorRightBACK.getCurrentPosition());
             telemetry.addData("right power: ", motorRightBACK.getPower());
             telemetry.addData("left power: ", motorLeftBACK.getPower());
-
             telemetry.update();
         }
         // Stop all motion;
@@ -179,8 +179,12 @@ public class AUTO2ELECTRICBOOGALO extends LinearOpMode {
         motorRightBACK.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorLeftFRONT.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorRightFRONT.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-
-
     }
+    public void drive(double left, double right ) {
+        motorLeftBACK.setPower(left);
+        motorRightBACK.setPower(right);
+        motorRightFRONT.setPower(right);
+        motorLeftFRONT.setPower(left);
+    }
+
 }

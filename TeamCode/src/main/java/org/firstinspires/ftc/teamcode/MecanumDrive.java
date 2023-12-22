@@ -58,16 +58,18 @@ import java.util.List;
 public final class MecanumDrive {
     public static class Params {
         // IMU orientation
-        //DOwn there changed it
-        // drive model parameters
-        public double inPerTick = 47.5/16100;
-        public double lateralInPerTick = 35.00561343965254;
-        public double trackWidthTicks = 5104.766780627318;
+        public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
+                RevHubOrientationOnRobot.LogoFacingDirection.UP;
+        public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
+                RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;        // drive model parameters
+        public double inPerTick = 47.5/16150;
+        public double lateralInPerTick = 33.006960836886215;
+        public double trackWidthTicks = 5046.393313485721;
 
         // feedforward parameters (in tick units)
-        public double kS = 0.9811417680378307;
-        public double kV = 0.0005948635290381832;
-        public double kA = 0.0001;
+        public double kS = 1.0737509689080875;
+        public double kV = 0.0006010117991206345;
+        public double kA = 0.000104;
 
         // path profile parameters (in inches)
         public double maxWheelVel = 50;
@@ -79,9 +81,9 @@ public final class MecanumDrive {
         public double maxAngAccel = Math.PI;
 
         // path controller gains
-        public double axialGain = 0.025;
-        public double lateralGain = 0.025;
-        public double headingGain = 0.025; // shared with turn
+        public double axialGain = 0;
+        public double lateralGain = 0;
+        public double headingGain = 0; // shared with turn
 
         public double axialVelGain = 0.0;
         public double lateralVelGain = 0.0;
@@ -204,12 +206,12 @@ public final class MecanumDrive {
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        leftFront.setDirection(DcMotor.Direction.REVERSE);
-        leftBack.setDirection(DcMotor.Direction.REVERSE);
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
         imu = hardwareMap.get(IMU.class, "imu");
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(new Orientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES,
-                0,0,0,0)));
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                PARAMS.logoFacingDirection, PARAMS.usbFacingDirection));
 
         imu.initialize(parameters);
 

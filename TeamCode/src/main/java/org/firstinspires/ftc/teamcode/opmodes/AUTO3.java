@@ -1,12 +1,12 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name = "Blue Car Warehouse")
-public class AUTO extends LinearOpMode {
+@Autonomous(name = "bluesidefarithink")
+public class AUTO3 extends LinearOpMode {
     // Declare OpMode members.
     //Tages
     ElapsedTime t = new ElapsedTime();
@@ -59,13 +59,21 @@ public class AUTO extends LinearOpMode {
 
 
         //run autonomous
-        if (opModeIsActive()) {
-            t.reset();
-            while (t.seconds() < 23) {
-                drive(0.5, 0.5);
+        while (opModeIsActive()) {
+
+            if (t.seconds() < 3 && t.seconds() > 2.5) {
+                drive(0.2, 0.2,true);
+            }
+            drive(0,0);
+
+            if (t.seconds() > 3.5 && t.seconds() < 6) {
+                drive(0.3, 0.3,false);
                 intakeLeft.setPower(-1);
             }
-                drive(0,0);
+
+
+            drive(0,0);
+            intakeLeft.setPower(0);
 
 
 
@@ -166,8 +174,19 @@ public class AUTO extends LinearOpMode {
         motorRightBACK.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorLeftFRONT.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorRightFRONT.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+    public void drive(double left, double right, boolean strafe) {
 
-
-
+        if(strafe){
+            motorLeftBACK.setPower(-left);
+            motorRightBACK.setPower(right);
+            motorRightFRONT.setPower(-right);
+            motorLeftFRONT.setPower(left);
+        } else {
+            motorLeftBACK.setPower(left);
+            motorRightBACK.setPower(right);
+            motorRightFRONT.setPower(right);
+            motorLeftFRONT.setPower(left);
+        }
     }
 }

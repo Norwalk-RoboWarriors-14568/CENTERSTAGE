@@ -4,45 +4,97 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Trajectory;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.TrajectoryActionFactory;
 import com.acmerobotics.roadrunner.TrajectoryBuilder;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
-public class PalestineActions {
-/*
-    public class Drive {
-        public Action followTrajectory(Trajectory t) {
-            return new TodoAction();
+import org.firstinspires.ftc.teamcode.MecanumDrive;
+
+public class PalestineActions extends LinearOpMode {
+
+// Localization is doesn't show drift, follower if it doe
+    boolean finished = false;
+
+    @Override
+    public void runOpMode() {
+
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0,0,0));
+
+        DcMotor motor1 = hardwareMap.get(DcMotor.class,  "motor");
+
+        // Delcare Trajectory as such
+        Action TrajectoryAction1 = drive.actionBuilder(drive.pose)
+                .lineToX(0)
+                .build();
+
+        // Bit more complicated way of doing it if you want access to the data of the trajectory
+        MecanumDrive.FollowTrajectoryAction TrajectoryAction2 = (MecanumDrive.FollowTrajectoryAction) drive.actionBuilder(new Pose2d(0,0,0))
+                .splineTo(new Vector2d(5,5), Math.toRadians(90))
+                .build();
+
+
+
+        while(!isStopRequested() && !opModeIsActive()) {
+
         }
 
-        public Action turn(double angle) {
-            return new TodoAction();
-        }
+        waitForStart();
 
-        public Action moveToPoint(double x, double y) {
-            return new TodoAction();
-        }
+        if (isStopRequested()) return;
+
+        /*
+        drive.setBreakFollowing(
+                () -> {
+                    if (true) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+        );*/
+
+        Actions.runBlocking(
+                new SequentialAction(
+                        TrajectoryAction1, // Example of a drive action
+
+                        // This action and the following action do the same thing
+                        new Action() {
+                            @Override
+                            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                                telemetry.addLine("Action!");
+                                return false;
+                            }
+                        },
+                        // Only that this action uses a Lambda expression to reduce complexity
+                        (telemetryPacket) -> {
+                            telemetry.addLine("Action!");
+                            return false; // Returning true causes the action to run again, returning false causes it to cease
+                        },
+                        new ParallelAction( // several actions being run in parallel
+                                TrajectoryAction2, // Run second trajectory
+                                (telemetryPacket) -> { // Run some action
+                                    motor1.setPower(1);
+                                    return false;
+                                }
+                        ),
+                        drive.actionBuilder(new Pose2d(15,10,Math.toRadians(125))) // Another way of running a trajectory (not recommended because trajectories take time to build and will slow down your code, always try to build them beforehand)
+                                .splineTo(new Vector2d(25, 15), 0)
+                                .build()
+
+                )
+        );
+
+
     }
 
-    public class Shooter {
-        public Action spinUp() {
-            return new TodoAction();
-        }
 
-        public Action fireBall() {
-            return new TodoAction();
-        }
-
-        public Action loadBall() {
-            return new TodoAction();
-        }
-    }
-
-
-
-*/
 
 }
