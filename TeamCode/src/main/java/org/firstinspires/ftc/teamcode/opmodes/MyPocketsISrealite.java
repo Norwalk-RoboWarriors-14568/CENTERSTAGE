@@ -23,7 +23,7 @@ public class MyPocketsISrealite extends LinearOpMode{
         MecanumDrive drive;
        // MONKERYSEEMONRYDOO openCv;
         private DcMotor armLeft, armRight, intakeLeft;
-        final double pulleyDiameter = 0;
+        final double pulleyDiameter = 2;
         ElapsedTime waitTimer = new ElapsedTime();
         ElapsedTime matchTimer = new ElapsedTime();
 
@@ -95,11 +95,15 @@ public class MyPocketsISrealite extends LinearOpMode{
 */
 
         Action BlueFront = drive.actionBuilder(new Pose2d(-36.33, 61.08, Math.toRadians(-89)))
-                .lineToX(-36.18).lineToY(47.98)
-                .lineToXSplineHeading(-36.33,Math.toRadians(180.00)).lineToYSplineHeading(36.18, Math.toRadians(180.00))
-                .lineToX(10.99).lineToY(35.89)
-                .lineToX(46.96).lineToY(35.75)
-                .afterTime(-0.1,raise(1,20))
+                .lineToY(-20.9)//.lineToY(41.98)
+                .waitSeconds(2)
+
+                .waitSeconds(2)
+                .lineToX(10.99)
+                .lineToY(35.89)
+                .lineToX(46.96)
+                .lineToY(35.75)
+                .afterTime(0.1,raise(1,20))
                 .afterTime(0,(telemetryPacket) -> { // Run some action
                     armLeft.setPower(0);
                     return false;

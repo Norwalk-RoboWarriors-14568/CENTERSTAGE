@@ -60,27 +60,20 @@ public class AUTO extends LinearOpMode {
 
         //run autonomous
         if (opModeIsActive()) {
-            t.reset();
-            while (t.seconds() < 23) {
-                drive(0.5, 0.5);
-                intakeLeft.setPower(-1);
-            }
-                drive(0,0);
-
-
-
+        encoferDrive(1,1,10,10);
         }
+
 
     }
 
-    public void encoferDrive(double leftSpeed, double rightSpeed, double leftCM, double rightCM){
+    public void encoferDrive(double leftSpeed, double rightSpeed, double left, double right){
         motorSetModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorSetModes(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorSetModes(DcMotor.RunMode.RUN_USING_ENCODER);   
 
-        int frontRightTarget = motorRightFRONT.getCurrentPosition() + (int) (CPCM_MECC * rightCM);
-        int backRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPCM_MECC * rightCM);
-        int frontLeftTarget = motorLeftFRONT.getCurrentPosition() +  (int) (CPCM_MECC * leftCM);
-        int backLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPCM_MECC * leftCM);
+        int frontRightTarget = motorRightFRONT.getCurrentPosition() + (int) (CPCM_MECC * right);
+        int backRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPCM_MECC * right);
+        int frontLeftTarget = motorLeftFRONT.getCurrentPosition() +  (int) (CPCM_MECC * left);
+        int backLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPCM_MECC * left);
         motorRightFRONT.setTargetPosition(frontRightTarget);
         motorRightBACK.setTargetPosition(backRightTarget);
         motorLeftFRONT.setTargetPosition(frontLeftTarget);
