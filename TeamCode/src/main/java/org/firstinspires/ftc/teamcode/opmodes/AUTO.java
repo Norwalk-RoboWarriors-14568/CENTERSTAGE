@@ -16,7 +16,7 @@ public class AUTO extends LinearOpMode {
     private DcMotor motorLeftFRONT = null;
     private DcMotor motorRightFRONT = null;
     private DcMotor intakeLeft = null;
-    final private double CPCM_MECC = 537.6/ ( 10 * Math.PI);
+    final private double CPCM_MECC = 537.6/ (3.81 * Math.PI);
     private ElapsedTime timer;
 
     private final int CPR_ODOMETRY = 8192;//counts per revolution for encoder, from website
@@ -50,7 +50,6 @@ public class AUTO extends LinearOpMode {
         // Reverse the motor that runs backwards when connected directly to the battery
 
 
-
         brakeMotors();
         reverseMotors();
         telemetry.update();
@@ -60,15 +59,15 @@ public class AUTO extends LinearOpMode {
 
         //run autonomous
         if (opModeIsActive()) {
-        encoferDrive(1,1,10,10);
+        encoferDrive(0.4,0.4,24,24);
         }
-
+        sleep(10000);
 
     }
 
     public void encoferDrive(double leftSpeed, double rightSpeed, double left, double right){
+        brakeMotors();
         motorSetModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorSetModes(DcMotor.RunMode.RUN_USING_ENCODER);   
 
         int frontRightTarget = motorRightFRONT.getCurrentPosition() + (int) (CPCM_MECC * right);
         int backRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPCM_MECC * right);
@@ -78,9 +77,11 @@ public class AUTO extends LinearOpMode {
         motorRightBACK.setTargetPosition(backRightTarget);
         motorLeftFRONT.setTargetPosition(frontLeftTarget);
         motorLeftBACK.setTargetPosition(backLeftTarget);
+        motorSetModes(DcMotor.RunMode.RUN_TO_POSITION);
+        brakeMotors();
         drive(leftSpeed,rightSpeed);
-        if (opModeIsActive() && !IsInRange(motorLeftBACK.getCurrentPosition(), backLeftTarget) && !IsInRange(motorRightBACK.getCurrentPosition(), backRightTarget)
-        && !IsInRange(motorLeftFRONT.getCurrentPosition(), frontLeftTarget) && !IsInRange(motorRightFRONT.getCurrentPosition(), frontRightTarget)){
+        while (!IsInRange(motorLeftBACK.getCurrentPosition(), backLeftTarget) || !IsInRange(motorRightBACK.getCurrentPosition(), backRightTarget)
+        || !IsInRange(motorLeftFRONT.getCurrentPosition(), frontLeftTarget) || !IsInRange(motorRightFRONT.getCurrentPosition(), frontRightTarget)){
             telemetry.addData("T-FrontLeft: ", frontLeftTarget);
             telemetry.addData("A-FrontLeft: ", motorLeftFRONT.getCurrentPosition());
             telemetry.addData("T-FrontRight: ", frontRightTarget);
@@ -95,11 +96,11 @@ public class AUTO extends LinearOpMode {
         drive(0, 0);
     }
 
-/*
+
     public void encoderDrive(double leftDTSpeed, double rightDTSpeed, double mtrLeftInches, double mtrRightInches) {
         motorSetModes(DcMotor.RunMode.RUN_USING_ENCODER);
-        int newLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPI_ATV_DT * mtrLeftInches);
-        int newRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPI_ATV_DT * mtrRightInches);
+        int newLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPCM_MECC * mtrLeftInches);
+        int newRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPCM_MECC * mtrRightInches);
         drive(mtrLeftInches < 0 ? -leftDTSpeed : leftDTSpeed, mtrRightInches < 0 ? -rightDTSpeed : rightDTSpeed);
         while (opModeIsActive() && !IsInRange(motorLeftBACK.getCurrentPosition(), newLeftTarget)
                 && !IsInRange(motorRightBACK.getCurrentPosition(), newRightTarget)) {
@@ -115,7 +116,7 @@ public class AUTO extends LinearOpMode {
         // Stop all motion;
         drive(0, 0);
     }
-*/
+
 
     public void motorSetModes(DcMotor.RunMode modeName) {
         motorLeftBACK.setMode(modeName);
@@ -137,7 +138,7 @@ public class AUTO extends LinearOpMode {
     }
 
     public boolean IsInRange(double inches, double target){
-        final float DEAD_RANGE = 20;
+        final float DEAD_RANGE = 10;
         if(Math.abs(target - inches) <= DEAD_RANGE){
             return true;
         }
