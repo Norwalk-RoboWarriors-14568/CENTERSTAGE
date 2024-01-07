@@ -1,155 +1,180 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-
-import androidx.annotation.NonNull;
-
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.ftc.Actions;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.MecanumDrive;
-@Autonomous(group = "BoredBlue")
-public class BoredBlue extends LinearOpMode{
+@Autonomous(name = "BoredBlue")
+public class BoredBlue extends LinearOpMode {
+    // Declare OpMode members.
+    //Tages
+    MONKERYSEEMONRYDOO openCv;
+    ElapsedTime t = new ElapsedTime();
+    private ElapsedTime runtime = new ElapsedTime();
+    private DcMotor motorLeftBACK = null;
+    private DcMotor motorRightBACK = null;
+    private DcMotor motorLeftFRONT = null;
+    private DcMotor motorRightFRONT = null;
+    private DcMotor intakeLeft = null;
+    final private double CPCM_MECC = 537.6/ ( 10 * Math.PI);
+    private ElapsedTime timer;
 
-    MecanumDrive drive;
-    // MONKERYSEEMONRYDOO openCv;
-    private DcMotor armLeft, armRight, intakeLeft;
-    final double pulleyDiameter = 0;
-    ElapsedTime waitTimer = new ElapsedTime();
-    ElapsedTime matchTimer = new ElapsedTime();
-
-    /*        enum State {
-                START,
-                FIRST_JUNCTION,
-                WAIT_1,
-                STACK,
-                WAIT_2,
-                POLE_RETURN,
-                DROP_CONE,
-                IDLE,
-                SMALL_POLE,
-                PARK
-            }
-            State currentState = State.START; */
-    Pose2d startPose = new Pose2d(0, 0, 0);
-
-    Pose2d Middle = new Pose2d(50,-25, Math.toRadians(90));
-    Pose2d Left = new Pose2d(52,-3,Math.toRadians(90));
-    Pose2d Right = new Pose2d(52,28,Math.toRadians(180));
-    Pose2d park;
-
+    private final int CPR_ODOMETRY = 8192;//counts per revolution for encoder, from website
+    private final int ODOMETRY_WHEEL_DIAMETER = 4;
+    private double cpiOdometry;
+    private double leftPos = 0;
+    private double rightPos = 0;
+    private int timeOutCount = 0;
+    // private VoltageSensor vs;
+    private double gameTimeSnapShot = 0;
+    enum park {
+        Right,
+        Middle,
+        Left
+    }
+    RedBored.park parkpos = RedBored.park.Left;
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
+        //telemetry.addData("T-FrontLeft: ", frontLeftTarget);
 
-        drive = new MecanumDrive(hardwareMap, startPose);
-        armLeft = hardwareMap.dcMotor.get("armLeft");
-        armRight = hardwareMap.dcMotor.get("armRight");
+        cpiOdometry  = CPR_ODOMETRY / (ODOMETRY_WHEEL_DIAMETER * Math.PI);
+        //CPI =     ticksPerRev / (circumerence);
+        //CPI_CORE_HEX = hexCoreCPR/4.4;
+        motorLeftBACK = hardwareMap.dcMotor.get("leftBack");
+        motorRightBACK = hardwareMap.dcMotor.get("rightBack");
+        motorLeftFRONT = hardwareMap.dcMotor.get( "leftFront");
+        motorRightFRONT = hardwareMap.dcMotor.get("rightFront");
         intakeLeft = hardwareMap.dcMotor.get("intakeLeft");
-        motorSetModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorSetModes(DcMotor.RunMode.RUN_USING_ENCODER);
+        //servoRight = hardwareMap.crservo.get("servo_0");
+        //servoLeft = hardwareMap.crservo.get("servo_1");
+        // vs  = this.hardwareMap.voltageSensor.iterator().next();
+        timer = new ElapsedTime();//create a timer from the elapsed time class
 
-        // openCv = new MONKERYSEEMONRYDOO();
-        // openCv.OpenCv(hardwareMap, telemetry);
-/*
-            while (!isStarted() && !isStopRequested())
-            {
-                telemetry.addData("Realtime analysis : ", openCv.pipeline.getAnalysis());
-                telemetry.update();
-                sleep(10);
-            }
-            int snapshotAnalysis = openCv.analysis();
 
-            telemetry.addData("Snapshot post-START analysis : ", snapshotAnalysis);
-            telemetry.update();
+        // Most robots need the motor on one side to be reversed to drive forward
+        // Reverse the motor that runs backwards when connected directly to the battery
 
-            if (isStopRequested()) return;
 
-            switch (snapshotAnalysis)
-            {
-                case 1://BLUE
-                {
-                    park = Right;
-                    break;
-                }
-                case 2://YELLOW
-                {
-                    park = Middle;
-                    break;
-                }
-                default://RED
-                {
-                    park = Left;
-                    break;
-                }
-            }
 
-*/
-
-        Action BlueFront = drive.actionBuilder(new Pose2d(-36.33, 61.08, Math.toRadians(-89)))
-                .lineToX(-36.18).lineToY(47.98)
-                .lineToXSplineHeading(-36.33,Math.toRadians(180.00)).lineToYSplineHeading(36.18, Math.toRadians(180.00))
-                .lineToX(10.99).lineToY(35.89)
-                .lineToX(46.96).lineToY(35.75)
-                .afterTime(-0.1,raise(1,20))
-                .afterTime(0,(telemetryPacket) -> { // Run some action
-                    armLeft.setPower(0);
-                    return false;
-                })
-                .afterTime(0,(telemetryPacket) -> { // Run some action
-                    armRight.setPower(0);
-                    return false;
-                })
-                .build();
-
-        /*
-        Action BlueBored = drive.actionBuilder(new Pose2d(11.43, 59.77, Math.toRadians(-90.00)))
-                .splineTo(new Vector2d(49.14, 36.33), Math.toRadians(-0.20))
-                //.afterTime(-0.1,usARMy(1,20))
-                .lineToXConstantHeading(49.29).lineToYConstantHeading( 61.23)
-                .build();
-        Action RedFront = drive.actionBuilder(new Pose2d(-36.33, -61.08, Math.toRadians(90.00)))
-                .lineToX(-36.18).lineToY(-47.98)
-                .lineToXSplineHeading(36.33,Math.toRadians(180.00)).lineToYSplineHeading(-36.18, Math.toRadians(-180.00))
-                .lineToX(10.99).lineToY(-35.89)
-                .lineToX(46.96).lineToY(-35.75)
-                //.afterTime(-0.1,usARMy(1,20))
-                .build();
-        Action RedBored = drive.actionBuilder(new Pose2d(11.43, -59.77, Math.toRadians(90.00)))
-                .splineTo(new Vector2d(49.14, -36.33), Math.toRadians(0.20))
-                //.afterTime(-0.1,usARMy(1,20))
-                .lineToXConstantHeading(49.29).lineToYConstantHeading( -61.23)
-                .build();
-
-*/
-        while(!isStopRequested() && !opModeIsActive()) {
-        }
-
+        brakeMotors();
+        reverseMotors();
+        telemetry.update();
         waitForStart();
+        runtime.reset();
+        openCv = new MONKERYSEEMONRYDOO();
+        openCv.OpenCv(hardwareMap, telemetry);
+
+        while (!isStarted() && !isStopRequested())
+        {
+            telemetry.addData("Realtime analysis : ", openCv.pipeline.getAnalysis());
+            telemetry.update();
+            sleep(10);
+        }
+        int snapshotAnalysis = openCv.analysis();
+
+        telemetry.addData("Snapshot post-START analysis : ", snapshotAnalysis);
+        telemetry.update();
 
         if (isStopRequested()) return;
 
-        //
-        Actions.runBlocking(new SequentialAction(
-                BlueFront,
-                (telemetryPacket) -> {
-                    telemetry.addLine("Action!");
-                    return false; // Returning true causes the action to run again, returning false causes it to cease
-                })
-        );
+        switch (snapshotAnalysis)
+        {
+            case 1://BLUE
+            {
+                parkpos = RedBored.park.Right;
+                break;
+            }
+            case 2://YELLOW
+            {
+                parkpos = RedBored.park.Middle;
+                break;
+            }
+            default://RED
+            {
+                parkpos = RedBored.park.Left;
+                break;
+            }
+        }
+
+        //run autonomous
+        if (opModeIsActive()) {
+            encoferDrive(1,1,10,10);
+        }
+
+
     }
 
-    public void driveArm(double speed){
-        armLeft.setPower(speed);
-        armRight.setPower(speed);
+    public void encoferDrive(double leftSpeed, double rightSpeed, double left, double right){
+        motorSetModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorSetModes(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        int frontRightTarget = motorRightFRONT.getCurrentPosition() + (int) (CPCM_MECC * right);
+        int backRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPCM_MECC * right);
+        int frontLeftTarget = motorLeftFRONT.getCurrentPosition() +  (int) (CPCM_MECC * left);
+        int backLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPCM_MECC * left);
+        motorRightFRONT.setTargetPosition(frontRightTarget);
+        motorRightBACK.setTargetPosition(backRightTarget);
+        motorLeftFRONT.setTargetPosition(frontLeftTarget);
+        motorLeftBACK.setTargetPosition(backLeftTarget);
+        drive(leftSpeed,rightSpeed);
+        if (opModeIsActive() && !IsInRange(motorLeftBACK.getCurrentPosition(), backLeftTarget) && !IsInRange(motorRightBACK.getCurrentPosition(), backRightTarget)
+                && !IsInRange(motorLeftFRONT.getCurrentPosition(), frontLeftTarget) && !IsInRange(motorRightFRONT.getCurrentPosition(), frontRightTarget)){
+            telemetry.addData("T-FrontLeft: ", frontLeftTarget);
+            telemetry.addData("A-FrontLeft: ", motorLeftFRONT.getCurrentPosition());
+            telemetry.addData("T-FrontRight: ", frontRightTarget);
+            telemetry.addData("A-FrontRight: ", motorRightFRONT.getCurrentPosition());
+            telemetry.addData("T-BackLeft: ", backLeftTarget);
+            telemetry.addData("A-BackLeft: ", motorLeftBACK.getCurrentPosition());
+            telemetry.addData("T-BackRight: ", backRightTarget);
+            telemetry.addData("A-BackRight: ", motorRightBACK.getCurrentPosition());
+            telemetry.update();
+
+        }
+        drive(0, 0);
     }
+
+/*
+    public void encoderDrive(double leftDTSpeed, double rightDTSpeed, double mtrLeftInches, double mtrRightInches) {
+        motorSetModes(DcMotor.RunMode.RUN_USING_ENCODER);
+        int newLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPI_ATV_DT * mtrLeftInches);
+        int newRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPI_ATV_DT * mtrRightInches);
+        drive(mtrLeftInches < 0 ? -leftDTSpeed : leftDTSpeed, mtrRightInches < 0 ? -rightDTSpeed : rightDTSpeed);
+        while (opModeIsActive() && !IsInRange(motorLeftBACK.getCurrentPosition(), newLeftTarget)
+                && !IsInRange(motorRightBACK.getCurrentPosition(), newRightTarget)) {
+            telemetry.addData("Target Left: ", newLeftTarget);
+            telemetry.addData("Target right: ", newRightTarget);
+            telemetry.addData("Current Pos Left:", motorLeftBACK.getCurrentPosition());
+            telemetry.addData("Current Pos Right:", motorRightBACK.getCurrentPosition());
+            telemetry.addData("right power: ", motorRightBACK.getPower());
+            telemetry.addData("left power: ", motorLeftBACK.getPower());
+
+            telemetry.update();
+        }
+        // Stop all motion;
+        drive(0, 0);
+    }
+*/
+
+    public void motorSetModes(DcMotor.RunMode modeName) {
+        motorLeftBACK.setMode(modeName);
+        motorRightBACK.setMode(modeName);
+        motorLeftFRONT.setMode(modeName);
+        motorRightFRONT.setMode(modeName);
+    }
+
+    public void drive(double left, double right  ) {
+        motorLeftBACK.setPower(left);
+        motorRightBACK.setPower(right);
+        motorRightFRONT.setPower(right);
+        motorLeftFRONT.setPower(left);
+    }
+
+    public void motorSetTargetPos(int targetLeft, int targetRight) {
+        motorLeftBACK.setTargetPosition(targetLeft);
+        motorRightBACK.setTargetPosition(targetRight);
+    }
+
     public boolean IsInRange(double inches, double target){
         final float DEAD_RANGE = 20;
         if(Math.abs(target - inches) <= DEAD_RANGE){
@@ -157,53 +182,24 @@ public class BoredBlue extends LinearOpMode{
         }
         return false;
     }
-    public void motorSetModes(DcMotor.RunMode modeName) {
-        armLeft.setMode(modeName);
-        armRight.setMode(modeName);
-    }
-    public Action raise(double armSpeed, double armDistance) {
-        return new Action() {
-            private boolean initialized = false;
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                if (!initialized) {
-                    driveArm(armSpeed);
-                    initialized = true;
-                }
-                int leftArmTarget = armLeft.getCurrentPosition() + (int) (pulleyDiameter * armDistance);
-                int rightArmTarget = armRight.getCurrentPosition() + (int) (pulleyDiameter * armDistance);
-                armLeft.setTargetPosition(leftArmTarget);
-                armRight.setTargetPosition(rightArmTarget);
-                packet.put("Position Left tar", leftArmTarget);
-                packet.put("Position right tar", rightArmTarget);
-                packet.put("Position Left", armLeft.getCurrentPosition());
-                packet.put("Position right", armRight.getCurrentPosition());
 
-                return !IsInRange(armLeft.getCurrentPosition(), leftArmTarget) && !IsInRange(armRight.getCurrentPosition(), rightArmTarget);
-            }
-        };
+
+
+
+
+    private void reverseMotors(){
+        motorLeftBACK.setDirection(DcMotor.Direction.REVERSE);
+        motorLeftFRONT.setDirection(DcMotor.Direction.REVERSE);
+
     }
 
+    private void brakeMotors(){
+        motorLeftBACK.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorRightBACK.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorLeftFRONT.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorRightFRONT.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-    /*
-   public void usARMy(double armSpeed, double armDistance){
-       motorSetModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-       motorSetModes(DcMotor.RunMode.RUN_USING_ENCODER);
 
-       int leftArmTarget = armLeft.getCurrentPosition() + (int) (pulleyDiameter * armDistance);
-       int rightArmTarget = armRight.getCurrentPosition() + (int) (pulleyDiameter * armDistance);
 
-       armLeft.setTargetPosition(leftArmTarget);
-       armRight.setTargetPosition(rightArmTarget);
-       driveArm(armSpeed);
-       while (opModeIsActive() && !IsInRange(armLeft.getCurrentPosition(), leftArmTarget) && !IsInRange(armRight.getCurrentPosition(), rightArmTarget)){
-           telemetry.addData("T-ArmLeft: ", armLeft.getTargetPosition());
-           telemetry.addData("A-ArmLeft: ", armLeft.getCurrentPosition());
-           telemetry.addData("T-ArmRight: ", armRight.getTargetPosition());
-           telemetry.addData("A-ArmRight: ", armRight.getTargetPosition());
-           telemetry.update();
-       }
-       driveArm(0);
-
-   } */
+    }
 }
