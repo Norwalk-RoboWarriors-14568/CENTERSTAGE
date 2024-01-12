@@ -5,12 +5,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+
 @Autonomous(name = "RedBored")
 public class RedBored extends LinearOpMode {
     // Declare OpMode members.
     //Tages
-    MONKERYSEEMONRYDOO openCv;
-
+    MONKERYSEEMONRYDOO openCv = new MONKERYSEEMONRYDOO();
     ElapsedTime t = new ElapsedTime();
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor motorLeftBACK = null;
@@ -18,7 +20,7 @@ public class RedBored extends LinearOpMode {
     private DcMotor motorLeftFRONT = null;
     private DcMotor motorRightFRONT = null;
     private DcMotor intakeLeft = null;
-    final private double CPCM_MECC = 537.6/ ( 10 * Math.PI);
+    final private double CPCM_MECC = 537.6/ ( 3.81 * Math.PI);
     private ElapsedTime timer;
 
     private final int CPR_ODOMETRY = 8192;//counts per revolution for encoder, from website
@@ -47,6 +49,10 @@ public class RedBored extends LinearOpMode {
         motorLeftFRONT = hardwareMap.dcMotor.get( "leftFront");
         motorRightFRONT = hardwareMap.dcMotor.get("rightFront");
         intakeLeft = hardwareMap.dcMotor.get("intakeLeft");
+
+        openCv.OpenCv(hardwareMap, telemetry);
+
+
         //servoRight = hardwareMap.crservo.get("servo_0");
         //servoLeft = hardwareMap.crservo.get("servo_1");
         // vs  = this.hardwareMap.voltageSensor.iterator().next();
@@ -64,42 +70,34 @@ public class RedBored extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        openCv = new MONKERYSEEMONRYDOO();
-        openCv.OpenCv(hardwareMap, telemetry);
+        int snapshotAnalysis = openCv.analysis();
 
-            while (!isStarted() && !isStopRequested())
+        telemetry.addData("Snapshot post-START analysis : ", snapshotAnalysis);
+        telemetry.update();
+
+        if (isStopRequested()) return;
+
+        switch (snapshotAnalysis)
+        {
+            case 1://BLUE
             {
-                telemetry.addData("Realtime analysis : ", openCv.pipeline.getAnalysis());
-                telemetry.update();
-                sleep(10);
+                parkpos = park.Right;
+                break;
             }
-            int snapshotAnalysis = openCv.analysis();
-
-            telemetry.addData("Snapshot post-START analysis : ", snapshotAnalysis);
-            telemetry.update();
-
-            if (isStopRequested()) return;
-
-            switch (snapshotAnalysis)
+            case 2://YELLOW
             {
-                case 1://BLUE
-                {
-                    parkpos = park.Right;
-                    break;
-                }
-                case 2://YELLOW
-                {
-                    parkpos = park.Middle;
-                    break;
-                }
-                default://RED
-                {
-                    parkpos = park.Left;
-                    break;
-                }
+                parkpos = park.Middle;
+                break;
             }
+            default://RED
+            {
+                parkpos = park.Left;
+                break;
+            }
+        }
         //run autonomous
         while (opModeIsActive()) {
+
             if (t.seconds() < 3 && t.seconds() > 2.5) {
                 drive(-0.2, -0.2,true);
             }

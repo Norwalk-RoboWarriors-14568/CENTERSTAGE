@@ -1,23 +1,28 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 
-@Autonomous(name = "BoredBlue")
-public class BoredBlue extends LinearOpMode {
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+@Autonomous(name = "BoredBlueC")
+public class BoredBlueC extends LinearOpMode {
     // Declare OpMode members.
     //Tages
     MONKERYSEEMONRYDOO openCv;
     ElapsedTime t = new ElapsedTime();
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor motorLeftBACK = null;
-    private DcMotor motorRightBACK = null;
-    private DcMotor motorLeftFRONT = null;
-    private DcMotor motorRightFRONT = null;
-    private DcMotor intakeLeft = null;
-    final private double CPCM_MECC = 537.6/ ( 10 * Math.PI);
+    DcMotor motorLeftFRONT, motorLeftBACK, motorRightFRONT, motorRightBACK, arm1, arm2, lift, intakeLeft;
+    private Servo gun;
+    private Servo bucket;
+
+
+    final private double CPCM_MECC = 537.6/ ( 3.75 * Math.PI);
+    final private double CPI_ARM = 537.6/(4.4);
     private ElapsedTime timer;
 
     private final int CPR_ODOMETRY = 8192;//counts per revolution for encoder, from website
@@ -33,7 +38,7 @@ public class BoredBlue extends LinearOpMode {
         Middle,
         Left
     }
-    RedBored.park parkpos = RedBored.park.Left;
+    park parkpos = park.Left;
     @Override
     public void runOpMode() {
         //telemetry.addData("T-FrontLeft: ", frontLeftTarget);
@@ -46,6 +51,12 @@ public class BoredBlue extends LinearOpMode {
         motorLeftFRONT = hardwareMap.dcMotor.get( "leftFront");
         motorRightFRONT = hardwareMap.dcMotor.get("rightFront");
         intakeLeft = hardwareMap.dcMotor.get("intakeLeft");
+        arm1 = hardwareMap.dcMotor.get("armLeft");
+        arm2 = hardwareMap.dcMotor.get("armRight");
+        //bucket = hardwareMap.servo.get("bucket");
+        lift = hardwareMap.dcMotor.get("Lift");
+        intakeLeft = hardwareMap.dcMotor.get("intakeLeft");
+        gun = hardwareMap.servo.get("gun");
         //servoRight = hardwareMap.crservo.get("servo_0");
         //servoLeft = hardwareMap.crservo.get("servo_1");
         // vs  = this.hardwareMap.voltageSensor.iterator().next();
@@ -55,22 +66,9 @@ public class BoredBlue extends LinearOpMode {
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
 
-
-
-        brakeMotors();
-        reverseMotors();
-        telemetry.update();
-        waitForStart();
-        runtime.reset();
         openCv = new MONKERYSEEMONRYDOO();
         openCv.OpenCv(hardwareMap, telemetry);
 
-        while (!isStarted() && !isStopRequested())
-        {
-            telemetry.addData("Realtime analysis : ", openCv.pipeline.getAnalysis());
-            telemetry.update();
-            sleep(10);
-        }
         int snapshotAnalysis = openCv.analysis();
 
         telemetry.addData("Snapshot post-START analysis : ", snapshotAnalysis);
@@ -82,44 +80,82 @@ public class BoredBlue extends LinearOpMode {
         {
             case 1://BLUE
             {
-                parkpos = RedBored.park.Right;
+                parkpos = park.Right;
                 break;
             }
             case 2://YELLOW
             {
-                parkpos = RedBored.park.Middle;
+                parkpos = park.Middle;
                 break;
             }
             default://RED
             {
-                parkpos = RedBored.park.Left;
+                parkpos = park.Left;
                 break;
             }
         }
+        //arm1.setDirection(DcMotorSimple.Direction.REVERSE);
+        brakeMotors();
+        reverseMotors();
+        telemetry.update();
+        waitForStart();
+        runtime.reset();
+
 
         //run autonomous
         if (opModeIsActive()) {
-            encoferDrive(1,1,10,10);
+            /*
+            encoferDrive(0.4,0.4,26,26,false);
+            encoferDrive(0.4,0.4,23.71,-23.71,false);
+            encoferDrive(0.4,0.4,-2,-2,false);
+
+            intakeLeft.setPower(-0.4);
+            sleep(200);
+            intakeLeft.setPower(0);
+            encoferDrive(0.4,0.4,-24,-24,true);
+            encoferDrive(0.4,0.4,-80,-80,false);
+            encoferDrive(0.4,0.4,47.42,-47.42,false);
+            intakeLeft.setPower(-0.4);
+            sleep(200);
+            intakeLeft.setPower(0);
+
+
+
+            //encoferDrive(0.4,0.4,-35,-35,true);
+
+             */
+
+
+            armDrive(0.4,50);
         }
 
 
     }
 
-    public void encoferDrive(double leftSpeed, double rightSpeed, double left, double right){
+    public void encoferDrive(double leftSpeed, double rightSpeed, double left, double right, boolean strafe){
+        brakeMotors();
         motorSetModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorSetModes(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        int frontRightTarget = motorRightFRONT.getCurrentPosition() + (int) (CPCM_MECC * right);
-        int backRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPCM_MECC * right);
-        int frontLeftTarget = motorLeftFRONT.getCurrentPosition() +  (int) (CPCM_MECC * left);
-        int backLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPCM_MECC * left);
+        int frontLeftTarget=0,frontRightTarget=0,backRightTarget=0,backLeftTarget=0;
+        if (strafe) {
+             frontRightTarget = motorRightFRONT.getCurrentPosition() + (int) (CPCM_MECC * -right);
+             backRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPCM_MECC * right);
+             frontLeftTarget = motorLeftFRONT.getCurrentPosition() + (int) (CPCM_MECC * left);
+             backLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPCM_MECC * -left);
+        } else {
+             frontRightTarget = motorRightFRONT.getCurrentPosition() + (int) (CPCM_MECC * right);
+             backRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPCM_MECC * right);
+             frontLeftTarget = motorLeftFRONT.getCurrentPosition() + (int) (CPCM_MECC * left);
+             backLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPCM_MECC * left);
+        }
         motorRightFRONT.setTargetPosition(frontRightTarget);
         motorRightBACK.setTargetPosition(backRightTarget);
         motorLeftFRONT.setTargetPosition(frontLeftTarget);
         motorLeftBACK.setTargetPosition(backLeftTarget);
-        drive(leftSpeed,rightSpeed);
-        if (opModeIsActive() && !IsInRange(motorLeftBACK.getCurrentPosition(), backLeftTarget) && !IsInRange(motorRightBACK.getCurrentPosition(), backRightTarget)
-                && !IsInRange(motorLeftFRONT.getCurrentPosition(), frontLeftTarget) && !IsInRange(motorRightFRONT.getCurrentPosition(), frontRightTarget)){
+        motorSetModes(DcMotor.RunMode.RUN_TO_POSITION);
+        brakeMotors();
+        drive(leftSpeed,rightSpeed, strafe);
+        while (!IsInRange(motorLeftBACK.getCurrentPosition(), backLeftTarget) || !IsInRange(motorRightBACK.getCurrentPosition(), backRightTarget)
+                || !IsInRange(motorLeftFRONT.getCurrentPosition(), frontLeftTarget) || !IsInRange(motorRightFRONT.getCurrentPosition(), frontRightTarget)){
             telemetry.addData("T-FrontLeft: ", frontLeftTarget);
             telemetry.addData("A-FrontLeft: ", motorLeftFRONT.getCurrentPosition());
             telemetry.addData("T-FrontRight: ", frontRightTarget);
@@ -131,9 +167,31 @@ public class BoredBlue extends LinearOpMode {
             telemetry.update();
 
         }
-        drive(0, 0);
+        drive(0, 0, strafe);
     }
-
+    public void armDrive (double armSpeed, double armInches){
+        arm1.setZeroPowerBehavior(BRAKE);
+        arm2.setZeroPowerBehavior(BRAKE);
+        arm1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        int arm1Target = arm1.getCurrentPosition() + (int)(armInches * CPI_ARM);
+        int arm2Target = arm2.getCurrentPosition() + (int)(armInches * CPI_ARM);
+        arm1.setTargetPosition(arm1Target);
+        arm2.setTargetPosition(arm2Target);
+        arm1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm1.setPower(armSpeed);
+        arm2.setPower(armSpeed);
+        while(!IsInRange(arm1.getCurrentPosition(), arm1.getTargetPosition()) || !IsInRange(arm2.getCurrentPosition(), arm2.getTargetPosition())){
+            telemetry.addData("T-Arm1: ", arm1.getTargetPosition());
+            telemetry.addData("A-Arm1: ", arm1.getCurrentPosition());
+            telemetry.addData("T-Arm2", arm2.getTargetPosition());
+            telemetry.addData("A-Arm2: ", arm2.getCurrentPosition());
+            telemetry.update();
+        }
+        arm1.setPower(0);
+        arm2.setPower(0);
+    }
 /*
     public void encoderDrive(double leftDTSpeed, double rightDTSpeed, double mtrLeftInches, double mtrRightInches) {
         motorSetModes(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -163,11 +221,18 @@ public class BoredBlue extends LinearOpMode {
         motorRightFRONT.setMode(modeName);
     }
 
-    public void drive(double left, double right  ) {
-        motorLeftBACK.setPower(left);
-        motorRightBACK.setPower(right);
-        motorRightFRONT.setPower(right);
-        motorLeftFRONT.setPower(left);
+    public void drive(double left, double right, boolean strafe) {
+        if (strafe){
+            motorLeftBACK.setPower(-left);
+            motorRightBACK.setPower(right);
+            motorRightFRONT.setPower(-right);
+            motorLeftFRONT.setPower(left);
+        } else {
+            motorLeftBACK.setPower(left);
+            motorRightBACK.setPower(right);
+            motorRightFRONT.setPower(right);
+            motorLeftFRONT.setPower(left);
+        }
     }
 
     public void motorSetTargetPos(int targetLeft, int targetRight) {
@@ -176,7 +241,7 @@ public class BoredBlue extends LinearOpMode {
     }
 
     public boolean IsInRange(double inches, double target){
-        final float DEAD_RANGE = 20;
+        final float DEAD_RANGE = 10;
         if(Math.abs(target - inches) <= DEAD_RANGE){
             return true;
         }
@@ -190,14 +255,14 @@ public class BoredBlue extends LinearOpMode {
     private void reverseMotors(){
         motorLeftBACK.setDirection(DcMotor.Direction.REVERSE);
         motorLeftFRONT.setDirection(DcMotor.Direction.REVERSE);
-
+       arm1.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     private void brakeMotors(){
-        motorLeftBACK.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorRightBACK.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorLeftFRONT.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorRightFRONT.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorLeftBACK.setZeroPowerBehavior(BRAKE);
+        motorRightBACK.setZeroPowerBehavior(BRAKE);
+        motorLeftFRONT.setZeroPowerBehavior(BRAKE);
+        motorRightFRONT.setZeroPowerBehavior(BRAKE);
 
 
 

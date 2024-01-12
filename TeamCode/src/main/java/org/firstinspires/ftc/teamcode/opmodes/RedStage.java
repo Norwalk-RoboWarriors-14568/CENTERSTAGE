@@ -57,22 +57,10 @@ public class RedStage extends LinearOpMode {
         // Reverse the motor that runs backwards when connected directly to the battery
 
 
-
-        brakeMotors();
-        reverseMotors();
-        telemetry.update();
-        waitForStart();
-        runtime.reset();
-
         openCv = new MONKERYSEEMONRYDOO();
         openCv.OpenCv(hardwareMap, telemetry);
 
-        while (!isStarted() && !isStopRequested())
-        {
-            telemetry.addData("Realtime analysis : ", openCv.pipeline.getAnalysis());
-            telemetry.update();
-            sleep(10);
-        }
+
         int snapshotAnalysis = openCv.analysis();
 
         telemetry.addData("Snapshot post-START analysis : ", snapshotAnalysis);
@@ -98,6 +86,13 @@ public class RedStage extends LinearOpMode {
                 break;
             }
         }
+
+        brakeMotors();
+        reverseMotors();
+        telemetry.update();
+        waitForStart();
+        runtime.reset();
+
         //run autonomous
         while (opModeIsActive()) {
             if (t.seconds() < 3 && t.seconds() > 2.5) {

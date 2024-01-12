@@ -32,11 +32,11 @@ public class TeleOpPOV extends OpMode {
 
         arm1 = hardwareMap.dcMotor.get("armLeft");
         arm2 = hardwareMap.dcMotor.get("armRight");
-        bucket = hardwareMap.servo.get("bucket");
+        //bucket = hardwareMap.servo.get("bucket");
 
         lift = hardwareMap.dcMotor.get("Lift");
         intakeLeft = hardwareMap.dcMotor.get("intakeLeft");
-        intake2 = hardwareMap.crservo.get("intake2");
+       intake2 = hardwareMap.crservo.get("intake2");
         gun = hardwareMap.servo.get("gun");
 
 
@@ -169,7 +169,7 @@ public class TeleOpPOV extends OpMode {
         }else {
             lift.setPower(0);
         }
-        telemetry.addLine("Servo " + bucket.getPosition());
+        //telemetry.addLine("Servo " + bucket.getPosition());
         if (gamepad2.y) {
             gun.setPosition(0.5);
         }
