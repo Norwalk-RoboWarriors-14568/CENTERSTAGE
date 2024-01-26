@@ -1,8 +1,12 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
@@ -12,15 +16,14 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 public class RedBored extends LinearOpMode {
     // Declare OpMode members.
     //Tages
-    MONKERYSEEMONRYDOO openCv = new MONKERYSEEMONRYDOO();
+    REDSIDEBLUDSWERULETHISTOWN openCv = new REDSIDEBLUDSWERULETHISTOWN();
     ElapsedTime t = new ElapsedTime();
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor motorLeftBACK = null;
-    private DcMotor motorRightBACK = null;
-    private DcMotor motorLeftFRONT = null;
-    private DcMotor motorRightFRONT = null;
-    private DcMotor intakeLeft = null;
+    DcMotor motorLeftFRONT, motorLeftBACK, motorRightFRONT, motorRightBACK, arm1, arm2, lift, intakeLeft;
+    private Servo gun;
+    private Servo bucket;
     final private double CPCM_MECC = 537.6/ ( 3.81 * Math.PI);
+    final private double CPI_ARM = 537.6/(4.4);
     private ElapsedTime timer;
 
     private final int CPR_ODOMETRY = 8192;//counts per revolution for encoder, from website
@@ -43,14 +46,22 @@ public class RedBored extends LinearOpMode {
 
         cpiOdometry  = CPR_ODOMETRY / (ODOMETRY_WHEEL_DIAMETER * Math.PI);
         //CPI =     ticksPerRev / (circumerence);
-        //CPI_CORE_HEX = hexCoreCPR/4.4;
         motorLeftBACK = hardwareMap.dcMotor.get("leftBack");
         motorRightBACK = hardwareMap.dcMotor.get("rightBack");
         motorLeftFRONT = hardwareMap.dcMotor.get( "leftFront");
         motorRightFRONT = hardwareMap.dcMotor.get("rightFront");
         intakeLeft = hardwareMap.dcMotor.get("intakeLeft");
+        arm1 = hardwareMap.dcMotor.get("armLeft");
+        arm2 = hardwareMap.dcMotor.get("armRight");
+        //bucket = hardwareMap.servo.get("bucket");
+        lift = hardwareMap.dcMotor.get("Lift");
+        intakeLeft = hardwareMap.dcMotor.get("intakeLeft");
+        gun = hardwareMap.servo.get("gun");
+        //servoRight = hardwareMap.crservo.get("servo_0");
+        //servoLeft = hardwareMap.crservo.get("servo_1");
+        // vs  = this.hardwareMap.voltageSensor.iterator().next();
+        timer = new ElapsedTime();//create a timer from the elapsed time class
 
-        openCv.OpenCv(hardwareMap, telemetry);
 
 
         //servoRight = hardwareMap.crservo.get("servo_0");
@@ -58,11 +69,10 @@ public class RedBored extends LinearOpMode {
         // vs  = this.hardwareMap.voltageSensor.iterator().next();
         timer = new ElapsedTime();//create a timer from the elapsed time class
 
-
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-
-
+        openCv.OpenCv(hardwareMap, telemetry);
+        if (isStopRequested()) return;
 
         brakeMotors();
         reverseMotors();
@@ -71,20 +81,18 @@ public class RedBored extends LinearOpMode {
         runtime.reset();
 
         int snapshotAnalysis = openCv.analysis();
-
         telemetry.addData("Snapshot post-START analysis : ", snapshotAnalysis);
+        telemetry.addData("MAX : ", openCv.getMax());
         telemetry.update();
-
-        if (isStopRequested()) return;
-
+        sleep(5000);
         switch (snapshotAnalysis)
         {
-            case 1://BLUE
+            case 0://BLUE
             {
                 parkpos = park.Right;
                 break;
             }
-            case 2://YELLOW
+            case 1://YELLOW
             {
                 parkpos = park.Middle;
                 break;
@@ -95,38 +103,108 @@ public class RedBored extends LinearOpMode {
                 break;
             }
         }
-        //run autonomous
-        while (opModeIsActive()) {
 
-            if (t.seconds() < 3 && t.seconds() > 2.5) {
-                drive(-0.2, -0.2,true);
+        //run autonomous
+        if (opModeIsActive()) {
+
+            switch (parkpos){
+                case Right: {
+                    encoferDrive(0.4,0.4,26,26,false);
+
+                    encoferDrive(0.4,0.4,-23.71,23.71,false);
+                    intakeLeft.setPower(-0.4);
+                    encoferDrive(0.4,0.4,-30,-30,true);
+                    break;
+                }
+                case Middle: {
+                    encoferDrive(0.4,0.4,27,27,false);
+                    sleep(400);
+                    intakeLeft.setPower(-0.4);
+
+                    encoferDrive(0.4,0.4,-6,-6,false);
+                    encoferDrive(0.4,0.4,-23.71,23.71,false);
+                    encoferDrive(0.4,0.4,-22,-22,true);
+                    break;
+
+                } default:{
+                    encoferDrive(0.4,0.4,26,26,false);
+
+                    encoferDrive(0.4,0.4,23.71,-23.71,false);
+                    sleep(200);
+                    intakeLeft.setPower(-0.4);
+                    sleep(200);
+                    encoferDrive(0.4,0.4,-5,-5,false);
+
+                    encoferDrive(0.4,0.4,-23.71,23.71,false);
+                    encoferDrive(0.4,0.4,-23.71,23.71,false);
+                    encoferDrive(0.4,0.4,-5,-5,false);
+                    encoferDrive(0.4,0.4,-30,-30,true);
+                    break;
+                }
             }
-            drive(0,0);
-            if (t.seconds() > 3.5 && t.seconds() < 6) {
-                drive(0.3, 0.3,false);
-                intakeLeft.setPower(-1);
-            }
-            drive(0,0);
+            //encoferDrive(0.4,0.4,-2,-2,false);
+
+            sleep(200);
             intakeLeft.setPower(0);
+            encoferDrive(0.4,0.4,-79,-79,false);
+            intakeLeft.setPower(-0.4);
+            encoferDrive(0.4,0.4,22,22,true);
+            armDrive(0.5, 20);
+            switch (parkpos){
+                case Right:{//Middle
+                    encoferDrive(0.4,0.4,4,4,true);
+                    break;
+                }
+                case Middle:{ //Right
+                    break;
+                }
+                default:{ //Left
+                    encoferDrive(0.4,0.4,-4,-4,true);
+                    break;
+                }
+            }
+
+
+            bucketDrive(0.3, 350);
+            sleep(500);
+            bucketDrive(0.2, -350);
+
+            armDrive(0.5, -15);
+            encoferDrive(0.4,0.4,-5,-5,false);
+
+            //encoferDrive(0.4,0.4,-35,-35,true);
+
+            //armDrive(0.4,50);
+
         }
+
 
     }
 
-    public void encoferDrive(double leftSpeed, double rightSpeed, double leftCM, double rightCM){
+    public void encoferDrive(double leftSpeed, double rightSpeed, double left, double right, boolean edge){
+        brakeMotors();
         motorSetModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorSetModes(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        int frontRightTarget = motorRightFRONT.getCurrentPosition() + (int) (CPCM_MECC * rightCM);
-        int backRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPCM_MECC * rightCM);
-        int frontLeftTarget = motorLeftFRONT.getCurrentPosition() +  (int) (CPCM_MECC * leftCM);
-        int backLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPCM_MECC * leftCM);
+        int frontLeftTarget=0,frontRightTarget=0,backRightTarget=0,backLeftTarget=0;
+        if (edge) {
+            frontRightTarget = motorRightFRONT.getCurrentPosition() + (int) (CPCM_MECC * -right);
+            backRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPCM_MECC * right);
+            frontLeftTarget = motorLeftFRONT.getCurrentPosition() + (int) (CPCM_MECC * left);
+            backLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPCM_MECC * -left);
+        } else {
+            frontRightTarget = motorRightFRONT.getCurrentPosition() + (int) (CPCM_MECC * right);
+            backRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPCM_MECC * right);
+            frontLeftTarget = motorLeftFRONT.getCurrentPosition() + (int) (CPCM_MECC * left);
+            backLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPCM_MECC * left);
+        }
         motorRightFRONT.setTargetPosition(frontRightTarget);
         motorRightBACK.setTargetPosition(backRightTarget);
         motorLeftFRONT.setTargetPosition(frontLeftTarget);
         motorLeftBACK.setTargetPosition(backLeftTarget);
-        drive(leftSpeed,rightSpeed);
-        if (opModeIsActive() && !IsInRange(motorLeftBACK.getCurrentPosition(), backLeftTarget) && !IsInRange(motorRightBACK.getCurrentPosition(), backRightTarget)
-                && !IsInRange(motorLeftFRONT.getCurrentPosition(), frontLeftTarget) && !IsInRange(motorRightFRONT.getCurrentPosition(), frontRightTarget)){
+        motorSetModes(DcMotor.RunMode.RUN_TO_POSITION);
+        brakeMotors();
+        drive(leftSpeed,rightSpeed, edge);
+        while (!IsInRange(motorLeftBACK.getCurrentPosition(), backLeftTarget) || !IsInRange(motorRightBACK.getCurrentPosition(), backRightTarget)
+                || !IsInRange(motorLeftFRONT.getCurrentPosition(), frontLeftTarget) || !IsInRange(motorRightFRONT.getCurrentPosition(), frontRightTarget)){
             telemetry.addData("T-FrontLeft: ", frontLeftTarget);
             telemetry.addData("A-FrontLeft: ", motorLeftFRONT.getCurrentPosition());
             telemetry.addData("T-FrontRight: ", frontRightTarget);
@@ -138,9 +216,45 @@ public class RedBored extends LinearOpMode {
             telemetry.update();
 
         }
-        drive(0, 0);
+        drive(0, 0, edge);
     }
-
+    public void armDrive (double armSpeed, double armInches){
+        arm1.setZeroPowerBehavior(BRAKE);
+        arm2.setZeroPowerBehavior(BRAKE);
+        arm1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        int arm1Target = arm1.getCurrentPosition() + (int)(armInches * CPI_ARM);
+        int arm2Target = arm2.getCurrentPosition() + (int)(armInches * CPI_ARM);
+        arm1.setTargetPosition(arm1Target);
+        arm2.setTargetPosition(arm2Target);
+        arm1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm1.setPower(armSpeed);
+        arm2.setPower(armSpeed);
+        while(!IsInRange(arm1.getCurrentPosition(), arm1.getTargetPosition()) || !IsInRange(arm2.getCurrentPosition(), arm2.getTargetPosition())){
+            telemetry.addData("T-Arm1: ", arm1.getTargetPosition());
+            telemetry.addData("A-Arm1: ", arm1.getCurrentPosition());
+            telemetry.addData("T-Arm2", arm2.getTargetPosition());
+            telemetry.addData("A-Arm2: ", arm2.getCurrentPosition());
+            telemetry.update();
+        }
+        arm1.setPower(0);
+        arm2.setPower(0);
+    }
+    public void bucketDrive(double speed, double targetDegrees){
+        lift.setZeroPowerBehavior(BRAKE);
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        int liftTarget = lift.getCurrentPosition() + (int) (targetDegrees * (700/360));
+        lift.setTargetPosition(liftTarget);
+        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lift.setPower(speed);
+        while(!IsInRange(lift.getCurrentPosition(), lift.getTargetPosition())){
+            telemetry.addData("T-Bucket: ", lift.getTargetPosition());
+            telemetry.addData("A-Bucket: ", lift.getCurrentPosition());
+            telemetry.update();
+        }
+        lift.setPower(0);
+    }
 /*
     public void encoderDrive(double leftDTSpeed, double rightDTSpeed, double mtrLeftInches, double mtrRightInches) {
         motorSetModes(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -170,11 +284,18 @@ public class RedBored extends LinearOpMode {
         motorRightFRONT.setMode(modeName);
     }
 
-    public void drive(double left, double right  ) {
-        motorLeftBACK.setPower(left);
-        motorRightBACK.setPower(right);
-        motorRightFRONT.setPower(right);
-        motorLeftFRONT.setPower(left);
+    public void drive(double left, double right, boolean strafe) {
+        if (strafe){
+            motorLeftBACK.setPower(-left);
+            motorRightBACK.setPower(right);
+            motorRightFRONT.setPower(-right);
+            motorLeftFRONT.setPower(left);
+        } else {
+            motorLeftBACK.setPower(left);
+            motorRightBACK.setPower(right);
+            motorRightFRONT.setPower(right);
+            motorLeftFRONT.setPower(left);
+        }
     }
 
     public void motorSetTargetPos(int targetLeft, int targetRight) {
@@ -183,7 +304,7 @@ public class RedBored extends LinearOpMode {
     }
 
     public boolean IsInRange(double inches, double target){
-        final float DEAD_RANGE = 20;
+        final float DEAD_RANGE = 10;
         if(Math.abs(target - inches) <= DEAD_RANGE){
             return true;
         }
@@ -197,27 +318,16 @@ public class RedBored extends LinearOpMode {
     private void reverseMotors(){
         motorLeftBACK.setDirection(DcMotor.Direction.REVERSE);
         motorLeftFRONT.setDirection(DcMotor.Direction.REVERSE);
-
+        arm1.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     private void brakeMotors(){
-        motorLeftBACK.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorRightBACK.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorLeftFRONT.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorRightFRONT.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-    }
-    public void drive(double left, double right, boolean strafe) {
+        motorLeftBACK.setZeroPowerBehavior(BRAKE);
+        motorRightBACK.setZeroPowerBehavior(BRAKE);
+        motorLeftFRONT.setZeroPowerBehavior(BRAKE);
+        motorRightFRONT.setZeroPowerBehavior(BRAKE);
 
-        if(strafe){
-            motorLeftBACK.setPower(-left);
-            motorRightBACK.setPower(right);
-            motorRightFRONT.setPower(-right);
-            motorLeftFRONT.setPower(left);
-        } else {
-            motorLeftBACK.setPower(left);
-            motorRightBACK.setPower(right);
-            motorRightFRONT.setPower(right);
-            motorLeftFRONT.setPower(left);
-        }
+
+
     }
 }

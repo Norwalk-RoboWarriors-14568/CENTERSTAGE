@@ -16,7 +16,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class BoredBlueA extends LinearOpMode {
     // Declare OpMode members.
     //Tages
-    MONKERYSEEMONRYDOO openCv;
+    MONKERYSEEMONRYDOO openCv = new MONKERYSEEMONRYDOO();
     ElapsedTime t = new ElapsedTime();
     private ElapsedTime runtime = new ElapsedTime();
     DcMotor motorLeftFRONT, motorLeftBACK, motorRightFRONT, motorRightBACK, arm1, arm2, lift, intakeLeft;
@@ -68,8 +68,6 @@ public class BoredBlueA extends LinearOpMode {
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-
-        openCv = new MONKERYSEEMONRYDOO();
         openCv.OpenCv(hardwareMap, telemetry);
         if (isStopRequested()) return;
 
@@ -84,7 +82,6 @@ public class BoredBlueA extends LinearOpMode {
         telemetry.addData("Snapshot post-START analysis : ", snapshotAnalysis);
         telemetry.addData("MAX : ", openCv.getMax());
         telemetry.update();
-        sleep(5000);
         switch (snapshotAnalysis)
         {
             case 0://BLUE
@@ -303,6 +300,7 @@ public class BoredBlueA extends LinearOpMode {
     public void motorSetTargetPos(int targetLeft, int targetRight) {
         motorLeftBACK.setTargetPosition(targetLeft);
         motorRightBACK.setTargetPosition(targetRight);
+
     }
 
     public boolean IsInRange(double inches, double target){

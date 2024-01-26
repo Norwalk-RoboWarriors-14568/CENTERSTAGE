@@ -177,7 +177,7 @@ public class REDSIDEBLUDSWERULETHISTOWN
         static final Scalar LEFT = new Scalar(0, 0, 255);
         static final Scalar RIGHT = new Scalar(255, 255, 51);
         static final Scalar MIDDLE = new Scalar(255, 0, 0);
-        private volatile SkystonePosition position = SkystonePosition.RIGHT;
+        private volatile SkystonePosition position = SkystonePosition.LEFT;
         int cNum =0;
         int cNum1 =1;
         int cNum2 =2;
@@ -193,13 +193,13 @@ public class REDSIDEBLUDSWERULETHISTOWN
         int avg2, avg3, avg4;
         static final int REGION_WIDTH = 100;
         static final int REGION_HEIGHT = 30;
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(20,250);
-        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(200,250);
-        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(539,250);
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(20,260);
+        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(230,260);
+        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(539,260);
         void inputToCb(Mat input)
         {
             Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
-            Core.extractChannel(YCrCb, Cb, cNum2);
+            Core.extractChannel(YCrCb, Cr, cNum1);
         }
         void inputToCbInvert(Mat input)
         {
@@ -234,11 +234,11 @@ public class REDSIDEBLUDSWERULETHISTOWN
         public void init(Mat firstFrame)
         {
             inputToCb(firstFrame);
-            region2_Cb = Cb.submat(new Rect(region2_pointA, region2_pointB));
+            region2_Cb = Cr.submat(new Rect(region2_pointA, region2_pointB));
             //inputToCbInvert(firstFrame);
-            region4_Cb = Cb.submat(new Rect(region1_pointA, region1_pointB));
+            region4_Cb = Cr.submat(new Rect(region1_pointA, region1_pointB));
             //inputToCr(firstFrame);
-            region3_Cb = Cb.submat(new Rect(region3_pointA, region3_pointB));
+            region3_Cb = Cr.submat(new Rect(region3_pointA, region3_pointB));
         }
         @Override
         public Mat processFrame(Mat input)
@@ -272,6 +272,16 @@ public class REDSIDEBLUDSWERULETHISTOWN
             int maxTwoThree = Math.max(avg3, avg2);
             int max = Math.max(maxTwoThree, avg4);
 
+            if (max <= 175){
+                max = avg4;
+                position = SkystonePosition.LEFT; // Record our analysis
+                Imgproc.rectangle(
+                        input, // Buffer to draw on
+                        region1_pointA, // First point which defines the rectangle
+                        region1_pointB, // Second point which defines the rectangle
+                        RIGHT, // The color the rectangle is drawn in
+                        -1); // Negative thickness means solid fill
+            }
             if( max == avg2) // Was it from region 2?
             {
                 position = SkystonePosition.MIDDLE; // Record our analysis
@@ -292,7 +302,7 @@ public class REDSIDEBLUDSWERULETHISTOWN
                         MIDDLE, // The color the rectangle is drawn in
                         -1); // Negative thickness means solid fill
             }
-            else if (max == avg4) // Was it from region 2?
+            else if (max == avg4 ) // Was it from region 2?
             {
                 position = SkystonePosition.LEFT; // Record our analysis
                 Imgproc.rectangle(
