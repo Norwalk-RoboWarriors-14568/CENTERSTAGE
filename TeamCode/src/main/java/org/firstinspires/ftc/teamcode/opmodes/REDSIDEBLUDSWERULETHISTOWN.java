@@ -17,7 +17,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 
-public class MONKERYSEEMONRYDOO
+public class REDSIDEBLUDSWERULETHISTOWN
 {
     OpenCvWebcam webcam;
     SamplePipeline pipeline;
@@ -177,7 +177,7 @@ public class MONKERYSEEMONRYDOO
         static final Scalar LEFT = new Scalar(0, 0, 255);
         static final Scalar RIGHT = new Scalar(255, 255, 51);
         static final Scalar MIDDLE = new Scalar(255, 0, 0);
-        private volatile SkystonePosition position = SkystonePosition.LEFT;
+        private volatile SkystonePosition position = SkystonePosition.RIGHT;
         int cNum =0;
         int cNum1 =1;
         int cNum2 =2;
@@ -185,7 +185,7 @@ public class MONKERYSEEMONRYDOO
         String colorLEFT = "LEFT";
         String colorMIDDLE = "RIGHT";
         String colorMIDDLENeg = "MIDDLE";
-        Mat region2_Cb, region3_Cb,region4_Cb, region5_Cb;
+        Mat region2_Cb, region3_Cb,region4_Cb;
         Mat YCrCb = new Mat();
         Mat Cr = new Mat();
         Mat Cb = new Mat();
@@ -274,7 +274,7 @@ public class MONKERYSEEMONRYDOO
 
             if( max == avg2) // Was it from region 2?
             {
-                position =SkystonePosition.MIDDLE; // Record our analysis
+                position = SkystonePosition.MIDDLE; // Record our analysis
                 Imgproc.rectangle(
                         input, // Buffer to draw on
                         region2_pointA, // First point which defines the rectangle

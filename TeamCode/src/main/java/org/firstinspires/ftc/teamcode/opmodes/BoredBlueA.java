@@ -71,22 +71,28 @@ public class BoredBlueA extends LinearOpMode {
 
         openCv = new MONKERYSEEMONRYDOO();
         openCv.OpenCv(hardwareMap, telemetry);
-
-        int snapshotAnalysis = openCv.analysis();
-
-        telemetry.addData("Snapshot post-START analysis : ", snapshotAnalysis);
-        telemetry.update();
-
         if (isStopRequested()) return;
 
+        //arm1.setDirection(DcMotorSimple.Direction.REVERSE);
+        brakeMotors();
+        reverseMotors();
+        telemetry.update();
+        waitForStart();
+        runtime.reset();
+
+        int snapshotAnalysis = openCv.analysis();
+        telemetry.addData("Snapshot post-START analysis : ", snapshotAnalysis);
+        telemetry.addData("MAX : ", openCv.getMax());
+        telemetry.update();
+        sleep(5000);
         switch (snapshotAnalysis)
         {
-            case 1://BLUE
+            case 0://BLUE
             {
                 parkpos = park.Right;
                 break;
             }
-            case 2://YELLOW
+            case 1://YELLOW
             {
                 parkpos = park.Middle;
                 break;
@@ -97,32 +103,71 @@ public class BoredBlueA extends LinearOpMode {
                 break;
             }
         }
-        //arm1.setDirection(DcMotorSimple.Direction.REVERSE);
-        brakeMotors();
-        reverseMotors();
-        telemetry.update();
-        waitForStart();
-        runtime.reset();
-
 
         //run autonomous
         if (opModeIsActive()) {
 
-            encoferDrive(0.4,0.4,26,26,false);
-            encoferDrive(0.4,0.4,23.71,-23.71,false);
+            switch (parkpos){
+                case Right: {
+                    encoferDrive(0.4,0.4,26,26,false);
+
+                    encoferDrive(0.4,0.4,23.71,-23.71,false);
+                    intakeLeft.setPower(-0.4);
+                    encoferDrive(0.4,0.4,27,27,true);
+                    break;
+                }
+                case Middle: {
+                    encoferDrive(0.4,0.4,27,27,false);
+                    sleep(400);
+                    intakeLeft.setPower(-0.4);
+
+                    encoferDrive(0.4,0.4,-6,-6,false);
+                    encoferDrive(0.4,0.4,23.71,-23.71,false);
+                    encoferDrive(0.4,0.4,22,22,true);
+                    break;
+
+                } default:{
+                    encoferDrive(0.4,0.4,26,26,false);
+
+                    encoferDrive(0.4,0.4,-23.71,23.71,false);
+                    sleep(200);
+                    intakeLeft.setPower(-0.4);
+                    sleep(200);
+                    encoferDrive(0.4,0.4,-5,-5,false);
+
+                    encoferDrive(0.4,0.4,23.71,-23.71,false);
+                    encoferDrive(0.4,0.4,23.71,-23.71,false);
+                    encoferDrive(0.4,0.4,-5,-5,false);
+                    encoferDrive(0.4,0.4,27,27,true);
+                    break;
+                }
+            }
             //encoferDrive(0.4,0.4,-2,-2,false);
 
-            intakeLeft.setPower(-0.4);
             sleep(200);
             intakeLeft.setPower(0);
-            encoferDrive(0.4,0.4,27,27,true);
-            encoferDrive(0.4,0.4,-77,-77,false);
+            encoferDrive(0.4,0.4,-79,-79,false);
             intakeLeft.setPower(-0.4);
             encoferDrive(0.4,0.4,-28,-28,true);
             armDrive(0.5, 20);
+            switch (parkpos){
+                case Right:{//Middle
+                    encoferDrive(0.4,0.4,-4,-4,true);
+                    break;
+                }
+                case Middle:{ //Right
+                    break;
+                }
+                default:{ //Left
+                    encoferDrive(0.4,0.4,4,4,true);
+                    break;
+                }
+            }
 
-            bucketDrive(0.2, 300);
-            bucketDrive(0.2, -300);
+
+            bucketDrive(0.3, 350);
+            sleep(500);
+            bucketDrive(0.2, -350);
 
             armDrive(0.5, -15);
             encoferDrive(0.4,0.4,-5,-5,false);
@@ -131,6 +176,8 @@ public class BoredBlueA extends LinearOpMode {
 
 
             //armDrive(0.4,50);
+
+
         }
 
 
@@ -199,7 +246,7 @@ public class BoredBlueA extends LinearOpMode {
     public void bucketDrive(double speed, double targetDegrees){
         lift.setZeroPowerBehavior(BRAKE);
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        int liftTarget = lift.getTargetPosition() + (int) (targetDegrees * (700/360));
+        int liftTarget = lift.getCurrentPosition() + (int) (targetDegrees * (700/360));
         lift.setTargetPosition(liftTarget);
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lift.setPower(speed);
