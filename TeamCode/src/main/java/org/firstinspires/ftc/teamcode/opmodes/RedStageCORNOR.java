@@ -9,11 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-
-@Autonomous(name = "RedBored")
-public class RedBored extends LinearOpMode {
+@Autonomous(name = "RedStageCornor")
+public class RedStageCORNOR extends LinearOpMode {
     // Declare OpMode members.
     //Tages
     REDSIDEBLUDSWERULETHISTOWN openCv = new REDSIDEBLUDSWERULETHISTOWN();
@@ -22,7 +19,9 @@ public class RedBored extends LinearOpMode {
     DcMotor motorLeftFRONT, motorLeftBACK, motorRightFRONT, motorRightBACK, arm1, arm2, lift, intakeLeft;
     private Servo gun;
     private Servo bucket;
-    final private double CPCM_MECC = 537.6/ ( 3.81 * Math.PI);
+
+
+    final private double CPCM_MECC = 537.6/ ( 3.75 * Math.PI);
     final private double CPI_ARM = 537.6/(4.4);
     private ElapsedTime timer;
 
@@ -32,8 +31,6 @@ public class RedBored extends LinearOpMode {
     private double leftPos = 0;
     private double rightPos = 0;
     private int timeOutCount = 0;
-    // private VoltageSensor vs;
-    private double gameTimeSnapShot = 0;
     enum park {
         Right,
         Middle,
@@ -62,18 +59,10 @@ public class RedBored extends LinearOpMode {
         // vs  = this.hardwareMap.voltageSensor.iterator().next();
         timer = new ElapsedTime();//create a timer from the elapsed time class
 
-
-
-        //servoRight = hardwareMap.crservo.get("servo_0");
-        //servoLeft = hardwareMap.crservo.get("servo_1");
-        // vs  = this.hardwareMap.voltageSensor.iterator().next();
-        timer = new ElapsedTime();//create a timer from the elapsed time class
-
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
         openCv.OpenCv(hardwareMap, telemetry);
         if (isStopRequested()) return;
 
+        //arm1.setDirection(DcMotorSimple.Direction.REVERSE);
         brakeMotors();
         reverseMotors();
         telemetry.update();
@@ -84,9 +73,8 @@ public class RedBored extends LinearOpMode {
         telemetry.addData("Snapshot post-START analysis : ", snapshotAnalysis);
         telemetry.addData("MAX : ", openCv.getMax());
         telemetry.update();
-        sleep(5000);
-        switch (snapshotAnalysis)
-        {
+        //sleep(10000);
+        switch (snapshotAnalysis) {
             case 0://BLUE
             {
                 parkpos = park.Right;
@@ -108,12 +96,16 @@ public class RedBored extends LinearOpMode {
         if (opModeIsActive()) {
 
             switch (parkpos){
-                case Right: {
+                case Left: {
                     encoferDrive(0.4,0.4,26,26,false);
 
                     encoferDrive(0.4,0.4,-23.71,23.71,false);
+                    encoferDrive(0.4,0.4,1,1,false);
+
                     intakeLeft.setPower(-0.4);
                     encoferDrive(0.4,0.4,-30,-30,true);
+                    intakeLeft.setPower(0);
+
                     break;
                 }
                 case Middle: {
@@ -122,8 +114,10 @@ public class RedBored extends LinearOpMode {
                     intakeLeft.setPower(-0.4);
 
                     encoferDrive(0.4,0.4,-6,-6,false);
+                    intakeLeft.setPower(0);
+
                     encoferDrive(0.4,0.4,-23.71,23.71,false);
-                    encoferDrive(0.4,0.4,-22,-22,true);
+                    encoferDrive(0.4,0.4,-24,-24,true);
                     break;
 
                 } default:{
@@ -134,6 +128,8 @@ public class RedBored extends LinearOpMode {
                     intakeLeft.setPower(-0.4);
                     sleep(200);
                     encoferDrive(0.4,0.4,-5,-5,false);
+                    intakeLeft.setPower(0);
+
 
                     encoferDrive(0.4,0.4,-23.71,23.71,false);
                     encoferDrive(0.4,0.4,-23.71,23.71,false);
@@ -146,33 +142,48 @@ public class RedBored extends LinearOpMode {
 
             sleep(200);
             intakeLeft.setPower(0);
-            encoferDrive(0.4,0.4,-79,-79,false);
+            encoferDrive(0.4,0.4,-30,-30,false);
             intakeLeft.setPower(-0.4);
             encoferDrive(0.4,0.4,22,22,true);
-            armDrive(0.5, 20);
+            intakeLeft.setPower(0);
+
+            armDrive(0.5, 18);
             switch (parkpos){
                 case Right:{//Middle
-                    encoferDrive(0.4,0.4,4,4,true);
+                    encoferDrive(0.4,0.4,-4,-4,true);
                     break;
                 }
                 case Middle:{ //Right
                     break;
                 }
                 default:{ //Left
-                    encoferDrive(0.4,0.4,-4,-4,true);
+                    encoferDrive(0.4,0.4,8,8,true);
                     break;
                 }
             }
 
 
-            bucketDrive(0.3, 350);
+            bucketDrive(0.3, 370);
             sleep(500);
             bucketDrive(0.2, -350);
 
-            armDrive(0.5, -15);
+            armDrive(0.5, -13);
             encoferDrive(0.4,0.4,-5,-5,false);
-
-            //encoferDrive(0.4,0.4,-35,-35,true);
+            switch (parkpos) {
+                case Right: {//Middle
+                    encoferDrive(0.4,0.4,-19,-19,true);
+                    break;
+                }
+                case Middle: { //Right
+                    encoferDrive(0.4,0.4,-24,-24,true);
+                    break;
+                }
+                default: { //Left
+                    encoferDrive(0.4,0.4,-29,-29,true);
+                    break;
+                }
+            }
+            encoferDrive(0.4,0.4,-9,-9,false);
 
             //armDrive(0.4,50);
 

@@ -2,21 +2,21 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.sun.source.tree.WhileLoopTree;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
-@Autonomous(name = "BoredBlueA")
-public class BoredBlueA extends LinearOpMode {
+@Autonomous(name = "RedStageMIDLLE")
+public class RedStageMIDDLE extends LinearOpMode {
     // Declare OpMode members.
     //Tages
-    MONKERYSEEMONRYDOO openCv = new MONKERYSEEMONRYDOO();
+    REDSIDEBLUDSWERULETHISTOWN openCv = new REDSIDEBLUDSWERULETHISTOWN();
     ElapsedTime t = new ElapsedTime();
     private ElapsedTime runtime = new ElapsedTime();
     DcMotor motorLeftFRONT, motorLeftBACK, motorRightFRONT, motorRightBACK, arm1, arm2, lift, intakeLeft;
@@ -34,21 +34,18 @@ public class BoredBlueA extends LinearOpMode {
     private double leftPos = 0;
     private double rightPos = 0;
     private int timeOutCount = 0;
-    // private VoltageSensor vs;
-    private double gameTimeSnapShot = 0;
     enum park {
         Right,
         Middle,
         Left
     }
-    park parkpos =park.Left;
+    park parkpos = park.Left;
     @Override
     public void runOpMode() {
         //telemetry.addData("T-FrontLeft: ", frontLeftTarget);
 
         cpiOdometry  = CPR_ODOMETRY / (ODOMETRY_WHEEL_DIAMETER * Math.PI);
         //CPI =     ticksPerRev / (circumerence);
-        //CPI_CORE_HEX = hexCoreCPR/4.4;
         motorLeftBACK = hardwareMap.dcMotor.get("leftBack");
         motorRightBACK = hardwareMap.dcMotor.get("rightBack");
         motorLeftFRONT = hardwareMap.dcMotor.get( "leftFront");
@@ -65,9 +62,6 @@ public class BoredBlueA extends LinearOpMode {
         // vs  = this.hardwareMap.voltageSensor.iterator().next();
         timer = new ElapsedTime();//create a timer from the elapsed time class
 
-
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
         openCv.OpenCv(hardwareMap, telemetry);
         if (isStopRequested()) return;
 
@@ -83,8 +77,7 @@ public class BoredBlueA extends LinearOpMode {
         telemetry.addData("MAX : ", openCv.getMax());
         telemetry.update();
         //sleep(10000);
-        switch (snapshotAnalysis)
-        {
+        switch (snapshotAnalysis) {
             case 0://BLUE
             {
                 parkpos = park.Right;
@@ -106,12 +99,14 @@ public class BoredBlueA extends LinearOpMode {
         if (opModeIsActive()) {
 
             switch (parkpos){
-                case Right: {
+                case Left: {
                     encoferDrive(0.4,0.4,26,26,false);
 
-                    encoferDrive(0.4,0.4,23.71,-23.71,false);
+                    encoferDrive(0.4,0.4,-23.71,23.71,false);
+                    encoferDrive(0.4,0.4,1,1,false);
+
                     intakeLeft.setPower(-0.4);
-                    encoferDrive(0.4,0.4,27,27,true);
+                    encoferDrive(0.4,0.4,-30,-30,true);
                     intakeLeft.setPower(0);
 
                     break;
@@ -124,14 +119,14 @@ public class BoredBlueA extends LinearOpMode {
                     encoferDrive(0.4,0.4,-6,-6,false);
                     intakeLeft.setPower(0);
 
-                    encoferDrive(0.4,0.4,23.71,-23.71,false);
-                    encoferDrive(0.4,0.4,22,22,true);
+                    encoferDrive(0.4,0.4,-23.71,23.71,false);
+                    encoferDrive(0.4,0.4,-24,-24,true);
                     break;
 
                 } default:{
                     encoferDrive(0.4,0.4,26,26,false);
 
-                    encoferDrive(0.4,0.4,-23.71,23.71,false);
+                    encoferDrive(0.4,0.4,23.71,-23.71,false);
                     sleep(200);
                     intakeLeft.setPower(-0.4);
                     sleep(200);
@@ -139,10 +134,10 @@ public class BoredBlueA extends LinearOpMode {
                     intakeLeft.setPower(0);
 
 
-                    encoferDrive(0.4,0.4,23.71,-23.71,false);
-                    encoferDrive(0.4,0.4,23.71,-23.71,false);
+                    encoferDrive(0.4,0.4,-23.71,23.71,false);
+                    encoferDrive(0.4,0.4,-23.71,23.71,false);
                     encoferDrive(0.4,0.4,-5,-5,false);
-                    encoferDrive(0.4,0.4,27,27,true);
+                    encoferDrive(0.4,0.4,-30,-30,true);
                     break;
                 }
             }
@@ -150,12 +145,12 @@ public class BoredBlueA extends LinearOpMode {
 
             sleep(200);
             intakeLeft.setPower(0);
-            encoferDrive(0.4,0.4,-79,-79,false);
+            encoferDrive(0.4,0.4,-30,-30,false);
             intakeLeft.setPower(-0.4);
-            encoferDrive(0.4,0.4,-28,-28,true);
+            encoferDrive(0.4,0.4,22,22,true);
             intakeLeft.setPower(0);
 
-            armDrive(0.5, 20);
+            armDrive(0.5, 18);
             switch (parkpos){
                 case Right:{//Middle
                     encoferDrive(0.4,0.4,-4,-4,true);
@@ -165,44 +160,56 @@ public class BoredBlueA extends LinearOpMode {
                     break;
                 }
                 default:{ //Left
-                    encoferDrive(0.4,0.4,4,4,true);
+                    encoferDrive(0.4,0.4,8,8,true);
                     break;
                 }
             }
 
 
-            bucketDrive(0.3, 350);
+            bucketDrive(0.3, 370);
             sleep(500);
             bucketDrive(0.2, -350);
-
-            armDrive(0.5, -15);
+            switch (parkpos) {
+                case Right: {//Middle
+                    encoferDrive(0.4,0.4,32,32,true);
+                    break;
+                }
+                case Middle: { //Right
+                    encoferDrive(0.4,0.4,28,28,true);
+                    break;
+                }
+                default: { //Left
+                    encoferDrive(0.4,0.4,25,25,true);
+                    break;
+                }
+            }
+            encoferDrive(0.4,0.4,-9,-9,false);
+            armDrive(0.5, -13);
             encoferDrive(0.4,0.4,-5,-5,false);
 
-            //encoferDrive(0.4,0.4,-35,-35,true);
 
 
             //armDrive(0.4,50);
-
 
         }
 
 
     }
-//
+
     public void encoferDrive(double leftSpeed, double rightSpeed, double left, double right, boolean edge){
         brakeMotors();
         motorSetModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         int frontLeftTarget=0,frontRightTarget=0,backRightTarget=0,backLeftTarget=0;
         if (edge) {
-             frontRightTarget = motorRightFRONT.getCurrentPosition() + (int) (CPCM_MECC * -right);
-             backRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPCM_MECC * right);
-             frontLeftTarget = motorLeftFRONT.getCurrentPosition() + (int) (CPCM_MECC * left);
-             backLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPCM_MECC * -left);
+            frontRightTarget = motorRightFRONT.getCurrentPosition() + (int) (CPCM_MECC * -right);
+            backRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPCM_MECC * right);
+            frontLeftTarget = motorLeftFRONT.getCurrentPosition() + (int) (CPCM_MECC * left);
+            backLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPCM_MECC * -left);
         } else {
-             frontRightTarget = motorRightFRONT.getCurrentPosition() + (int) (CPCM_MECC * right);
-             backRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPCM_MECC * right);
-             frontLeftTarget = motorLeftFRONT.getCurrentPosition() + (int) (CPCM_MECC * left);
-             backLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPCM_MECC * left);
+            frontRightTarget = motorRightFRONT.getCurrentPosition() + (int) (CPCM_MECC * right);
+            backRightTarget = motorRightBACK.getCurrentPosition() + (int) (CPCM_MECC * right);
+            frontLeftTarget = motorLeftFRONT.getCurrentPosition() + (int) (CPCM_MECC * left);
+            backLeftTarget = motorLeftBACK.getCurrentPosition() + (int) (CPCM_MECC * left);
         }
         motorRightFRONT.setTargetPosition(frontRightTarget);
         motorRightBACK.setTargetPosition(backRightTarget);
@@ -309,7 +316,6 @@ public class BoredBlueA extends LinearOpMode {
     public void motorSetTargetPos(int targetLeft, int targetRight) {
         motorLeftBACK.setTargetPosition(targetLeft);
         motorRightBACK.setTargetPosition(targetRight);
-
     }
 
     public boolean IsInRange(double inches, double target){
@@ -327,7 +333,7 @@ public class BoredBlueA extends LinearOpMode {
     private void reverseMotors(){
         motorLeftBACK.setDirection(DcMotor.Direction.REVERSE);
         motorLeftFRONT.setDirection(DcMotor.Direction.REVERSE);
-       arm1.setDirection(DcMotorSimple.Direction.REVERSE);
+        arm1.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     private void brakeMotors(){

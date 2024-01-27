@@ -157,12 +157,10 @@ public class REDSIDEBLUDSWERULETHISTOWN
 
     public int analysis()
     {
-
         return pipeline.getAnalysis().ordinal();
     }
     public int getMax()
     {
-
         return pipeline.getMax();
     }
 
@@ -272,8 +270,7 @@ public class REDSIDEBLUDSWERULETHISTOWN
             int maxTwoThree = Math.max(avg3, avg2);
             int max = Math.max(maxTwoThree, avg4);
 
-            if (max <= 175){
-                max = avg4;
+            if (max <= 133){
                 position = SkystonePosition.LEFT; // Record our analysis
                 Imgproc.rectangle(
                         input, // Buffer to draw on
@@ -282,7 +279,7 @@ public class REDSIDEBLUDSWERULETHISTOWN
                         RIGHT, // The color the rectangle is drawn in
                         -1); // Negative thickness means solid fill
             }
-            if( max == avg2) // Was it from region 2?
+            else if( max == avg2) // Was it from region 2?
             {
                 position = SkystonePosition.MIDDLE; // Record our analysis
                 Imgproc.rectangle(
