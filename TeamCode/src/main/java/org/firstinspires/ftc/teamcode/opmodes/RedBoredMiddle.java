@@ -121,6 +121,8 @@ public class RedBoredMiddle extends LinearOpMode {
 
                     encoferDrive(0.4,0.4,-23.71,23.71,false);
                     encoferDrive(0.4,0.4,-24,-24,true);
+                    //encoferDrive(0.4,0.4,2,2,true);
+
                     break;
 
                 } default:{
@@ -137,7 +139,9 @@ public class RedBoredMiddle extends LinearOpMode {
                     encoferDrive(0.4,0.4,-23.71,23.71,false);
                     encoferDrive(0.4,0.4,-23.71,23.71,false);
                     encoferDrive(0.4,0.4,-5,-5,false);
-                    encoferDrive(0.4,0.4,-30,-30,true);
+                    encoferDrive(0.4,0.4,-34,-34,true);
+                    encoferDrive(0.4,0.4,2,2,true);
+
                     break;
                 }
             }
@@ -152,11 +156,11 @@ public class RedBoredMiddle extends LinearOpMode {
 
             armDrive(0.5, 18);
             switch (parkpos){
-                case Right:{//Middle
-                    encoferDrive(0.4,0.4,-4,-4,true);
+                case Right:{
+                    encoferDrive(0.4,0.4,-8,-8,true);
                     break;
                 }
-                case Middle:{ //Right
+                case Middle:{
                     break;
                 }
                 default:{ //Left
