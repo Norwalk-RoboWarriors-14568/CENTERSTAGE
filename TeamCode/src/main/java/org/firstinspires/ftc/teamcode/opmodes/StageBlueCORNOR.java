@@ -22,7 +22,7 @@ public class StageBlueCORNOR extends LinearOpMode {
     DcMotor motorLeftFRONT, motorLeftBACK, motorRightFRONT, motorRightBACK, arm1, arm2, lift, intakeLeft;
     private Servo gun;
     private Servo bucket;
-
+    private int liftTarget;
 
     final private double CPCM_MECC = 537.6/ ( 3.75 * Math.PI);
     final private double CPI_ARM = 537.6/(4.4);
@@ -110,15 +110,16 @@ public class StageBlueCORNOR extends LinearOpMode {
                     encoferDrive(0.4,0.4,26,26,false);
 
                     encoferDrive(0.4,0.4,23.71,-23.71,false);
+                    encoferDrive(0.4,0.4,2,2,false);
+
                     intakeLeft.setPower(-0.4);
-                    intakeLeft.setPower(0);
-                    sleep(200);
+                    sleep(400);
                     intakeLeft.setPower(0);
                     encoferDrive(0.4,0.4,-28,-28,false);
-                    intakeLeft.setPower(-0.4);
+                    //intakeLeft.setPower(-0.4);
                     //encoferDrive(0.4,0.4,22,22,true);
-                    intakeLeft.setPower(0);
-                    armDrive(0.5, 20);
+                    //intakeLeft.setPower(0);
+                    //armDrive(0.5, 20);
                     break;
                 }
                 case Middle: {
@@ -127,16 +128,16 @@ public class StageBlueCORNOR extends LinearOpMode {
                     intakeLeft.setPower(-0.4);
 
                     encoferDrive(0.4,0.4,-6,-6,false);
-                    intakeLeft.setPower(0);
+                    //ntakeLeft.setPower(0);
 
                     encoferDrive(0.4,0.4,23.71,-23.71,false);
                     sleep(200);
                     intakeLeft.setPower(0);
                     encoferDrive(0.4,0.4,-28,-28,false);
-                    intakeLeft.setPower(-0.4);
+                    //intakeLeft.setPower(-0.4);
                     //encoferDrive(0.4,0.4,22,22,true);
-                    intakeLeft.setPower(0);
-                    armDrive(0.5, 20);
+                    //intakeLeft.setPower(0);
+                    // armDrive(0.5, 20);
                     break;
 
                 } default:{
@@ -151,49 +152,55 @@ public class StageBlueCORNOR extends LinearOpMode {
                     encoferDrive(0.4,0.4,23.71,-23.71,false);
                     encoferDrive(0.4,0.4,23.71,-23.71,false);
                     encoferDrive(0.4,0.4,-5,-5,false);
-                    encoferDrive(0.4,0.4,-22,-22,true);
+                    encoferDrive(0.4,0.4,25,25,true);
                     sleep(200);
                     intakeLeft.setPower(0);
                     encoferDrive(0.4,0.4,-28,-28,false);
-                    intakeLeft.setPower(-0.4);
-                    encoferDrive(0.4,0.4,22,22,true);
-                    intakeLeft.setPower(0);
-                    armDrive(0.5, 20);
+                    //intakeLeft.setPower(-0.4);
+                    encoferDrive(0.4,0.4,-19,-19,true);
+                    //intakeLeft.setPower(0);
+                    //armDrive(0.5, 20);
                     break;
                 }
             }
             //encoferDrive(0.4,0.4,-2,-2,false);
+            armDrive(0.5, 10);
 
+            bucketDrive(0.15, 225);
+            sleep(1000);
+            //bucketDrive(0.2, -);
+            armDrive(0.5, -3);
+            encoferDrive(0.4,0.4,-11,-11,false);
 
             switch (parkpos){
                 case Right:{//Middle
-                    encoferDrive(0.4,0.4,-4,-4,true);
+                    encoferDrive(0.4,0.4,-8,-8,true);
                     break;
                 }
                 case Middle:{ //Right
+                    encoferDrive(0.4,0.4,-6,-6,true);
+
                     break;
                 }
                 default:{ //Left
-                    encoferDrive(0.4,0.4,4,4,true);
+                    //encoferDrive(0.4,0.4,2,2,true);
                     break;
                 }
             }
 
 
-            bucketDrive(0.3, 350);
-            sleep(500);
-            bucketDrive(0.2, -350);
 
-            armDrive(0.5, -15);
-            encoferDrive(0.4,0.4,-5,-5,false);
+            bucketDrive(0.2, 300);
+            encoferDrive(0.4,0.4,1,1,false);
 
-            //encoferDrive(0.4,0.4,-35,-35,true);
-
+            sleep(400);
+            bucketDrive(0.3, -250);
+            encoferDrive(0.4,0.4,2,2,false);
 
             //armDrive(0.4,50);
             switch (parkpos) {
                 case Right: {//Middle
-                    encoferDrive(0.4,0.4,32,32,true);
+                    encoferDrive(0.4,0.4,35,35,true);
                     break;
                 }
                 case Middle: { //Right
@@ -205,7 +212,11 @@ public class StageBlueCORNOR extends LinearOpMode {
                     break;
                 }
             }
-            encoferDrive(0.4,0.4,-9,-9,false);
+            armDrive(0.4, 6);
+            bucketDrive(0.3, -250);
+            armDrive(0.4, -12);
+
+            //encoferDrive(0.4,0.4,-9,-9,false);
 
         }
 
@@ -274,8 +285,12 @@ public class StageBlueCORNOR extends LinearOpMode {
     }
     public void bucketDrive(double speed, double targetDegrees){
         lift.setZeroPowerBehavior(BRAKE);
-        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        int liftTarget = lift.getCurrentPosition() + (int) (targetDegrees * (700/360));
+
+        if (targetDegrees != 0) {
+             liftTarget = lift.getCurrentPosition() + (int) (targetDegrees * (700 / 360));
+        } else {
+             liftTarget = 0;
+        }
         lift.setTargetPosition(liftTarget);
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lift.setPower(speed);
