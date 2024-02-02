@@ -111,8 +111,11 @@ public class BoredBlueA extends LinearOpMode {
 
                     encoferDrive(0.4,0.4,23.71,-23.71,false);
                     intakeLeft.setPower(-0.4);
-                    encoferDrive(0.4,0.4,27,27,true);
+                    encoferDrive(0.4,0.4,-25,-25,true);
+                    encoferDrive(0.4,0.4,-79,-79,false);
+
                     intakeLeft.setPower(0);
+                    encoferDrive(0.4,0.4,25,25,true);
 
                     break;
                 }
@@ -123,18 +126,27 @@ public class BoredBlueA extends LinearOpMode {
 
                     encoferDrive(0.4,0.4,-6,-6,false);
                     intakeLeft.setPower(0);
+                    //encoferDrive(0.4,0.4,-3,-3,false);
 
                     encoferDrive(0.4,0.4,23.71,-23.71,false);
-                    encoferDrive(0.4,0.4,22,22,true);
+                    encoferDrive(0.4,0.4,-2,-2,true);
+
+                    encoferDrive(0.4,0.4,-79,-79,false);
+
+
                     break;
 
                 } default:{
                     encoferDrive(0.4,0.4,26,26,false);
 
                     encoferDrive(0.4,0.4,-23.71,23.71,false);
+                    encoferDrive(0.4,0.4,2,2,false);
+
                     sleep(200);
                     intakeLeft.setPower(-0.4);
                     sleep(200);
+                    encoferDrive(0.4,0.4,-2,-2,false);
+
                     encoferDrive(0.4,0.4,-5,-5,false);
                     intakeLeft.setPower(0);
 
@@ -142,7 +154,10 @@ public class BoredBlueA extends LinearOpMode {
                     encoferDrive(0.4,0.4,23.71,-23.71,false);
                     encoferDrive(0.4,0.4,23.71,-23.71,false);
                     encoferDrive(0.4,0.4,-5,-5,false);
-                    encoferDrive(0.4,0.4,27,27,true);
+                    encoferDrive(0.4,0.4,-25,-25,true);
+                    encoferDrive(0.4,0.4,-79,-79,false);
+                    encoferDrive(0.4,0.4,25,25,true);
+
                     break;
                 }
             }
@@ -150,12 +165,11 @@ public class BoredBlueA extends LinearOpMode {
 
             sleep(200);
             intakeLeft.setPower(0);
-            encoferDrive(0.4,0.4,-79,-79,false);
             intakeLeft.setPower(-0.4);
-            encoferDrive(0.4,0.4,-28,-28,true);
+            //encoferDrive(0.4,0.4,-28,-28,true);
             intakeLeft.setPower(0);
 
-            armDrive(0.5, 20);
+            armDrive(0.5, 17.5);
             switch (parkpos){
                 case Right:{//Middle
                     encoferDrive(0.4,0.4,-4,-4,true);
@@ -165,7 +179,7 @@ public class BoredBlueA extends LinearOpMode {
                     break;
                 }
                 default:{ //Left
-                    encoferDrive(0.4,0.4,4,4,true);
+                    encoferDrive(0.4,0.4,8,8,true);
                     break;
                 }
             }
