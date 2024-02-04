@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name = "StageBlueMeddle")
+//@Autonomous(name = "StageBlueMeddle")
 public class StageBlueMiddle extends LinearOpMode {
     // Declare OpMode members.
     //Tages

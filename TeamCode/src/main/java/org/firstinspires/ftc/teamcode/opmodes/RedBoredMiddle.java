@@ -9,10 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-
-@Autonomous(name = "RedBoredMiddle")
+@Autonomous(name = "RedBored")
 public class RedBoredMiddle extends LinearOpMode {
     // Declare OpMode members.
     //Tages
@@ -101,98 +98,76 @@ public class RedBoredMiddle extends LinearOpMode {
             switch (parkpos){
                 case Left: {
                     encoferDrive(0.4,0.4,26,26,false);
-
                     encoferDrive(0.4,0.4,-23.71,23.71,false);
                     encoferDrive(0.4,0.4,1,1,false);
-
+                    sleep(200);
                     intakeLeft.setPower(-0.4);
-                    encoferDrive(0.4,0.4,-30,-30,true);
+                    sleep(200);
                     intakeLeft.setPower(0);
-
+                    encoferDrive(0.4,0.4,25,25,true);
+                    
+                    sleep(200);
+                    intakeLeft.setPower(0);
+                    encoferDrive(0.4,0.4,-70,-70,false);
+                    encoferDrive(0.4,0.4,-31,-31,true);
                     break;
                 }
                 case Middle: {
                     encoferDrive(0.4,0.4,27,27,false);
                     sleep(400);
                     intakeLeft.setPower(-0.4);
-
                     encoferDrive(0.4,0.4,-6,-6,false);
+                    encoferDrive(0.4,0.4,-23.5,23.5,false);
+                    encoferDrive(0.4,0.4,3,3,true);
+
+                    sleep(200);
                     intakeLeft.setPower(0);
-
-                    encoferDrive(0.4,0.4,-23.71,23.71,false);
-                    encoferDrive(0.4,0.4,-24,-24,true);
-                    //encoferDrive(0.4,0.4,2,2,true);
-
+                    encoferDrive(0.4,0.4,-72,-72  ,false);
                     break;
 
                 } default:{
                     encoferDrive(0.4,0.4,26,26,false);
-
                     encoferDrive(0.4,0.4,23.71,-23.71,false);
+                    encoferDrive(0.4,0.4,1,1,false);
                     sleep(200);
                     intakeLeft.setPower(-0.4);
                     sleep(200);
-                    encoferDrive(0.4,0.4,-5,-5,false);
                     intakeLeft.setPower(0);
-
-
+                    encoferDrive(0.4,0.4,-25,-25,true);
                     encoferDrive(0.4,0.4,-23.71,23.71,false);
                     encoferDrive(0.4,0.4,-23.71,23.71,false);
-                    encoferDrive(0.4,0.4,-5,-5,false);
-                    encoferDrive(0.4,0.4,-34,-34,true);
-                    encoferDrive(0.4,0.4,2,2,true);
-
+                    sleep(200);
+                    intakeLeft.setPower(0);
+                    encoferDrive(0.4,0.4,-69,-69,false);
+                    encoferDrive(0.4,0.4,-31,-31,true);
                     break;
                 }
             }
-            //encoferDrive(0.4,0.4,-2,-2,false);
-
-            sleep(200);
-            intakeLeft.setPower(0);
-            encoferDrive(0.4,0.4,-79,-79,false);
-            intakeLeft.setPower(-0.4);
-            encoferDrive(0.4,0.4,22,22,true);
-            intakeLeft.setPower(0);
-
-            armDrive(0.5, 18);
             switch (parkpos){
-                case Right:{
+                case Left:{//Left
+                    encoferDrive(0.4,0.4,5,5,true);
+                    break;
+                }
+                case Middle:{ //<Middle>
+                    encoferDrive(0.4,0.4,-1,-1,true);
+
+                    break;
+                }
+                default:{ //Right
                     encoferDrive(0.4,0.4,-8,-8,true);
                     break;
                 }
-                case Middle:{
-                    break;
-                }
-                default:{ //Left
-                    encoferDrive(0.4,0.4,4,4,true);
-                    break;
-                }
             }
+            armDrive(0.5, 16);
+            encoferDrive(0.4,0.4,-7,-7,false);
+            bucketDrive(0.2, 350);
+            encoferDrive(0.4,0.4,1,1,false);
+            sleep(400);
+            bucketDrive(0.3, -350);
+            armDrive(0.4,-15);
+            //encoferDrive(0.4,0.4,2,2,false);
 
 
-            bucketDrive(0.3, 370);
-            sleep(500);
-            bucketDrive(0.2, -350);
-
-            armDrive(0.5, -13);
-            encoferDrive(0.4,0.4,-5,-5,false);
-            /*
-            switch (parkpos) {
-                case Right: {//Middle
-                    encoferDrive(0.4,0.4,32,32,true);
-                    break;
-                }
-                case Middle: { //Right
-                    encoferDrive(0.4,0.4,28,28,true);
-                    break;
-                }
-                default: { //Left
-                    encoferDrive(0.4,0.4,25,25,true);
-                    break;
-                }
-            }
-            encoferDrive(0.4,0.4,-9,-9,false); */
-            //encoferDrive(0.4,0.4,-35,-35,true);
 
             //armDrive(0.4,50);
 

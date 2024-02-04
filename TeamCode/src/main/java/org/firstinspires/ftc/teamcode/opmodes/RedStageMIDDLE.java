@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
-@Autonomous(name = "RedStageMIDLLE")
+//@Autonomous(name = "RedStage")
 public class RedStageMIDDLE extends LinearOpMode {
     // Declare OpMode members.
     //Tages

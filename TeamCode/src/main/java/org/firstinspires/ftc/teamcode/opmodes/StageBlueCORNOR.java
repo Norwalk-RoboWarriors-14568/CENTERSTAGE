@@ -110,7 +110,7 @@ public class StageBlueCORNOR extends LinearOpMode {
                     encoferDrive(0.4,0.4,26,26,false);
 
                     encoferDrive(0.4,0.4,23.71,-23.71,false);
-                    encoferDrive(0.4,0.4,2,2,false);
+                    //encoferDrive(0.4,0.4,2,2,false);
 
                     intakeLeft.setPower(-0.4);
                     sleep(400);
@@ -126,63 +126,58 @@ public class StageBlueCORNOR extends LinearOpMode {
                     encoferDrive(0.4,0.4,27,27,false);
                     sleep(400);
                     intakeLeft.setPower(-0.4);
-
                     encoferDrive(0.4,0.4,-6,-6,false);
-                    //ntakeLeft.setPower(0);
-
                     encoferDrive(0.4,0.4,23.71,-23.71,false);
                     sleep(200);
                     intakeLeft.setPower(0);
-                    encoferDrive(0.4,0.4,-28,-28,false);
-                    //intakeLeft.setPower(-0.4);
-                    //encoferDrive(0.4,0.4,22,22,true);
-                    //intakeLeft.setPower(0);
-                    // armDrive(0.5, 20);
+                    encoferDrive(0.4,0.4,-27.25,-27.25  ,false);
                     break;
 
                 } default:{
                     encoferDrive(0.4,0.4,26,26,false);
-
                     encoferDrive(0.4,0.4,-23.71,23.71,false);
+                    encoferDrive(0.4,0.4,1,1,false);
                     sleep(200);
                     intakeLeft.setPower(-0.4);
                     sleep(200);
-                    encoferDrive(0.4,0.4,-5,-5,false);
                     intakeLeft.setPower(0);
+                    encoferDrive(0.4,0.4,-25,-25,true);
                     encoferDrive(0.4,0.4,23.71,-23.71,false);
                     encoferDrive(0.4,0.4,23.71,-23.71,false);
-                    encoferDrive(0.4,0.4,-5,-5,false);
-                    encoferDrive(0.4,0.4,25,25,true);
                     sleep(200);
                     intakeLeft.setPower(0);
                     encoferDrive(0.4,0.4,-28,-28,false);
-                    //intakeLeft.setPower(-0.4);
                     encoferDrive(0.4,0.4,-19,-19,true);
-                    //intakeLeft.setPower(0);
-                    //armDrive(0.5, 20);
                     break;
                 }
             }
             //encoferDrive(0.4,0.4,-2,-2,false);
-            armDrive(0.5, 10);
+            armDrive(0.5, 16);
 
-            bucketDrive(0.15, 225);
+           // bucketDrive(0.15, 400);
             sleep(1000);
             //bucketDrive(0.2, -);
-            armDrive(0.5, -3);
-            encoferDrive(0.4,0.4,-11,-11,false);
+            //armDrive(0.5, -3);
+            encoferDrive(0.4,0.4,-7,-7,false);
 
             switch (parkpos){
                 case Right:{//Middle
-                    encoferDrive(0.4,0.4,-8,-8,true);
+                    encoferDrive(0.4,0.4,1,1,false);
+
+                    encoferDrive(0.4,0.4,-5,-5,true);
+                    encoferDrive(0.4,0.4,-0.75,-0.75,false);
+
                     break;
                 }
                 case Middle:{ //Right
-                    encoferDrive(0.4,0.4,-6,-6,true);
+                    //encoferDrive(0.4,0.4,-6,-6,true);
+                    encoferDrive(0.4,0.4,-3,-3,true);
 
                     break;
                 }
                 default:{ //Left
+                    encoferDrive(0.4,0.4,3,3,true);
+
                     //encoferDrive(0.4,0.4,2,2,true);
                     break;
                 }
@@ -190,11 +185,12 @@ public class StageBlueCORNOR extends LinearOpMode {
 
 
 
-            bucketDrive(0.2, 300);
+            bucketDrive(0.2, 350);
             encoferDrive(0.4,0.4,1,1,false);
 
             sleep(400);
-            bucketDrive(0.3, -250);
+            bucketDrive(0.3, -350);
+            armDrive(0.4,-15);
             encoferDrive(0.4,0.4,2,2,false);
 
             //armDrive(0.4,50);
@@ -212,10 +208,11 @@ public class StageBlueCORNOR extends LinearOpMode {
                     break;
                 }
             }
+            /*
             armDrive(0.4, 6);
             bucketDrive(0.3, -250);
             armDrive(0.4, -12);
-
+*/
             //encoferDrive(0.4,0.4,-9,-9,false);
 
         }

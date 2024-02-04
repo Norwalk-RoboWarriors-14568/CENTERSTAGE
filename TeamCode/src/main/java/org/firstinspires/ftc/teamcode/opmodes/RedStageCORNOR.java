@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name = "RedStageCornor")
+@Autonomous(name = "RedStage")
 public class RedStageCORNOR extends LinearOpMode {
     // Declare OpMode members.
     //Tages
@@ -100,90 +100,81 @@ public class RedStageCORNOR extends LinearOpMode {
                     encoferDrive(0.4,0.4,26,26,false);
 
                     encoferDrive(0.4,0.4,-23.71,23.71,false);
-                    encoferDrive(0.4,0.4,1,1,false);
+                    //encoferDrive(0.4,0.4,2,2,false);
 
                     intakeLeft.setPower(-0.4);
-                    encoferDrive(0.4,0.4,-30,-30,true);
+                    sleep(400);
                     intakeLeft.setPower(0);
-
+                    encoferDrive(0.4,0.4,-28,-28,false);
                     break;
                 }
                 case Middle: {
                     encoferDrive(0.4,0.4,27,27,false);
                     sleep(400);
                     intakeLeft.setPower(-0.4);
-
                     encoferDrive(0.4,0.4,-6,-6,false);
-                    intakeLeft.setPower(0);
-
                     encoferDrive(0.4,0.4,-23.71,23.71,false);
-                    encoferDrive(0.4,0.4,-24,-24,true);
+                    sleep(200);
+                    intakeLeft.setPower(0);
+                    encoferDrive(0.4,0.4,-27.25,-27.25  ,false);
                     break;
 
                 } default:{
                     encoferDrive(0.4,0.4,26,26,false);
-
                     encoferDrive(0.4,0.4,23.71,-23.71,false);
+                    encoferDrive(0.4,0.4,1,1,false);
                     sleep(200);
                     intakeLeft.setPower(-0.4);
                     sleep(200);
-                    encoferDrive(0.4,0.4,-5,-5,false);
                     intakeLeft.setPower(0);
-
-
+                    encoferDrive(0.4,0.4,25,25,true);
                     encoferDrive(0.4,0.4,-23.71,23.71,false);
                     encoferDrive(0.4,0.4,-23.71,23.71,false);
-                    encoferDrive(0.4,0.4,-5,-5,false);
-                    encoferDrive(0.4,0.4,-30,-30,true);
+                    sleep(200);
+                    intakeLeft.setPower(0);
+                    encoferDrive(0.4,0.4,-28,-28,false);
+                    encoferDrive(0.4,0.4,19,19,true);
                     break;
                 }
             }
-            //encoferDrive(0.4,0.4,-2,-2,false);
-
-            sleep(200);
-            intakeLeft.setPower(0);
-            encoferDrive(0.4,0.4,-30,-30,false);
-            intakeLeft.setPower(-0.4);
-            encoferDrive(0.4,0.4,22,22,true);
-            intakeLeft.setPower(0);
-
-            armDrive(0.5, 18);
             switch (parkpos){
-                case Right:{//Middle
-                    encoferDrive(0.4,0.4,-4,-4,true);
+                case Left:{//Left
+                    encoferDrive(0.4,0.4,5,5,true);
                     break;
                 }
-                case Middle:{ //Right
+                case Middle:{ //<Middle>
+                    encoferDrive(0.4,0.4,-1,-1,true);
+
                     break;
                 }
-                default:{ //Left
-                    encoferDrive(0.4,0.4,8,8,true);
+                default:{ //Right
+                    encoferDrive(0.4,0.4,-8,-8,true);
                     break;
                 }
             }
-
-
-            bucketDrive(0.3, 370);
-            sleep(500);
-            bucketDrive(0.2, -350);
-
-            armDrive(0.5, -13);
-            encoferDrive(0.4,0.4,-5,-5,false);
+            armDrive(0.5, 16);
+            encoferDrive(0.4,0.4,-7,-7,false);
+            bucketDrive(0.2, 350);
+            encoferDrive(0.4,0.4,1,1,false);
+            sleep(400);
+            bucketDrive(0.3, -350);
+            armDrive(0.4,-15);
+            encoferDrive(0.4,0.4,2,2,false);
             switch (parkpos) {
-                case Right: {//Middle
-                    encoferDrive(0.4,0.4,-19,-19,true);
+                case Left: {//left
+                    encoferDrive(0.4, 0.4, -35, -35, true);
                     break;
                 }
-                case Middle: { //Right
-                    encoferDrive(0.4,0.4,-24,-24,true);
+                case Middle: { //middle
+                    encoferDrive(0.4, 0.4, -28, -28, true);
                     break;
                 }
-                default: { //Left
-                    encoferDrive(0.4,0.4,-29,-29,true);
+                default: { //right
+                    encoferDrive(0.4, 0.4, -25, -25, true);
                     break;
                 }
             }
-            encoferDrive(0.4,0.4,-9,-9,false);
+
 
             //armDrive(0.4,50);
 
