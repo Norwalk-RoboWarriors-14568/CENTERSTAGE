@@ -143,7 +143,7 @@ public class RedStageCORNOR extends LinearOpMode {
                     break;
                 }
                 case Middle:{ //<Middle>
-                    encoferDrive(0.4,0.4,-1,-1,true);
+                    encoferDrive(0.4,0.4,1,1,true);
 
                     break;
                 }
@@ -166,7 +166,7 @@ public class RedStageCORNOR extends LinearOpMode {
                     break;
                 }
                 case Middle: { //middle
-                    encoferDrive(0.4, 0.4, -28, -28, true);
+                    encoferDrive(0.4, 0.4, -30, -30, true);
                     break;
                 }
                 default: { //right

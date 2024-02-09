@@ -75,66 +75,39 @@ public class TeleOpPOV extends OpMode {
         }
         mecanumStrafe = gamepad1.left_stick_x;
 
-        if (drivePOV) {
-            if ((gamepad1.left_stick_x) > 0.15){
+        if (!gamepad1.right_bumper) {
+            if ((gamepad1.left_stick_x) > 0.15) {
+                drive(-gamepad1.left_stick_x / 1.5, gamepad1.left_stick_x / 1.5, gamepad1.left_stick_x / 1.5, -gamepad1.left_stick_x / 1.5);
+            } else {
+                drive((gamepad1.left_stick_y + -mecanumStrafe) / 1.5, (gamepad1.left_stick_y + mecanumStrafe) / 1.5, (gamepad1.left_stick_y + mecanumStrafe) / 1.5, (gamepad1.left_stick_y + -mecanumStrafe) / 1.5);
+            }
+
+            if ((gamepad1.right_stick_x) > 0.2) {
+                drive(gamepad1.right_stick_x * -1, gamepad1.right_stick_x * -1, gamepad1.right_stick_x * 1, gamepad1.right_stick_x * 1);
+            } else if (gamepad1.right_stick_x < -0.2) {
+                drive(gamepad1.right_stick_x * -1, gamepad1.right_stick_x * -1, gamepad1.right_stick_x * 1, gamepad1.right_stick_x);
+
+
+            }
+        } else {
+            if ((gamepad1.left_stick_x) > 0.15) {
                 drive(-gamepad1.left_stick_x / 2, gamepad1.left_stick_x / 2, gamepad1.left_stick_x / 2, -gamepad1.left_stick_x / 2);
             } else {
                 drive((gamepad1.left_stick_y + -mecanumStrafe) / 2, (gamepad1.left_stick_y + mecanumStrafe) / 2, (gamepad1.left_stick_y + mecanumStrafe) / 2, (gamepad1.left_stick_y + -mecanumStrafe) / 2);
             }
 
-            if ((gamepad1.right_stick_x) > 0.2){
-                drive(gamepad1.right_stick_x *-1,gamepad1.right_stick_x  *-1, gamepad1.right_stick_x *   1, gamepad1.right_stick_x  *1);
-            } else if (gamepad1.right_stick_x < -0.2){
-                drive(gamepad1.right_stick_x *-1,gamepad1.right_stick_x  *-1, gamepad1.right_stick_x * 1, gamepad1.right_stick_x);
+            if ((gamepad1.right_stick_x) > 0.2) {
+                drive(gamepad1.right_stick_x * -1, gamepad1.right_stick_x * -1, gamepad1.right_stick_x * 1, gamepad1.right_stick_x * 1);
+            } else if (gamepad1.right_stick_x < -0.2) {
+                drive(gamepad1.right_stick_x * -1, gamepad1.right_stick_x * -1, gamepad1.right_stick_x * 1, gamepad1.right_stick_x);
 
 
             }
-            telemetry.addLine("DRIVE POV");
-        } else {
-            if (abs(gamepad1.left_stick_x) > 0.15 || abs(gamepad1.right_stick_x) > 0.15) {
-                //removes negatives from joystick values, to set variable to +/- for determing stick farther from zero
-                dominantXJoystick = (abs(gamepad1.left_stick_x) - abs(gamepad1.right_stick_x));
-                mecanumDriveMode = true;
-            } else {
-                mecanumDriveMode = false;
-            }
-
-            if (mecanumDriveMode) {     //when enabled, motors will only hit 100% when strafing and driving
-
-                if (dominantXJoystick > 0) {
-                    mecanumStrafe = gamepad1.left_stick_x;
-                } else if (dominantXJoystick < 0) {
-                    mecanumStrafe = gamepad1.right_stick_x;
-                }
-
-                if (gamepad1.left_bumper) {
-                    fl.setPower((gamepad1.left_stick_y + -mecanumStrafe) / 3.0); // previously 2
-                    bl.setPower((gamepad1.left_stick_y + mecanumStrafe) / 3.0);
-                    fr.setPower((gamepad1.right_stick_y + mecanumStrafe) / 3.0);
-                    br.setPower((gamepad1.right_stick_y + -mecanumStrafe) / 3.0);
-                } else if (gamepad1.right_bumper) {
-                    fl.setPower((gamepad1.left_stick_y + -mecanumStrafe) / 1.5); // previously 2 * .5
-                    bl.setPower((gamepad1.left_stick_y + mecanumStrafe) / 1.5);
-                    fr.setPower((gamepad1.right_stick_y + mecanumStrafe) / 1.5);
-                    br.setPower((gamepad1.right_stick_y + -mecanumStrafe) / 1.5);
-                } else {
-                    fl.setPower((gamepad1.left_stick_y + -mecanumStrafe) / 2.25); // previously 2 * .75
-                    bl.setPower((gamepad1.left_stick_y + mecanumStrafe) / 2.25);
-                    fr.setPower((gamepad1.right_stick_y + mecanumStrafe) / 2.25);
-                    br.setPower((gamepad1.right_stick_y + -mecanumStrafe) / 2.25 );
-                }
-            } else if (!mecanumDriveMode ) {
-                if (gamepad1.right_bumper) {
-                    drive(gamepad1.left_stick_y * 0.8, gamepad1.right_stick_y * 0.8);
-                } else if (gamepad1.left_bumper) {
-                    drive(gamepad1.left_stick_y * 0.25, gamepad1.right_stick_y * 0.25);
-                } else {
-                    drive(gamepad1.left_stick_y * 0.5, gamepad1.right_stick_y * 0.5);
-                }
-            }
-            telemetry.addLine("DRIVE TANK");
-
         }
+        telemetry.addLine("DRIVE POV");
+
+
+
 
         if (gamepad2.right_stick_y > 0.1){
             arm2.setPower(gamepad2.right_stick_y);//arm slow

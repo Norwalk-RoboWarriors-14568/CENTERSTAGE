@@ -10,54 +10,61 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp
-
+@TeleOp(name = "ESCAPETHEMATRIX \uD83E\uDD2B \uD83E\uDDCF")
 public class TeleOpZTD extends OpMode {
-    private DcMotor fl, bl, fr, br, armAngle, armHeight, slide;
-
-    private CRServo intakeLeft, intakeRight;
+    DcMotor fl, bl, fr, br, arm1, arm2, lift, intakeLeft;
+    private Servo gun;
+    boolean jacob = false;
+    private CRServo intake2;
+    private Servo bucket;
     private boolean mecanumDriveMode = true;
     private float mecanumStrafe = 0, dominantXJoystick = 0;
+    boolean drivePOV = true;
 
     @Override
     public void init() {
         fl = hardwareMap.dcMotor.get("leftFront");
-        bl = hardwareMap.dcMotor.get("leftRear");
+        bl = hardwareMap.dcMotor.get("leftBack");
         fr = hardwareMap.dcMotor.get("rightFront");
-        br = hardwareMap.dcMotor.get("rightRear");
+        br = hardwareMap.dcMotor.get("rightBack");
 
+        arm1 = hardwareMap.dcMotor.get("armLeft");
+        arm2 = hardwareMap.dcMotor.get("armRight");
+        //bucket = hardwareMap.servo.get("bucket");
 
-        armAngle = hardwareMap.dcMotor.get("armAngle");
-        armHeight = hardwareMap.dcMotor.get("armHeight");
-
-        slide = hardwareMap.dcMotor.get("slide");
-
-        intakeLeft = hardwareMap.crservo.get("intakeLeft");
-        intakeRight = hardwareMap.crservo.get("intakeRight");
+        lift = hardwareMap.dcMotor.get("Lift");
+        intakeLeft = hardwareMap.dcMotor.get("intakeLeft");
+        intake2 = hardwareMap.crservo.get("intake2");
+        gun = hardwareMap.servo.get("gun");
 
 
         fr.setDirection(DcMotor.Direction.REVERSE);
         br.setDirection(DcMotor.Direction.REVERSE);
-        intakeRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        arm2.setDirection(DcMotor.Direction.REVERSE);
 
         setBehavior(fl, FLOAT);
         setBehavior(bl, FLOAT);
         setBehavior(fr, FLOAT);
         setBehavior(br, FLOAT);
 
-        setBehavior(armAngle, BRAKE);
-        setBehavior(armHeight, BRAKE);
-
-
+        setBehavior(arm1, BRAKE  );
+        setBehavior(arm2, BRAKE);
+        setBehavior(lift, BRAKE);
         telemetry.addLine("Init Opmode");
+        /*
+        armAngle.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armAngle.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        */
+        arm1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        float armTicksZero = arm1.getCurrentPosition();//sets the floor position to 0
+        // bucket.setPosition(0);
+        //bucket.setBehavior();
     }
 
     @Override
     public void loop(){
-        mecanumStrafe = gamepad1.left_stick_x;
-
-
         if (abs(gamepad1.left_stick_x) > 0.15 || abs(gamepad1.right_stick_x) > 0.15) {
             //removes negatives from joystick values, to set variable to +/- for determing stick farther from zero
             dominantXJoystick = (abs(gamepad1.left_stick_x) - abs(gamepad1.right_stick_x));
@@ -91,42 +98,58 @@ public class TeleOpZTD extends OpMode {
                 br.setPower((gamepad1.right_stick_y + -mecanumStrafe) / 2.25 );
             }
         } else if (!mecanumDriveMode ) {
-            if (gamepad1.left_bumper) {
+            if (gamepad1.right_bumper) {
                 drive(gamepad1.left_stick_y * 0.8, gamepad1.right_stick_y * 0.8);
-            } else if (gamepad1.right_bumper) {
+            } else if (gamepad1.left_bumper) {
                 drive(gamepad1.left_stick_y * 0.25, gamepad1.right_stick_y * 0.25);
             } else {
                 drive(gamepad1.left_stick_y * 0.5, gamepad1.right_stick_y * 0.5);
             }
         }
-
-
+        telemetry.addLine("DRIVE TANK");
         if (gamepad2.right_stick_y > 0.1){
-            armHeight.setPower(0.4);
+            arm2.setPower(gamepad2.right_stick_y);//arm slow
+            arm1.setPower(gamepad2.right_stick_y);
         } else if (gamepad2.right_stick_y < -0.1) {
-            armHeight.setPower(-0.4);
+            arm2.setPower(gamepad2.right_stick_y);
+            arm1.setPower(gamepad2.right_stick_y);
+
         } else {
-            armHeight.setPower(0);
+            arm2.setPower(0);
+            arm1.setPower(0);
         }
 
-        if (gamepad2.left_stick_y > 0.1) {
-            armAngle.setPower(0.4);
-        } else if (gamepad2.left_stick_y < -1) {
-            armAngle.setPower(-0.4);
-        } else {
-            armAngle.setPower(0);
-        }
-
-        if (gamepad2.right_bumper) {
-            intakeRight.setPower(1);
+        if (gamepad2.right_trigger > 0.25){
             intakeLeft.setPower(1);
-        } else if (gamepad2.left_bumper) {
-            intakeRight.setPower(-1);
-            intakeLeft.setPower(-1);
-        } else {
-            intakeRight.setPower(0);
+            intake2.setPower(-1);
+        } else if (gamepad2.left_trigger > 0.25){
+            intakeLeft.setPower(-0.5);
+            intake2.setPower(0.5);
+        } else{
             intakeLeft.setPower(0);
+            intake2.setPower(0);
+
         }
+
+
+
+        if(gamepad2.right_bumper){
+            // bucket.setPosition(0.15);//Can only use these values nothing beyond this point
+            lift.setPower(0.30);
+        } else if (gamepad2.left_bumper){
+            // bucket.setPosition(0.85);//Can only use these values nothing beyond this point
+            lift.setPower(-0.30);
+        }else {
+            lift.setPower(0);
+        }
+        //telemetry.addLine("Servo " + bucket.getPosition());
+        if (gamepad2.y) {
+            gun.setPosition(0.5);
+        }
+        if (gamepad2.x ){
+            gun.setPosition(0.2);
+        }
+
     }
     @Override
     public void stop() {
