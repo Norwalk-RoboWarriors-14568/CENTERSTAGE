@@ -146,10 +146,10 @@ public class TeleOpPOV extends OpMode {
         }
         //telemetry.addLine("Servo " + bucket.getPosition());
         if (gamepad2.y) {
-            gun.setPosition(0.5);
+            gun.setPosition(1);
         }
         if (gamepad2.x ){
-            gun.setPosition(0.2);
+            gun.setPosition(0.5);
         }
 
         telemetry.update();
