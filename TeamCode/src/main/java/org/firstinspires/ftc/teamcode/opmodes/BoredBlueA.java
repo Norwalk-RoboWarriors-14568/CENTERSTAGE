@@ -185,9 +185,9 @@ public class BoredBlueA extends LinearOpMode {
             }
 
 
-            bucketDrive(0.3, 350);
+            bucketDrive(0.3, 420);
             sleep(500);
-            bucketDrive(0.2, -350);
+            bucketDrive(0.2, -420);
 
             armDrive(0.5, -15);
             encoferDrive(0.4,0.4,-5,-5,false);

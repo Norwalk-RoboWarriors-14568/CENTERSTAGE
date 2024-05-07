@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name = "StageBlueSSS")
-public class StageBlueCORNORSpedUpVersion extends LinearOpMode {
+@Autonomous(name = "StageBlueSSSCBCB")
+public class StageBlueCORNORSpedUpVersionCB extends LinearOpMode {
     // Declare OpMode members.
     //Tages
     MONKERYSEEMONRYDOO openCv = new MONKERYSEEMONRYDOO();
@@ -110,7 +110,7 @@ public class StageBlueCORNORSpedUpVersion extends LinearOpMode {
                     //encoferDrive(0.4,0.4,2,2,false);
 
                     intakeLeft.setPower(-0.4);
-                    sleep(400);
+                    sleep(12000);
                     intakeLeft.setPower(0);
                     encoferDrive(0.4,0.4,-28,-28,false);
                     //intakeLeft.setPower(-0.4);
@@ -121,7 +121,7 @@ public class StageBlueCORNORSpedUpVersion extends LinearOpMode {
                 }
                 case Middle: {
                     encoferDrive(0.4,0.4,27,27,false);
-                    sleep(400);
+                    sleep(10000);
                     intakeLeft.setPower(-0.4);
                     sleep(100);
                     //encoferDrive(0.4,0.4,-6,-6,false);
@@ -139,7 +139,7 @@ public class StageBlueCORNORSpedUpVersion extends LinearOpMode {
                     encoferDrive(0.4,0.4,1,1,false);
                     sleep(200);
                     intakeLeft.setPower(-0.4);
-                    sleep(200);
+                    sleep(10000);
                     intakeLeft.setPower(0);
                     encoferDrive(0.4,0.4,-25,-25,true);
                     encoferDrive(0.4,0.4,23.71,-23.71,false);

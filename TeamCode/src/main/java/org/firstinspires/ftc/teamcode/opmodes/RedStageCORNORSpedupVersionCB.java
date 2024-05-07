@@ -9,17 +9,17 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name = "StageBlueSSS")
-public class StageBlueCORNORSpedUpVersion extends LinearOpMode {
+@Autonomous(name = "RedStageSSSCBCB")
+public class RedStageCORNORSpedupVersionCB extends LinearOpMode {
     // Declare OpMode members.
     //Tages
-    MONKERYSEEMONRYDOO openCv = new MONKERYSEEMONRYDOO();
+    REDSIDEBLUDSWERULETHISTOWN openCv = new REDSIDEBLUDSWERULETHISTOWN();
     ElapsedTime t = new ElapsedTime();
     private ElapsedTime runtime = new ElapsedTime();
     DcMotor motorLeftFRONT, motorLeftBACK, motorRightFRONT, motorRightBACK, arm1, arm2, lift, intakeLeft;
     private Servo gun;
     private Servo bucket;
-    private int liftTarget;
+
 
     final private double CPCM_MECC = 537.6/ ( 3.75 * Math.PI);
     final private double CPI_ARM = 537.6/(4.4);
@@ -31,8 +31,6 @@ public class StageBlueCORNORSpedUpVersion extends LinearOpMode {
     private double leftPos = 0;
     private double rightPos = 0;
     private int timeOutCount = 0;
-    // private VoltageSensor vs;
-    private double gameTimeSnapShot = 0;
     enum park {
         Right,
         Middle,
@@ -45,7 +43,6 @@ public class StageBlueCORNORSpedUpVersion extends LinearOpMode {
 
         cpiOdometry  = CPR_ODOMETRY / (ODOMETRY_WHEEL_DIAMETER * Math.PI);
         //CPI =     ticksPerRev / (circumerence);
-        //CPI_CORE_HEX = hexCoreCPR/4.4;
         motorLeftBACK = hardwareMap.dcMotor.get("leftBack");
         motorRightBACK = hardwareMap.dcMotor.get("rightBack");
         motorLeftFRONT = hardwareMap.dcMotor.get( "leftFront");
@@ -62,9 +59,6 @@ public class StageBlueCORNORSpedUpVersion extends LinearOpMode {
         // vs  = this.hardwareMap.voltageSensor.iterator().next();
         timer = new ElapsedTime();//create a timer from the elapsed time class
 
-
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
         openCv.OpenCv(hardwareMap, telemetry);
         if (isStopRequested()) return;
 
@@ -80,8 +74,7 @@ public class StageBlueCORNORSpedUpVersion extends LinearOpMode {
         telemetry.addData("MAX : ", openCv.getMax());
         telemetry.update();
         //sleep(10000);
-        switch (snapshotAnalysis)
-        {
+        switch (snapshotAnalysis) {
             case 0://BLUE
             {
                 parkpos = park.Right;
@@ -103,123 +96,93 @@ public class StageBlueCORNORSpedUpVersion extends LinearOpMode {
         if (opModeIsActive()) {
 
             switch (parkpos){
-                case Right: {
+                case Left: {
                     encoferDrive(0.4,0.4,26,26,false);
 
-                    encoferDrive(0.4,0.4,23.71,-23.71,false);
+                    encoferDrive(0.4,0.4,-23.71,23.71,false);
                     //encoferDrive(0.4,0.4,2,2,false);
 
                     intakeLeft.setPower(-0.4);
-                    sleep(400);
+                    sleep(10000);
                     intakeLeft.setPower(0);
                     encoferDrive(0.4,0.4,-28,-28,false);
-                    //intakeLeft.setPower(-0.4);
-                    //encoferDrive(0.4,0.4,22,22,true);
-                    //intakeLeft.setPower(0);
-                    //armDrive(0.5, 20);
                     break;
                 }
                 case Middle: {
                     encoferDrive(0.4,0.4,27,27,false);
                     sleep(400);
                     intakeLeft.setPower(-0.4);
-                    sleep(100);
-                    //encoferDrive(0.4,0.4,-6,-6,false);
+                    encoferDrive(0.4,0.4,-6,-6,false);
+                    encoferDrive(0.4,0.4,-23.71,23.71,false);
+                    sleep(10000);
                     intakeLeft.setPower(0);
-                    encoferDrive(0.4,0.4,-26.5,-26.5  ,true);
-
-                    encoferDrive(0.4,0.4,23.71,-23.71,false);
-                    //sleep(200);
-
+                    encoferDrive(0.4,0.4,-27.25,-27.25  ,false);
                     break;
 
                 } default:{
                     encoferDrive(0.4,0.4,26,26,false);
-                    encoferDrive(0.4,0.4,-23.71,23.71,false);
+                    encoferDrive(0.4,0.4,23.71,-23.71,false);
                     encoferDrive(0.4,0.4,1,1,false);
                     sleep(200);
                     intakeLeft.setPower(-0.4);
-                    sleep(200);
+                    sleep(12000);
                     intakeLeft.setPower(0);
-                    encoferDrive(0.4,0.4,-25,-25,true);
-                    encoferDrive(0.4,0.4,23.71,-23.71,false);
-                    encoferDrive(0.4,0.4,23.71,-23.71,false);
+                    encoferDrive(0.4,0.4,25,25,true);
+                    encoferDrive(0.4,0.4,-23.71,23.71,false);
+                    encoferDrive(0.4,0.4,-23.71,23.71,false);
                     sleep(200);
                     intakeLeft.setPower(0);
                     encoferDrive(0.4,0.4,-28,-28,false);
-                    encoferDrive(0.4,0.4,-19,-19,true);
+                    encoferDrive(0.4,0.4,19,19,true);
                     break;
                 }
             }
-            //encoferDrive(0.4,0.4,-2,-2,false);
-            armDrive(0.5, 16);
-
-           // bucketDrive(0.15, 400);
-            //sleep(1000);
-            //bucketDrive(0.2, -);
-            //armDrive(0.5, -3);
-            encoferDrive(0.4,0.4,-7,-7,false);
-
             switch (parkpos){
-                case Right:{//Middle
-                    encoferDrive(0.4,0.4,1,1,false);
-
-                    encoferDrive(0.4,0.4,-5,-5,true);
-                    encoferDrive(0.4,0.4,-0.75,-0.75,false);
+                case Left:{//Left
+                    encoferDrive(0.4,0.4,5,5,true);
+                    break;
+                }
+                case Middle:{ //<Middle>
+                    encoferDrive(0.4,0.4,1,1,true);
 
                     break;
                 }
-                case Middle:{ //Right
-                    //encoferDrive(0.4,0.4,-6,-6,true);
-                    encoferDrive(0.4,0.4,-9,-9,true);
-
-                    break;
-                }
-                default:{ //Left
-                    encoferDrive(0.4,0.4,3,3,true);
-
-                    //encoferDrive(0.4,0.4,2,2,true);
+                default:{ //Right
+                    encoferDrive(0.4,0.4,-8,-8,true);
                     break;
                 }
             }
-
-
-
+            armDrive(0.5, 16);
+            encoferDrive(0.4,0.4,-7,-7,false);
             bucketDrive(0.2, 420);
             encoferDrive(0.4,0.4,1,1,false);
-
             sleep(400);
             bucketDrive(0.3, -420);
             armDrive(0.4,-15);
             encoferDrive(0.4,0.4,2,2,false);
-
-            //armDrive(0.4,50);
             switch (parkpos) {
-                case Right: {//Middle
-                    encoferDrive(0.4,0.4,35,35,true);
+                case Left: {//left
+                    encoferDrive(0.4, 0.4, -35, -35, true);
                     break;
                 }
-                case Middle: { //Right
-                    encoferDrive(0.4,0.4,28,28,true);
+                case Middle: { //middle
+                    encoferDrive(0.4, 0.4, -30, -30, true);
                     break;
                 }
-                default: { //Left
-                    encoferDrive(0.4,0.4,25,25,true);
+                default: { //right
+                    encoferDrive(0.4, 0.4, -25, -25, true);
                     break;
                 }
             }
-            /*
-            armDrive(0.4, 6);
-            bucketDrive(0.3, -250);
-            armDrive(0.4, -12);
-*/
-            //encoferDrive(0.4,0.4,-9,-9,false);
+
+
+            //armDrive(0.4,50);
 
         }
 
 
     }
-    //
+
     public void encoferDrive(double leftSpeed, double rightSpeed, double left, double right, boolean edge){
         brakeMotors();
         motorSetModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -282,12 +245,8 @@ public class StageBlueCORNORSpedUpVersion extends LinearOpMode {
     }
     public void bucketDrive(double speed, double targetDegrees){
         lift.setZeroPowerBehavior(BRAKE);
-
-        if (targetDegrees != 0) {
-             liftTarget = lift.getCurrentPosition() + (int) (targetDegrees * (700 / 360));
-        } else {
-             liftTarget = 0;
-        }
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        int liftTarget = lift.getCurrentPosition() + (int) (targetDegrees * (700/360));
         lift.setTargetPosition(liftTarget);
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lift.setPower(speed);
@@ -344,7 +303,6 @@ public class StageBlueCORNORSpedUpVersion extends LinearOpMode {
     public void motorSetTargetPos(int targetLeft, int targetRight) {
         motorLeftBACK.setTargetPosition(targetLeft);
         motorRightBACK.setTargetPosition(targetRight);
-
     }
 
     public boolean IsInRange(double inches, double target){

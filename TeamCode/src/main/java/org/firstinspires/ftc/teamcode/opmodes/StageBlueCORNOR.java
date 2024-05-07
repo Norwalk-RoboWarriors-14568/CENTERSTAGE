@@ -185,11 +185,11 @@ public class StageBlueCORNOR extends LinearOpMode {
 
 
 
-            bucketDrive(0.2, 350);
+            bucketDrive(0.2, 420);
             encoferDrive(0.4,0.4,1,1,false);
 
             sleep(400);
-            bucketDrive(0.3, -350);
+            bucketDrive(0.3, -420);
             armDrive(0.4,-15);
             encoferDrive(0.4,0.4,2,2,false);
 
